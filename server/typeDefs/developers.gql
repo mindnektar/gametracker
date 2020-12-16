@@ -1,0 +1,14 @@
+type Query {
+    developers: [Developer!]!
+}
+
+type Developer {
+    id: ID!
+    name: String!
+    games: [Game!]!
+}
+
+input RelateDeveloperInput {
+    id: ID
+    name: String
+}

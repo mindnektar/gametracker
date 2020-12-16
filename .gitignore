@@ -1,0 +1,8 @@
+node_modules
+yarn-error.log
+.DS_Store
+package-lock.json
+.ssh
+client/public/index.html
+client/public/app.*
+client/public/script

@@ -1,0 +1,14 @@
+type Query {
+    systems: [System!]!
+}
+
+type System {
+    id: ID!
+    name: String!
+    games: [Game!]!
+}
+
+input RelateSystemInput {
+    id: ID
+    name: String
+}

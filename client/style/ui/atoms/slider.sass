@@ -1,0 +1,42 @@
+.ui-slider
+    cursor: ew-resize
+    margin-bottom: 16px
+    position: relative
+
+    &__bar
+        background-color: #777777
+        border-bottom: 2px solid #777777
+        border-radius: 4px
+        box-sizing: border-box
+        height: 36px
+        overflow: hidden
+        position: relative
+
+    &__bar-inner
+        background-image: repeating-linear-gradient(-45deg, #bbbbbb, #bbbbbb 4px, #cccccc 4px, #cccccc 8px)
+        height: 100%
+        left: 0
+        position: absolute
+        top: 0
+        transition: 50ms transform linear
+        width: 100%
+
+    &__draggable
+        position: absolute
+        top: -2px
+        transform: translateX(-50%)
+        transition: 50ms left linear
+
+    &__point
+        background-color: #bbbbbb
+        border: 1px solid #333333
+        border-radius: 3px
+        box-sizing: border-box
+        height: 39px
+        width: 5px
+
+    &__value
+        left: 50%
+        position: absolute
+        top: 42px
+        transform: translateX(-50%)

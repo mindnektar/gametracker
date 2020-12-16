@@ -1,0 +1,157 @@
+[{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474a"
+  },
+  "name": "Game Boy",
+  "order": 7
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4750"
+  },
+  "name": "3DS",
+  "order": 11
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4759"
+  },
+  "name": "Super Nintendo",
+  "order": 1
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475b"
+  },
+  "name": "Wii U",
+  "order": 5
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4752"
+  },
+  "name": "DS",
+  "order": 10
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4755"
+  },
+  "name": "PlayStation",
+  "order": 12
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4760"
+  },
+  "name": "Oculus Rift",
+  "order": 23
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4754"
+  },
+  "name": "PC",
+  "order": 22
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474b"
+  },
+  "name": "Game Boy Advance",
+  "order": 9
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4753"
+  },
+  "name": "NES",
+  "order": 0
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4749"
+  },
+  "name": "Arcade",
+  "order": 25
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474c"
+  },
+  "name": "Game Boy Color",
+  "order": 8
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474f"
+  },
+  "name": "Master System",
+  "order": 20
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475d"
+  },
+  "name": "Xbox 360",
+  "order": 18
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4761"
+  },
+  "name": "Switch",
+  "order": 6
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4757"
+  },
+  "name": "PlayStation 3",
+  "order": 14
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474d"
+  },
+  "name": "GameCube",
+  "order": 3
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475f"
+  },
+  "name": "PlayStation 4",
+  "order": 15
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475e"
+  },
+  "name": "Xbox One",
+  "order": 19
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4751"
+  },
+  "name": "Nintendo 64",
+  "order": 2
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475a"
+  },
+  "name": "Wii",
+  "order": 4
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d474e"
+  },
+  "name": "Genesis",
+  "order": 21
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4756"
+  },
+  "name": "PlayStation 2",
+  "order": 13
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4748"
+  },
+  "name": "Android",
+  "order": 24
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d475c"
+  },
+  "name": "Xbox",
+  "order": 17
+},{
+  "_id": {
+    "$oid": "5b199548ca8a0b97f07d4758"
+  },
+  "name": "PlayStation Portable",
+  "order": 16
+}]

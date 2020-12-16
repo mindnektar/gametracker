@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  api:
+    build: ./server
+    image: quay.io/martin_denk/gametracker-api:${APP_VERSION:-latest}
+    volumes:
+      - ./server:/app
+    ports:
+      - ${EXTERNAL_PORT:-5930}:5930
+    links:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_URI=postgresql://gametracker:secret@postgres:5432/gametracker
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
+      - DEBUG
+      - DATABASE_DEBUG
+    command: ["npm", "run", "dev"]
+
+  postgres:
+    image: postgres:11.1-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=gametracker
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=gametracker
+
+volumes:
+  postgres-data:

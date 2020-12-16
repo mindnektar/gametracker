@@ -1,0 +1,47 @@
+type Mutation {
+    createGame(input: CreateGameInput!): Game!
+    updateGame(input: UpdateGameInput!): Game!
+}
+
+type Game {
+    id: ID!
+    system: System!
+    compilation: Compilation
+    developer: Developer!
+    genres: [Genre!]!
+    dlcs: [Dlc!]!
+    title: String!
+    rating: Int!
+    release: Int!
+    description: String!
+    youTubeId: String!
+}
+
+input CreateGameInput {
+    title: String!
+    rating: Int!
+    release: Int!
+    description: String!
+    youTubeId: String!
+    lists: [RelateInput!]!
+    system: RelateSystemInput!
+    developer: RelateDeveloperInput!
+    genres: [RelateGenreInput!]!
+    compilation: RelateCompilationInput
+    dlcs: [CreateDlcInput!]
+}
+
+input UpdateGameInput {
+    id: ID!
+    title: String
+    rating: Int
+    release: Int
+    description: String
+    youTubeId: String
+    lists: [RelateInput!]
+    system: RelateSystemInput
+    developer: RelateDeveloperInput
+    genres: [RelateGenreInput!]
+    compilation: RelateCompilationInput
+    dlcs: [CreateDlcInput!]
+}

@@ -1,0 +1,11 @@
+type Dlc {
+    id: ID!
+    game: Game!
+    title: String!
+    rating: Int!
+}
+
+input CreateDlcInput {
+    title: String!
+    rating: Int!
+}

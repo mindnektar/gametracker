@@ -1,0 +1,14 @@
+type Query {
+    genres: [Genre!]!
+}
+
+type Genre {
+    id: ID!
+    name: String!
+    games: [Game!]!
+}
+
+input RelateGenreInput {
+    id: ID
+    name: String
+}

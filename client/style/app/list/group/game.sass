@@ -1,0 +1,108 @@
+.game
+    background-color: #999999
+    border: 1px solid #bbbbbb
+    border-bottom-color: #777777
+    border-radius: 4px
+    border-right-color: #777777
+    height: 26px
+    margin-left: 8px
+    overflow: hidden
+    padding: 0 8px
+    transition: ease 300ms
+    transition-property: background-color, height
+
+    &:hover
+        background-color: #a8a8a8
+
+    &--expanded
+        background-color: #a8a8a8
+        height: 280px
+
+    &__head
+        align-items: center
+        cursor: pointer
+        display: flex
+        height: 26px
+
+    &__title
+        align-items: center
+        display: flex
+        flex-grow: 1
+
+    &__title-compilation
+        font-size: .8rem
+        margin-left: 8px
+
+    &__title-dlc-count
+        font-size: .8rem
+        font-style: italic
+        margin-left: 8px
+        opacity: .5
+
+    &__genre
+        display: flex
+        width: 256px
+
+    &__genre-item
+        background-color: rgba(255, 255, 255, .2)
+        border-radius: 24px
+        font-size: .8rem
+        font-style: italic
+        font-weight: 300
+        margin-right: 4px
+        padding: 2px 8px
+        transition: 300ms ease background-color
+        white-space: nowrap
+
+    &__genre-item--active,
+    &__genre-item:hover
+        background-color: rgba(255, 255, 255, .4)
+
+    &__system
+        font-size: .8rem
+        width: 96px
+
+    &__developer
+        font-size: .8rem
+        width: 136px
+
+    &__release
+        text-align: center
+        width: 64px
+
+    &__body
+        height: 225px
+        padding: 8px 0
+        position: relative
+
+    &__info
+        display: flex
+
+    &__video,
+    &__video-placeholder
+        background-image: repeating-linear-gradient(-45deg, #bbbbbb, #bbbbbb 4px, #cccccc 4px, #cccccc 8px)
+        border: 1px solid #cccccc
+        border-radius: 4px
+        height: 225px
+        width: 300px
+
+    &__description
+        flex-grow: 1
+        margin-left: 24px
+        height: 192px
+        overflow: auto
+
+    &__dlcs-header
+        font-weight: bold
+        margin-top: 16px
+
+    &__dlc
+        align-items: center
+        display: flex
+        height: 24px
+        justify-content: space-between
+
+    &__edit
+        bottom: 8px
+        position: absolute
+        right: 8px

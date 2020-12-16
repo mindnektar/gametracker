@@ -1,0 +1,14 @@
+type Query {
+    compilations: [Compilation!]!
+}
+
+type Compilation {
+    id: ID!
+    title: String!
+    games: [Game!]!
+}
+
+input RelateCompilationInput {
+    id: ID
+    title: String
+}
