@@ -1,4 +1,6 @@
 import transaction from './helpers/transaction';
+import fetchGiantbombData from '../services/giantbomb';
+import fetchYouTubeData from '../services/youTube';
 import Game from '../models/Game';
 
 export default {
@@ -24,5 +26,17 @@ export default {
                     })
             ))
         ),
+        fetchGameData: async (parent, { input }) => {
+            const giantbombData = await fetchGiantbombData(input.title);
+            const youTubeData = await fetchYouTubeData(input.title, input.system);
+
+            return {
+                description: giantbombData.description,
+                release: giantbombData.release,
+                developer: giantbombData.developer,
+                genres: giantbombData.genres,
+                youTubeId: youTubeData.youTubeId,
+            };
+        },
     },
 };

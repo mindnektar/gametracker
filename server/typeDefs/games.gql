@@ -1,6 +1,7 @@
 type Mutation {
     createGame(input: CreateGameInput!): Game!
     updateGame(input: UpdateGameInput!): Game!
+    fetchGameData(input: FetchGameDataInput!): FetchGameDataResult!
 }
 
 type Game {
@@ -44,4 +45,17 @@ input UpdateGameInput {
     genres: [RelateGenreInput!]
     compilation: RelateCompilationInput
     dlcs: [CreateDlcInput!]
+}
+
+input FetchGameDataInput {
+    title: String!
+    system: String!
+}
+
+type FetchGameDataResult {
+    developer: String
+    genres: [String!]
+    release: Int
+    description: String
+    youTubeId: String
 }

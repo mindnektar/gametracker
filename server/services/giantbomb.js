@@ -1,0 +1,160 @@
+import axios from 'axios';
+import config from '../config';
+
+const developerMap = {
+    '1-UP Studio': 'Nintendo',
+    '2K Marin': '2K Games',
+    '3 Minute Games, LLC': '3 Minute Games',
+    'Acclaim Studios Manchester': 'Acclaim',
+    'Acclaim Studios Salt Lake City': 'Acclaim',
+    'Adventure Soft Publishing Ltd.': 'Adventure Soft',
+    'AlphaDream Corporation, Ltd.': 'AlphaDream',
+    'Arkane Studios SA': 'Arkane Studios',
+    'ASCII Corporation': 'ASCII',
+    'Athena Co., Ltd.': 'Athena',
+    'Atlus Co., Ltd.': 'Atlus',
+    'Bethesda Game Studios': 'Bethesda',
+    'Blizzard Entertainment': 'Blizzard',
+    'Camelot Software Planning': 'Camelot',
+    'Capcom Production Studio 2': 'Capcom',
+    'Core Design Ltd.': 'Core Design',
+    'cavia inc.': 'Cavia',
+    'CD Projekt RED Sp. z o.o.': 'CD Projekt RED',
+    'CD Projekt Red': 'CD Projekt RED',
+    'CING, Inc.': 'CING',
+    'Croteam Ltd.': 'Croteam',
+    'Crystal Dynamics, Inc.': 'Crystal Dynamics',
+    'Daedalic Entertainment': 'Daedalic',
+    'Dimps Corporation': 'Dimps',
+    'Divide By Zero, Ltd.': 'Divide By Zero',
+    'DONTNOD Entertainment': 'DONTNOD',
+    'Double Fine Productions, Inc.': 'Double Fine',
+    'EA Los Angeles': 'Electronic Arts',
+    'EA Montreal': 'Electronic Arts',
+    'Eidos-Montréal': 'Eidos',
+    'Eurocom Entertainment Software': 'Eurocom',
+    'Flagship Co., Ltd.': 'Flagship',
+    'Fountainhead Entertainment, Inc.': 'Fountainhead',
+    'Frontier Developments Ltd.': 'Frontier',
+    'Funcom Productions A/S': 'Funcom',
+    'Game Freak, Inc.': 'Game Freak',
+    'Gameloft S.A.': 'Gameloft',
+    'Gearbox Software LLC': 'Gearbox',
+    'Grasshopper Manufacture inc.': 'Grasshopper',
+    'Guerrilla Cambridge': 'Guerrilla',
+    'HAL Laboratory, Inc.': 'HAL Laboratory',
+    'Harmonix Music Systems, Inc.': 'Harmonix',
+    'Hudson Entertainment, Inc.': 'Hudson',
+    'Human Entertainment, Inc.': 'Human Entertainment',
+    'Human Head Studios, Inc.': 'Human Head',
+    'iNiS Corp.': 'iNiS',
+    'Intelligent Systems Co., Ltd.': 'Intelligent Systems',
+    'Insomniac Games': 'Insomniac',
+    'Inti Creates Co., Ltd.': 'Inti Creates',
+    'Ion Storm Inc.': 'Ion Storm',
+    'Klei Entertainment Inc.': 'Klei',
+    'Konami Computer Entertainment Osaka Co., Ltd.': 'Konami',
+    'Konami Computer Entertainment Japan, Inc.': 'Konami',
+    'Konami Computer Entertainment Tokyo': 'Konami',
+    'Level-5 Inc.': 'Level-5',
+    'Looking Glass Studios, Inc.': 'Looking Glass',
+    'LucasArts Entertainment Company LLC': 'LucasArts',
+    'Ludosity Interactive': 'Ludosity',
+    'Mistwalker Corporation': 'Mistwalker',
+    'Monolith Productions, Inc.': 'Monolith Productions',
+    'Monolith Software, Inc.': 'Monolith Soft',
+    'n-Space, Inc.': 'n-Space',
+    'Naughty Dog, Inc.': 'Naughty Dog',
+    'NEON Software GmbH': 'Neon Studios',
+    'Neverland Co., Ltd.': 'Neverland',
+    'Neversoft Entertainment': 'Neversoft',
+    'Nintendo EAD': 'Nintendo',
+    'Nintendo EAD Tokyo Group No.1': 'Nintendo',
+    'Nintendo EAD Tokyo Group No.2': 'Nintendo',
+    'Nintendo EPD': 'Nintendo',
+    'Nintendo R&D1': 'Nintendo',
+    'Nintendo R&D3': 'Nintendo',
+    'Now Production Co., Ltd.': 'Now Production',
+    'Number None Inc': 'Number None',
+    'Obsidian Entertainment': 'Obsidian',
+    'Pandemic Studios': 'Pandemic',
+    'Paon Corporation, Ltd.': 'Paon',
+    'Playful Corp': 'Playful',
+    'PopCap Games, Inc.': 'PopCap Games',
+    'Quintet Co., Ltd.': 'Quintet',
+    'Racjin Co., Ltd.': 'Racjin',
+    'Rare, Ltd.': 'Rare',
+    'RedLynx Ltd': 'RedLynx',
+    'Remedy Entertainment Ltd.': 'Remedy',
+    'Revolution Software Ltd.': 'Revolution Software',
+    'Rockstar North': 'Rockstar',
+    'Rockstar San Diego': 'Rockstar',
+    'Rocksteady Studios Ltd': 'Rocksteady',
+    'Sega Studios Australia': 'Sega',
+    'Silicon Knights, Inc.': 'Silicon Knights',
+    'Sims Co., Ltd.': 'SIMS',
+    'Sony Interactive Entertainment': 'Sony',
+    'Sproing Interactive Media GmbH': 'Sproing',
+    'SRD Co. Ltd.': 'Nintendo',
+    'Starbreeze Studios AB': 'Starbreeze',
+    'Sumo Digital Ltd.': 'Sumo Digital',
+    'Taito Corporation': 'Taito',
+    'Team17 Software Limited': 'Team17',
+    'Techland Sp. z o.o.': 'Techland',
+    'Thekla Inc': 'Thekla',
+    'Toaplan Co., Ltd.': 'Toaplan',
+    'TopWare Interactive': 'TopWare',
+    'Traveller\'s Tales Ltd.': 'Traveller\'s Tales',
+    'Troika Games L.L.C.': 'Troika Games',
+    'tri-Crescendo Inc.': 'tri-Crescendo',
+    'Ubisoft Montpellier Studios': 'Ubisoft',
+    'Ubisoft Montreal Studios': 'Ubisoft',
+    'Ubisoft Paris Studios': 'Ubisoft',
+    'Ubisoft Shanghai Studios': 'Ubisoft',
+    'Valve Corporation': 'Valve',
+    'Vanillaware Ltd.': 'Vanillaware',
+    'WayForward Technologies': 'WayForward',
+    'Westwood Studios, Inc.': 'Westwood',
+    'YAGER Development GmbH': 'Yager Development',
+};
+
+export default async (title) => {
+    try {
+        const giantBombSearch = await axios.get('https://www.giantbomb.com/api/search', {
+            params: {
+                api_key: config.giantbomb.apiKey,
+                query: title,
+                resources: 'game',
+                limit: 1,
+                field_list: 'guid',
+                format: 'json',
+            },
+        });
+        const { guid } = giantBombSearch.data.results[0];
+        const giantBombGame = await axios.get(`https://www.giantbomb.com/api/game/${guid}`, {
+            params: {
+                api_key: config.giantbomb.apiKey,
+                field_list: 'deck,original_release_date,developers,genres',
+                format: 'json',
+            },
+        });
+        const { results } = giantBombGame.data;
+
+        return {
+            description: results.deck ? results.deck.replace(/&amp;/g, '&') : '',
+            release: results.original_release_date
+                ? parseInt(results.original_release_date.substring(0, 4), 10)
+                : '',
+            developer: results.developers
+                ? developerMap[results.developers[0].name] || results.developers[0].name
+                : '',
+            genres: results.genres
+                ? results.genres.map((genre) => genre.name)
+                : [],
+        };
+    } catch (error) {
+        console.error(error);
+    }
+
+    return {};
+};

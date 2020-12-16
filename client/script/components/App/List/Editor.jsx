@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import getYear from 'date-fns/getYear';
 import useCreateGameMutation from 'hooks/graphql/mutations/createGame';
 import useUpdateGameMutation from 'hooks/graphql/mutations/updateGame';
+import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import { systemOrder } from 'helpers/systems';
 import { prepareValues } from 'helpers/form';
 import Select from 'atoms/Select';
 import TextField from 'atoms/TextField';
 import Slider from 'atoms/Slider';
+import Button from 'atoms/Button';
 import TextArea from 'atoms/TextArea';
 import Dialog from 'molecules/Dialog';
 import Form, { FormItem } from 'molecules/Form';
@@ -15,6 +17,7 @@ import Form, { FormItem } from 'molecules/Form';
 const Editor = (props) => {
     const createGame = useCreateGameMutation();
     const updateGame = useUpdateGameMutation();
+    const fetchGameData = useFetchGameDataMutation();
     const allSystems = [...props.systems].sort((a, b) => (
         systemOrder.indexOf(a.name) - systemOrder.indexOf(b.name)
     ));
@@ -117,6 +120,35 @@ const Editor = (props) => {
         return value.__isNew__ ? { name: value.value } : { id: value.value };
     };
 
+    const autoFillFields = async () => {
+        const { data } = await fetchGameData({
+            title: state.title.trim(),
+            system: (
+                allSystems.find(({ id }) => id === state.system.value)?.name
+                || state.system.value
+            ),
+        });
+
+        const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
+
+        setState((previous) => ({
+            ...previous,
+            description: data.fetchGameData.description,
+            release: data.fetchGameData.release,
+            youTubeId: data.fetchGameData.youTubeId,
+            developer: developer
+                ? { value: developer.id, label: developer.name }
+                : { value: data.fetchGameData.developer, label: data.fetchGameData.developer, __isNew__: true },
+            genres: data.fetchGameData.genres.map((genre) => {
+                const existingGenre = allGenres.find(({ name }) => name === genre);
+
+                return existingGenre
+                    ? { value: existingGenre.id, label: existingGenre.name }
+                    : { value: genre, label: genre, __isNew__: true };
+            }),
+        }));
+    };
+
     const save = async () => {
         const foundErrors = validators.reduce((result, current) => {
             if (current.isValid(state[current.field])) {
@@ -188,6 +220,15 @@ const Editor = (props) => {
                         onChange={changeValueHandler('system')}
                         value={state.system}
                     />
+                </FormItem>
+
+                <FormItem label="Auto-fill fields">
+                    <Button
+                        onClick={autoFillFields}
+                        disabled={!state.title.trim() || !state.system}
+                    >
+                        Auto-fill
+                    </Button>
                 </FormItem>
 
                 <FormItem label="Compilation">

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "knex migrate:latest && nodemon app.js --exec babel-node --ignore='node_modules' --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread",
+    "dev": "knex migrate:latest && nodemon -L app.js --exec babel-node --ignore='node_modules' --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread",
     "prestart": "knex migrate:latest",
     "start": "nodemon app.js --exec babel-node --ignore='node_modules' --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread"
   },
@@ -21,6 +21,11 @@
       "@babel/plugin-proposal-object-rest-spread"
     ]
   },
+  "nodemonConfig": {
+    "verbose": true,
+    "delay": "3000",
+    "ext": "js,json,gql"
+  },
   "dependencies": {
     "@babel/cli": "7.12.10",
     "@babel/core": "7.12.10",
@@ -28,6 +33,7 @@
     "@babel/plugin-proposal-class-properties": "7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "7.12.1",
     "@babel/preset-env": "7.12.10",
+    "axios": "^0.21.0",
     "convict": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",

@@ -61,6 +61,20 @@ const config = convict({
             },
         },
     },
+    giantbomb: {
+        apiKey: {
+            format: String,
+            default: 'aebe8a5bc71b49509966b5ea50e7951d79d99cd8',
+            env: 'GIANTBOMB_API_KEY',
+        },
+    },
+    youTube: {
+        apiKey: {
+            format: String,
+            default: 'AIzaSyA07Y1XjytaowyA2F452XpEjtKEOGIAesI',
+            env: 'YOU_TUBE_API_KEY',
+        },
+    },
 });
 
 config.validate({ allowed: 'strict' });
