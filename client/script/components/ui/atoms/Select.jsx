@@ -32,7 +32,7 @@ Select.propTypes = {
     })).isRequired,
     label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.object,
+    value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     isMulti: PropTypes.bool,
     creatable: PropTypes.bool,
 };

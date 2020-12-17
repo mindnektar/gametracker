@@ -94,7 +94,7 @@ const Editor = (props) => {
         message: 'Please select a developer.',
     }, {
         field: 'genres',
-        isValid: (value) => value.length > 0,
+        isValid: (value) => !!value && value.length > 0,
         message: 'Please select at least one genre.',
     }];
 
@@ -121,6 +121,8 @@ const Editor = (props) => {
     };
 
     const autoFillFields = async () => {
+        setLoading(true);
+
         const { data } = await fetchGameData({
             title: state.title.trim(),
             system: (
@@ -136,9 +138,14 @@ const Editor = (props) => {
             description: data.fetchGameData.description,
             release: data.fetchGameData.release,
             youTubeId: data.fetchGameData.youTubeId,
-            developer: developer
-                ? { value: developer.id, label: developer.name }
-                : { value: data.fetchGameData.developer, label: data.fetchGameData.developer, __isNew__: true },
+            developer: developer ? {
+                value: developer.id,
+                label: developer.name,
+            } : {
+                value: data.fetchGameData.developer,
+                label: data.fetchGameData.developer,
+                __isNew__: true,
+            },
             genres: data.fetchGameData.genres.map((genre) => {
                 const existingGenre = allGenres.find(({ name }) => name === genre);
 
@@ -147,6 +154,8 @@ const Editor = (props) => {
                     : { value: genre, label: genre, __isNew__: true };
             }),
         }));
+
+        setLoading(false);
     };
 
     const save = async () => {
@@ -185,8 +194,8 @@ const Editor = (props) => {
             dlcs: [],
         });
 
-        setLoading(false);
         props.onClose();
+        setLoading(false);
     };
 
     return (

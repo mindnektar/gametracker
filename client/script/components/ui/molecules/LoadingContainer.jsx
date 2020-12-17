@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Loader from 'atoms/Loader';
 
 const LoadingContainer = (props) => (
     <div className="ui-loading-container">
         {props.children || (
-            'Loading'
+            <div className="ui-loading-container__loader">
+                <Loader />
+            </div>
         )}
     </div>
 );
