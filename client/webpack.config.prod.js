@@ -1,9 +1,9 @@
 const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = webpackMerge(require('./webpack.config.common.js'), {
+module.exports = merge(require('./webpack.config.common.js'), {
     output: {
         publicPath: '/',
         filename: 'script/[name][fullhash].js',
@@ -17,14 +17,13 @@ module.exports = webpackMerge(require('./webpack.config.common.js'), {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
+            'process.env.API_HTTP_URL': JSON.stringify('https://completed-games.herokuapp.com/api'),
         }),
     ],
 
     optimization: {
         minimize: true,
-        minimizer: [new TerserPlugin({
-            sourceMap: true,
-        })],
+        minimizer: [new TerserPlugin()],
     },
 
     devtool: 'source-map',

@@ -14,15 +14,20 @@ COPY docker/docker-entrypoint.sh /
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 
-RUN npm install pm2 -g
-RUN mkdir -p /app && mkdir -p /app/node_modules
+RUN mkdir -p /app
 RUN chown -R node:node /app
-WORKDIR /app
-USER node
 
-ADD package.json /app/package.json
+WORKDIR /app/client
+RUN chown -R node:node /app/client
+COPY --chown=node:node client/package.json /app/client/package.json
 RUN yarn install
-ADD . /app
+COPY --chown=node:node client .
+RUN node_modules/.bin/webpack --config webpack.config.prod.js
+WORKDIR /app/server
+RUN chown -R node:node /app/server
+COPY --chown=node:node server/package.json /app/server/package.json
+RUN yarn install
+COPY --chown=node:node server .
 
 EXPOSE 4000
 

@@ -27,6 +27,7 @@ module.exports = merge(require('./webpack.config.common.js'), {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development'),
+            'process.env.API_HTTP_URL': JSON.stringify('http://localhost:5930/api'),
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],

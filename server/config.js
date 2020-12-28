@@ -40,27 +40,6 @@ const config = convict({
             env: 'DATABASE_DEBUG',
         },
     },
-    redis: {
-        uri: {
-            format: String,
-            default: 'redis://localhost:6390',
-            env: 'REDIS_URI',
-        },
-        retry: {
-            maxTotalTime: {
-                format: 'nat',
-                default: 1000 * 60 * 60,
-            },
-            maxAttempts: {
-                format: 'nat',
-                default: 12,
-            },
-            maxReconnectDelay: {
-                format: 'nat',
-                default: 1000 * 60,
-            },
-        },
-    },
     giantbomb: {
         apiKey: {
             format: String,
