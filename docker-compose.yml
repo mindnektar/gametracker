@@ -2,10 +2,10 @@ version: '3.1'
 
 services:
   api:
-    build: ./server
+    build: .
     image: quay.io/martin_denk/gametracker-api:${APP_VERSION:-latest}
     volumes:
-      - ./server:/app
+      - .:/app
     ports:
       - ${EXTERNAL_PORT:-5930}:5930
     links:
