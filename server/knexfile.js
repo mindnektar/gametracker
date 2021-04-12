@@ -2,7 +2,7 @@ const config = require('./config');
 
 const knexconf = {
     client: config.knex.client,
-    connection: config.knex.connection,
+    connection: `${config.knex.connection}?sslmode=require`,
     migrations: config.knex.migrations,
     debug: config.knex.debug,
     seeds: {
