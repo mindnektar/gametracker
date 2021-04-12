@@ -23,6 +23,7 @@ export const systemOrder = [
     'Genesis',
     'PC',
     'Oculus Rift',
+    'Oculus Quest',
     'Android',
     'Arcade',
 ];
