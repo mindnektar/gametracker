@@ -144,7 +144,7 @@ export default async (title) => {
             description: results.deck ? results.deck.replace(/&amp;/g, '&') : '',
             release: results.original_release_date
                 ? parseInt(results.original_release_date.substring(0, 4), 10)
-                : '',
+                : null,
             developer: results.developers
                 ? developerMap[results.developers[0].name] || results.developers[0].name
                 : '',
