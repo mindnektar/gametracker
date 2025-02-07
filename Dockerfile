@@ -3,7 +3,7 @@ FROM node:18.20.6-alpine as webpack
 LABEL maintainer="Martin Denk <ausdenk@gmail.com>"
 
 # Add Tini and bash
-RUN apk add --no-cache tini bash busybox-extras python build-base yarn
+RUN apk add --no-cache tini bash busybox-extras python3 build-base yarn
 
 ENV NODE_PATH /app/node_modules
 ENV PATH $NODE_PATH/.bin:$PATH
