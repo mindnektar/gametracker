@@ -17,6 +17,10 @@ const List = () => {
     const [editorState, setEditorState] = useState({ id: null, isOpen: false });
 
     const getGroups = () => {
+        if (!data) {
+            return [];
+        }
+
         if (groupBy.value === 'none') {
             return [{ name: 'All games', games: data.list.games }];
         }
