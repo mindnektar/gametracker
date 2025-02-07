@@ -35,7 +35,7 @@ const Editor = (props) => {
     const defaultState = {
         title: '',
         system: () => ({
-            defaultValue: null,
+            defaultValue: props.systems.find(({ name }) => name === 'PC'),
             modify: (system) => (
                 system
                     ? { value: system.id, label: system.name }
