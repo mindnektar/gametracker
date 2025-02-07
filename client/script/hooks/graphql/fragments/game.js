@@ -8,6 +8,7 @@ export default gql`
         release
         description
         youTubeId
+        status
         system {
             id
             name

@@ -8,7 +8,7 @@ const Header = (props) => (
         </div>
 
         <div className="header__total">
-            {props.gameCount} games
+            {props.gameCount} game{props.gameCount !== 1 ? 's' : ''}
         </div>
     </div>
 );

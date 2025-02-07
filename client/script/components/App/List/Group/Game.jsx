@@ -25,6 +25,9 @@ const Game = (props) => {
                 'game',
                 {
                     'game--expanded': props.expanded,
+                    'game--planned': props.game.status === 'planned',
+                    'game--active': props.game.status === 'active',
+                    'game--dropped': props.game.status === 'dropped',
                 }
             )}
             data-game={props.game.id}
@@ -48,6 +51,22 @@ const Game = (props) => {
                         </span>
                     )}
                 </div>
+
+                {props.groupBy !== 'status' && (
+                    <div
+                        className={classnames(
+                            'game__status',
+                            {
+                                'game__status--active': props.game.status === 'active',
+                                'game__status--dropped': props.game.status === 'dropped',
+                                'game__status--planned': props.game.status === 'planned',
+                                'game__status--completed': props.game.status === 'completed',
+                            }
+                        )}
+                    >
+                        {props.game.status}
+                    </div>
+                )}
 
                 <div className="game__genre">
                     {props.game.genres.map((genre) => (
@@ -83,7 +102,10 @@ const Game = (props) => {
                 )}
 
                 {props.groupBy !== 'rating' && (
-                    <Rating value={props.game.rating} />
+                    <Rating
+                        value={props.game.rating}
+                        visible={props.game.status === 'completed'}
+                    />
                 )}
             </div>
 

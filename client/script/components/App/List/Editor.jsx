@@ -5,6 +5,7 @@ import useCreateGameMutation from 'hooks/graphql/mutations/createGame';
 import useUpdateGameMutation from 'hooks/graphql/mutations/updateGame';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import { systemOrder } from 'helpers/systems';
+import statusMap from 'helpers/statusMap';
 import { prepareValues } from 'helpers/form';
 import Select from 'atoms/Select';
 import TextField from 'atoms/TextField';
@@ -45,6 +46,7 @@ const Editor = (props) => {
         release: 2020,
         description: '',
         youTubeId: '',
+        status: { value: 'planned', label: 'Planned' },
         developer: () => ({
             defaultValue: null,
             modify: (developer) => (
@@ -186,6 +188,7 @@ const Editor = (props) => {
             release: state.release,
             description: state.description.trim(),
             youTubeId: state.youTubeId.trim(),
+            status: state.status.value,
             system: formatSelectValue(state.system),
             developer: formatSelectValue(state.developer),
             compilation: formatSelectValue(state.compilation),
@@ -310,15 +313,30 @@ const Editor = (props) => {
                     />
                 </FormItem>
 
-                <FormItem label="Rating">
-                    <Slider
-                        min={0}
-                        max={100}
-                        stepSize={5}
-                        value={state.rating}
-                        onChange={changeValueHandler('rating')}
+                <FormItem
+                    label="Status"
+                    error={errors.status}
+                >
+                    <Select
+                        items={Object.entries(statusMap).map(([value, label]) => ({
+                            value, label,
+                        }))}
+                        onChange={changeValueHandler('status')}
+                        value={state.status}
                     />
                 </FormItem>
+
+                {state.status.value === 'completed' && (
+                    <FormItem label="Rating">
+                        <Slider
+                            min={0}
+                            max={100}
+                            stepSize={5}
+                            value={state.rating}
+                            onChange={changeValueHandler('rating')}
+                        />
+                    </FormItem>
+                )}
             </Form>
         </Dialog>
     );

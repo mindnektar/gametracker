@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useListQuery from 'hooks/graphql/queries/list';
 import groupMap from 'helpers/groupMap';
+import statusMap from 'helpers/statusMap';
 import LoadingContainer from 'molecules/LoadingContainer';
 import Header from './List/Header';
 import Meta from './List/Meta';
@@ -10,6 +11,7 @@ import Editor from './List/Editor';
 const List = () => {
     const { loading, data } = useListQuery();
     const [groupBy, setGroupBy] = useState({ value: 'system', label: 'System' });
+    const [statusFilter, setStatusFilter] = useState({ value: 'completed', label: statusMap.completed });
     const [expandedGame, setExpandedGame] = useState(null);
     const [genreFilter, setGenreFilter] = useState([]);
     const [editorState, setEditorState] = useState({ id: null, isOpen: false });
@@ -21,6 +23,10 @@ const List = () => {
 
         const groups = data.list.games.reduce((result, current) => {
             const name = groupMap[groupBy.value].resolver(current);
+
+            if (current.status !== statusFilter.value && statusFilter.value !== 'all') {
+                return result;
+            }
 
             return {
                 ...result,
@@ -59,22 +65,26 @@ const List = () => {
         setEditorState((previous) => ({ ...previous, isOpen: false }));
     };
 
+    const groups = getGroups();
+
     return (
         <LoadingContainer>
             {!loading && (
                 <div className="list">
                     <Header
                         listName={data.list.name}
-                        gameCount={data.list.games.length}
+                        gameCount={groups.flatMap((group) => group.games).length}
                     />
 
                     <Meta
                         openEditor={openEditor}
                         groupBy={groupBy}
                         setGroupBy={setGroupBy}
+                        statusFilter={statusFilter}
+                        setStatusFilter={setStatusFilter}
                     />
 
-                    {getGroups().map((group) => (
+                    {groups.map((group) => (
                         <Group
                             key={group.name}
                             expandGame={setExpandedGame}

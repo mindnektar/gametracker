@@ -16,6 +16,14 @@ type Game {
     release: Int!
     description: String!
     youTubeId: String!
+    status: GameStatus!
+}
+
+enum GameStatus {
+    active
+    planned
+    completed
+    dropped
 }
 
 input CreateGameInput {
@@ -30,6 +38,7 @@ input CreateGameInput {
     genres: [RelateGenreInput!]!
     compilation: RelateCompilationInput
     dlcs: [CreateDlcInput!]
+    status: GameStatus!
 }
 
 input UpdateGameInput {
@@ -45,6 +54,7 @@ input UpdateGameInput {
     genres: [RelateGenreInput!]
     compilation: RelateCompilationInput
     dlcs: [CreateDlcInput!]
+    status: GameStatus
 }
 
 input FetchGameDataInput {

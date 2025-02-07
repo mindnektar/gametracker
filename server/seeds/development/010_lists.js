@@ -3,7 +3,7 @@ const uuid = require('uuid').v4;
 const list = {
     completedGames: {
         id: uuid(),
-        name: 'Completed games',
+        name: 'Game Tracker',
     },
 };
 
