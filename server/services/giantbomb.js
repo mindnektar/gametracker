@@ -156,5 +156,10 @@ export default async (title) => {
         console.error(error);
     }
 
-    return {};
+    return {
+        description: '',
+        release: null,
+        developer: '',
+        genres: [],
+    };
 };

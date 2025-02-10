@@ -70,6 +70,14 @@ const List = () => {
     };
 
     const groups = getGroups();
+    const games = groups.flatMap((group) => group.games);
+
+    const pickRandom = () => {
+        const game = games[Math.floor(Math.random() * games.length)];
+
+        setExpandedGame(game.id);
+        window.scrollTo({ top: document.querySelector(`[data-game="${game.id}"]`).offsetTop - 80, behavior: 'smooth' });
+    };
 
     return (
         <LoadingContainer>
@@ -77,11 +85,12 @@ const List = () => {
                 <div className="list">
                     <Header
                         listName={data.list.name}
-                        gameCount={groups.flatMap((group) => group.games).length}
+                        gameCount={games.length}
                     />
 
                     <Meta
                         openEditor={openEditor}
+                        pickRandom={pickRandom}
                         groupBy={groupBy}
                         setGroupBy={setGroupBy}
                         statusFilter={statusFilter}

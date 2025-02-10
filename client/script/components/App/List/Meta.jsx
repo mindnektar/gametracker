@@ -36,15 +36,22 @@ const Meta = (props) => {
                 />
             </div>
 
-            <Button onClick={openEditor}>
-                Add game
-            </Button>
+            <div className="meta__options">
+                <Button onClick={props.pickRandom}>
+                    Pick random game
+                </Button>
+
+                <Button onClick={openEditor}>
+                    Add game
+                </Button>
+            </div>
         </div>
     );
 };
 
 Meta.propTypes = {
     openEditor: PropTypes.func.isRequired,
+    pickRandom: PropTypes.func.isRequired,
     setGroupBy: PropTypes.func.isRequired,
     groupBy: PropTypes.object.isRequired,
     statusFilter: PropTypes.string.isRequired,
