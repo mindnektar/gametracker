@@ -9,6 +9,7 @@ export default gql`
         description
         youTubeId
         status
+        skipCount
         system {
             id
             name

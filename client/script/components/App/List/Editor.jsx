@@ -46,7 +46,14 @@ const Editor = (props) => {
         release: 2020,
         description: '',
         youTubeId: '',
-        status: { value: 'planned', label: 'Planned' },
+        status: () => ({
+            defaultValue: 'planned',
+            modify: (status) => (
+                status
+                    ? { value: status, label: statusMap[status] }
+                    : null
+            ),
+        }),
         developer: () => ({
             defaultValue: null,
             modify: (developer) => (

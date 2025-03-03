@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import useListQuery from 'hooks/graphql/queries/list';
+import useSkipGame from 'hooks/graphql/mutations/skipGame';
+import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
 import groupMap from 'helpers/groupMap';
 import statusMap from 'helpers/statusMap';
 import LoadingContainer from 'molecules/LoadingContainer';
@@ -10,6 +12,8 @@ import Editor from './List/Editor';
 
 const List = () => {
     const { loading, data } = useListQuery();
+    const skipGame = useSkipGame();
+    const deleteGame = useDeleteGame();
     const [groupBy, setGroupBy] = useState({ value: 'system', label: 'System' });
     const [statusFilter, setStatusFilter] = useState({ value: 'completed', label: statusMap.completed });
     const [expandedGame, setExpandedGame] = useState(null);
@@ -69,6 +73,11 @@ const List = () => {
         setEditorState((previous) => ({ ...previous, isOpen: false }));
     };
 
+    const onSkipGame = (id) => {
+        skipGame(id);
+        pickRandom();
+    };
+
     const groups = getGroups();
     const games = groups.flatMap((group) => group.games);
 
@@ -100,6 +109,7 @@ const List = () => {
                     {groups.map((group) => (
                         <Group
                             key={group.name}
+                            deleteGame={deleteGame}
                             expandGame={setExpandedGame}
                             expandedGame={expandedGame}
                             editGame={openEditor}
@@ -108,6 +118,7 @@ const List = () => {
                             toggleGenreFilter={toggleGenreFilter}
                             name={group.name}
                             games={group.games}
+                            skipGame={onSkipGame}
                         />
                     ))}
 

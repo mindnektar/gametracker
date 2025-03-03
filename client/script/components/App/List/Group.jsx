@@ -37,12 +37,14 @@ const Group = (props) => {
 
             {games.map((game) => (
                 <Game
+                    deleteGame={props.deleteGame}
                     expandGame={props.expandGame}
                     expanded={props.expandedGame === game.id}
                     editGame={props.editGame}
                     genreFilter={props.genreFilter}
                     groupBy={props.groupBy}
                     key={game.id}
+                    skipGame={props.skipGame}
                     toggleGenreFilter={props.toggleGenreFilter}
                     game={game}
                 />
@@ -56,6 +58,7 @@ Group.defaultProps = {
 };
 
 Group.propTypes = {
+    deleteGame: PropTypes.func.isRequired,
     expandGame: PropTypes.func.isRequired,
     expandedGame: PropTypes.string,
     editGame: PropTypes.func.isRequired,
@@ -63,6 +66,7 @@ Group.propTypes = {
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    skipGame: PropTypes.func.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
 };
 

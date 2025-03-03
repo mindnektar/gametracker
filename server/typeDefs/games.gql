@@ -2,6 +2,8 @@ type Mutation {
     createGame(input: CreateGameInput!): Game!
     updateGame(input: UpdateGameInput!): Game!
     fetchGameData(input: FetchGameDataInput!): FetchGameDataResult!
+    skipGame(id: ID!): Game!
+    deleteGame(id: ID!): Game!
 }
 
 type Game {
@@ -17,6 +19,7 @@ type Game {
     description: String!
     youTubeId: String!
     status: GameStatus!
+    skipCount: Int!
 }
 
 enum GameStatus {

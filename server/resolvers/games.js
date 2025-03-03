@@ -38,5 +38,23 @@ export default {
                 youTubeId: youTubeData.youTubeId,
             };
         },
+        skipGame: (parent, { id }, context, info) => (
+            transaction((trx) => (
+                Game
+                    .query(trx)
+                    .graphqlEager(info)
+                    .findById(id)
+                    .increment('skipCount', 1)
+                    .returning('*')
+            ))
+        ),
+        deleteGame: (parent, { id }) => (
+            transaction((trx) => (
+                Game
+                    .query(trx)
+                    .deleteById(id)
+                    .returning('*')
+            ))
+        ),
     },
 };

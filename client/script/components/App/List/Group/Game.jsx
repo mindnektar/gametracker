@@ -14,6 +14,14 @@ const Game = (props) => {
         props.editGame(props.game.id);
     };
 
+    const skipGame = () => {
+        props.skipGame(props.game.id);
+    };
+
+    const deleteGame = () => {
+        props.deleteGame(props.game.id);
+    };
+
     const toggleGenreFilterHandler = (genreId) => (event) => {
         event.stopPropagation();
         props.toggleGenreFilter(genreId);
@@ -48,6 +56,12 @@ const Game = (props) => {
                     {props.game.dlcs.length > 0 && (
                         <span className="game__title-dlc-count">
                             {props.game.dlcs.length} DLC{props.game.dlcs.length !== 1 ? 's' : ''}
+                        </span>
+                    )}
+
+                    {props.game.skipCount > 0 && (
+                        <span className="game__title-skip-count">
+                            {props.game.skipCount} Skip{props.game.skipCount !== 1 ? 's' : ''}
                         </span>
                     )}
                 </div>
@@ -156,7 +170,20 @@ const Game = (props) => {
                                         </div>
                                     )}
 
-                                    <div className="game__edit">
+                                    <div className="game__actions">
+                                        {props.game.status === 'planned' && (
+                                            <Button onClick={skipGame}>
+                                                Skip game
+                                            </Button>
+                                        )}
+
+                                        <Button
+                                            destructive
+                                            onClick={deleteGame}
+                                        >
+                                            Delete game
+                                        </Button>
+
                                         <Button onClick={editGame}>
                                             Edit game
                                         </Button>
@@ -172,10 +199,12 @@ const Game = (props) => {
 };
 
 Game.propTypes = {
+    deleteGame: PropTypes.func.isRequired,
     game: PropTypes.object.isRequired,
     expanded: PropTypes.bool.isRequired,
     expandGame: PropTypes.func.isRequired,
     editGame: PropTypes.func.isRequired,
+    skipGame: PropTypes.func.isRequired,
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
