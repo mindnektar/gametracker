@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import moment from 'moment';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Button from 'atoms/Button';
 import Rating from './Game/Rating';
@@ -115,7 +116,13 @@ const Game = (props) => {
                     </div>
                 )}
 
-                {props.groupBy !== 'rating' && (
+                {props.groupBy !== 'completed' && props.game.status === 'completed' && (
+                    <div className="game__completed">
+                        {moment(props.game.updatedAt).format('L')}
+                    </div>
+                )}
+
+                {props.groupBy !== 'rating' && props.game.status === 'completed' && (
                     <Rating
                         value={props.game.rating}
                         visible={props.game.status === 'completed'}
