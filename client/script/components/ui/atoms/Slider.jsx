@@ -4,7 +4,7 @@ import Draggable from 'Draggable';
 
 const Slider = (props) => {
     const sliderRef = useRef();
-    const bla = (props.value - props.min) / (props.max - props.min);
+    const left = (props.value - props.min) / (props.max - props.min);
 
     const onDrag = (event) => {
         const sliderRect = sliderRef.current.getBoundingClientRect();
@@ -19,7 +19,7 @@ const Slider = (props) => {
             ),
         );
 
-        props.onChange(Math.round(value));
+        props.onChange(Math.round(value / props.stepSize) * props.stepSize);
     };
 
     return (
@@ -34,13 +34,13 @@ const Slider = (props) => {
                 <div className="ui-slider__bar">
                     <div
                         className="ui-slider__bar-inner"
-                        style={{ transform: `translateX(${-100 + (bla * 100)}%)` }}
+                        style={{ transform: `translateX(${-100 + (left * 100)}%)` }}
                     />
                 </div>
 
                 <div
                     className="ui-slider__draggable"
-                    style={{ left: `${bla * 100}%` }}
+                    style={{ left: `${left * 100}%` }}
                 >
                     <div className="ui-slider__point" />
 

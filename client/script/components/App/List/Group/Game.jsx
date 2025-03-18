@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import moment from 'moment';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Button from 'atoms/Button';
 import Rating from './Game/Rating';
@@ -46,7 +45,9 @@ const Game = (props) => {
                 onClick={expandGame}
             >
                 <div className="game__title">
-                    {props.game.title}
+                    <div className="game__title-text">
+                        {props.game.title}
+                    </div>
 
                     {props.game.compilation && (
                         <span className="game__title-compilation">
@@ -113,12 +114,6 @@ const Game = (props) => {
                 {props.groupBy !== 'release' && (
                     <div className="game__release">
                         {props.game.release}
-                    </div>
-                )}
-
-                {props.groupBy !== 'completed' && props.game.status === 'completed' && (
-                    <div className="game__completed">
-                        {moment(props.game.updatedAt).format('L')}
                     </div>
                 )}
 

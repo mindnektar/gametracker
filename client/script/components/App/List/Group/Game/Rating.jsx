@@ -15,7 +15,7 @@ const Rating = (props) => (
         />
 
         <div className="rating__text">
-            {props.value}
+            {props.value / 10}
         </div>
     </div>
 );

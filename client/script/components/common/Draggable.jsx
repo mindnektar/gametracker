@@ -1,30 +1,31 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const Draggable = (props) => {
-    const isMouseDown = useRef(false);
-    const [hasMoved, setHasMoved] = useState(false);
     const containerRef = useRef();
+    const isDraggingRef = useRef(false);
+
+    // Need to attach the events like this because this is the only way to add them
+    // non-passively in react, and that is necessary because otherwise we can't prevent
+    // background scrolling on iOS >= 11.3
+    useEffect(() => {
+        containerRef.current?.addEventListener('touchstart', onDragStart, { passive: false });
+
+        return () => containerRef.current?.removeEventListener('touchstart', onDragStart);
+    }, [props.onDragStart]);
 
     useEffect(() => {
-        // Need to attach the events like this because this is the only way to add them
-        // non-passively in react, and that is necessary because otherwise we can't prevent
-        // background scrolling on iOS >= 11.3
-        containerRef.current.addEventListener('touchstart', onDragStart, { passive: false });
-        containerRef.current.addEventListener('touchmove', onDrag, { passive: false });
-        containerRef.current.addEventListener('touchend', onDragEnd, { passive: false });
+        containerRef.current?.addEventListener('touchmove', onDrag, { passive: false });
 
-        return () => {
-            if (!containerRef.current) {
-                return;
-            }
+        return () => containerRef.current?.removeEventListener('touchmove', onDrag);
+    }, [props.onDrag]);
 
-            containerRef.current.removeEventListener('touchstart', onDragStart);
-            containerRef.current.removeEventListener('touchmove', onDrag);
-            containerRef.current.removeEventListener('touchend', onDragEnd);
-        };
-    }, []);
+    useEffect(() => {
+        containerRef.current?.addEventListener('touchend', onDragEnd, { passive: false });
+
+        return () => containerRef.current?.removeEventListener('touchend', onDragEnd);
+    }, [props.onDragEnd]);
 
     const shouldIgnore = (element) => {
         if (!props.ignoreSelector || !element.parentNode) {
@@ -51,31 +52,37 @@ const Draggable = (props) => {
             return;
         }
 
-        event.preventDefault();
+        if (props.preventDefault) {
+            event.preventDefault();
+        }
 
-        setHasMoved(false);
+        isDraggingRef.current = true;
+
         props.onDragStart(event);
     };
 
     const onDrag = (event) => {
-        if (shouldIgnore(event.target) || !isHandle(event.target)) {
+        if (shouldIgnore(event.target) || !isDraggingRef.current) {
             return;
         }
 
-        event.preventDefault();
-
-        if (event.type === 'mousemove' && !isMouseDown.current) {
-            return;
+        if (props.preventDefault) {
+            event.preventDefault();
         }
 
-        setHasMoved(true);
         props.onDrag(event);
     };
 
     const onDragEnd = (event) => {
-        if (shouldIgnore(event.target) || !isHandle(event.target)) {
+        if (shouldIgnore(event.target) || !isDraggingRef.current) {
             return;
         }
+
+        if (props.preventDefault) {
+            event.preventDefault();
+        }
+
+        isDraggingRef.current = false;
 
         props.onDragEnd(event);
     };
@@ -85,30 +92,40 @@ const Draggable = (props) => {
             return;
         }
 
-        event.preventDefault();
+        if (props.preventDefault) {
+            event.preventDefault();
+        }
 
-        isMouseDown.current = true;
+        isDraggingRef.current = true;
 
         document.addEventListener('mouseup', onMouseUp);
         document.addEventListener('mousemove', onMouseMove);
 
-        setHasMoved(false);
         props.onDragStart(event);
     };
 
     const onMouseMove = (event) => {
-        if (!isMouseDown.current) {
+        if (shouldIgnore(event.target) || !isDraggingRef.current) {
             return;
         }
 
-        event.preventDefault();
+        if (props.preventDefault) {
+            event.preventDefault();
+        }
 
-        setHasMoved(true);
         props.onDrag(event);
     };
 
     const onMouseUp = (event) => {
-        isMouseDown.current = false;
+        if (shouldIgnore(event.target) || !isDraggingRef.current) {
+            return;
+        }
+
+        if (props.preventDefault) {
+            event.preventDefault();
+        }
+
+        isDraggingRef.current = false;
 
         document.removeEventListener('mouseup', onMouseUp);
         document.removeEventListener('mousemove', onMouseMove);
@@ -116,22 +133,15 @@ const Draggable = (props) => {
         props.onDragEnd(event);
     };
 
-    const onClick = (event) => {
-        if (hasMoved) {
-            event.stopPropagation();
-        }
-    };
-
     return (
         <div
+            ref={containerRef}
             className={classNames(
                 'draggable',
-                { 'draggable--disabled': props.disabled }
+                { 'draggable--disabled': props.disabled },
             )}
             onMouseDown={onMouseDown}
-            ref={containerRef}
             style={props.style}
-            onClick={onClick}
         >
             {props.children}
         </div>
@@ -139,24 +149,26 @@ const Draggable = (props) => {
 };
 
 Draggable.defaultProps = {
-    onDragStart: () => null,
+    disabled: false,
+    handle: null,
+    ignoreSelector: null,
     onDrag: () => null,
     onDragEnd: () => null,
+    onDragStart: () => null,
+    preventDefault: true,
     style: null,
-    disabled: false,
-    ignoreSelector: null,
-    handle: null,
 };
 
 Draggable.propTypes = {
-    onDragStart: PropTypes.func,
+    children: PropTypes.node.isRequired,
+    disabled: PropTypes.bool,
+    handle: PropTypes.string,
+    ignoreSelector: PropTypes.string,
     onDrag: PropTypes.func,
     onDragEnd: PropTypes.func,
-    children: PropTypes.node.isRequired,
+    onDragStart: PropTypes.func,
+    preventDefault: PropTypes.bool,
     style: PropTypes.object,
-    disabled: PropTypes.bool,
-    ignoreSelector: PropTypes.string,
-    handle: PropTypes.string,
 };
 
 export default Draggable;

@@ -42,7 +42,14 @@ const Editor = (props) => {
                     : null
             ),
         }),
-        rating: 50,
+        rating: () => ({
+            defaultValue: 5,
+            modify: (rating) => (
+                rating
+                    ? rating / 10
+                    : null
+            ),
+        }),
         release: 2020,
         description: '',
         youTubeId: '',
@@ -121,12 +128,12 @@ const Editor = (props) => {
         }));
     };
 
-    const formatSelectValue = (value) => {
+    const formatSelectValue = (value, key = 'name') => {
         if (!value || value.value === '') {
             return null;
         }
 
-        return value.__isNew__ ? { name: value.value } : { id: value.value };
+        return value.__isNew__ ? { [key]: value.value } : { id: value.value };
     };
 
     const autoFillFields = async () => {
@@ -191,14 +198,14 @@ const Editor = (props) => {
         await mutation({
             id: props.game?.id,
             title: state.title.trim(),
-            rating: state.rating,
+            rating: state.rating * 10,
             release: state.release,
             description: state.description.trim(),
             youTubeId: state.youTubeId.trim(),
             status: state.status.value,
             system: formatSelectValue(state.system),
             developer: formatSelectValue(state.developer),
-            compilation: formatSelectValue(state.compilation),
+            compilation: formatSelectValue(state.compilation, 'title'),
             genres: state.genres.map(formatSelectValue),
             lists: [{ id: props.listId }],
             dlcs: [],
@@ -337,8 +344,8 @@ const Editor = (props) => {
                     <FormItem label="Rating">
                         <Slider
                             min={0}
-                            max={100}
-                            stepSize={5}
+                            max={10}
+                            stepSize={0.5}
                             value={state.rating}
                             onChange={changeValueHandler('rating')}
                         />
