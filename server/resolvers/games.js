@@ -1,6 +1,8 @@
 import transaction from './helpers/transaction';
 import fetchGiantbombData from '../services/giantbomb';
 import fetchYouTubeData from '../services/youTube';
+import fetchAiData from '../services/ai';
+import developerMap from '../services/developerMap';
 import Game from '../models/Game';
 
 export default {
@@ -27,13 +29,17 @@ export default {
             ))
         ),
         fetchGameData: async (parent, { input }) => {
+            const aiData = await fetchAiData(input.title, input.system);
             const giantbombData = await fetchGiantbombData(input.title);
             const youTubeData = await fetchYouTubeData(input.title, input.system);
+            const description = aiData?.description || giantbombData.description;
+            const release = aiData?.release_year || giantbombData.release;
+            const developer = aiData?.developer || giantbombData.developer;
 
             return {
-                description: giantbombData.description,
-                release: giantbombData.release,
-                developer: giantbombData.developer,
+                description,
+                release,
+                developer: developerMap[developer] || developer,
                 genres: giantbombData.genres,
                 youTubeId: youTubeData.youTubeId,
             };

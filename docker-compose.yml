@@ -5,7 +5,8 @@ services:
     build: .
     image: quay.io/martin_denk/gametracker-api:${APP_VERSION:-latest}
     volumes:
-      - .:/app
+      - ./server:/app/server
+      - ./client:/app/client
     ports:
       - ${EXTERNAL_PORT:-5930}:5930
     links:

@@ -54,6 +54,13 @@ const config = convict({
             env: 'YOU_TUBE_API_KEY',
         },
     },
+    ai: {
+        apiKey: {
+            format: String,
+            default: 'AIzaSyDVxXvPd3eJUbOcrm4i1d_8-gZ8VYZHaKM',
+            env: 'AI_API_KEY',
+        },
+    },
 });
 
 config.validate({ allowed: 'strict' });
