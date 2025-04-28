@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import Markdown from 'react-markdown';
 import Button from 'atoms/Button';
 import Rating from './Game/Rating';
 
@@ -151,7 +152,7 @@ const Game = (props) => {
                                 )}
 
                                 <div className="game__description">
-                                    {props.game.description}
+                                    <Markdown>{props.game.description}</Markdown>
 
                                     {props.game.dlcs.length > 0 && (
                                         <div className="game__dlcs">

@@ -32,8 +32,18 @@ export default {
             const aiData = await fetchAiData(input.title, input.system);
             const giantbombData = await fetchGiantbombData(input.title);
             const youTubeData = await fetchYouTubeData(input.title, input.system);
-            const description = aiData?.description || giantbombData.description;
-            const release = aiData?.release_year || giantbombData.release;
+            const description = aiData.story && aiData.gameplay && aiData.history ? `## Story & theme
+
+${aiData.story}
+
+## Gameplay
+
+${aiData.gameplay}
+
+## History
+
+${aiData.history}` : giantbombData.description;
+            const release = aiData?.releaseYear || giantbombData.release;
             const developer = aiData?.developer || giantbombData.developer;
 
             return {
@@ -41,7 +51,7 @@ export default {
                 release,
                 developer: developerMap[developer] || developer,
                 genres: giantbombData.genres,
-                youTubeId: youTubeData.youTubeId,
+                youTubeId: youTubeData.youTubeId || '',
             };
         },
         skipGame: (parent, { id }, context, info) => (
