@@ -32,7 +32,7 @@ export default {
             const aiData = await fetchAiData(input.title, input.system);
             const giantbombData = await fetchGiantbombData(input.title);
             const youTubeData = await fetchYouTubeData(input.title, input.system);
-            const description = aiData.story && aiData.gameplay && aiData.history ? `## Story & theme
+            const description = aiData.story && aiData.gameplay && aiData.history ? `## Story & Theme
 
 ${aiData.story}
 
