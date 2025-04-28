@@ -62,7 +62,9 @@ export default class CustomQueryBuilder extends QueryBuilder {
     // @overrides super.upsertGraph
     async upsertGraph(graph, options) {
         return super.upsertGraph(
-            await this.transformGraphForBelongsToOneRelations(graph),
+            options?.noGraphTransform
+                ? graph
+                : await this.transformGraphForBelongsToOneRelations(graph),
             options,
         );
     }
@@ -70,7 +72,9 @@ export default class CustomQueryBuilder extends QueryBuilder {
     // @overrides super.upsertGraphAndFetch
     async upsertGraphAndFetch(graph, options) {
         return super.upsertGraphAndFetch(
-            await this.transformGraphForBelongsToOneRelations(graph),
+            options?.noGraphTransform
+                ? graph
+                : await this.transformGraphForBelongsToOneRelations(graph),
             options,
         );
     }

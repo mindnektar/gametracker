@@ -25,6 +25,7 @@ export default {
                     .upsertGraphAndFetch(input, {
                         relate: ['lists', 'system', 'developer', 'genres', 'compilation'],
                         unrelate: ['lists', 'system', 'developer', 'genres', 'compilation'],
+                        noGraphTransform: true,
                     })
             ))
         ),
