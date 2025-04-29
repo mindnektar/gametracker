@@ -78,6 +78,10 @@ const List = () => {
         pickRandom();
     };
 
+    const toggleExpandedGame = (id) => {
+        setExpandedGame((previous) => (previous === id ? null : id));
+    };
+
     const groups = getGroups();
     const games = groups.flatMap((group) => group.games);
 
@@ -110,7 +114,7 @@ const List = () => {
                         <Group
                             key={group.name}
                             deleteGame={deleteGame}
-                            expandGame={setExpandedGame}
+                            expandGame={toggleExpandedGame}
                             expandedGame={expandedGame}
                             editGame={openEditor}
                             genreFilter={genreFilter}

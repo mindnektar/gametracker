@@ -195,21 +195,28 @@ const Editor = (props) => {
 
         const mutation = props.game ? updateGame : createGame;
 
-        await mutation({
-            id: props.game?.id,
-            title: state.title.trim(),
-            rating: state.rating * 10,
-            release: state.release,
-            description: state.description.trim(),
-            youTubeId: state.youTubeId.trim(),
-            status: state.status.value,
-            system: formatSelectValue(state.system),
-            developer: formatSelectValue(state.developer),
-            compilation: formatSelectValue(state.compilation, 'title'),
-            genres: state.genres.map(formatSelectValue),
-            lists: [{ id: props.listId }],
-            dlcs: [],
-        });
+        try {
+            await mutation({
+                id: props.game?.id,
+                title: state.title.trim(),
+                rating: state.rating * 10,
+                release: state.release,
+                description: state.description.trim(),
+                youTubeId: state.youTubeId.trim(),
+                status: state.status.value,
+                system: formatSelectValue(state.system),
+                developer: formatSelectValue(state.developer),
+                compilation: formatSelectValue(state.compilation, 'title'),
+                genres: state.genres.map(formatSelectValue),
+                lists: [{ id: props.listId }],
+                dlcs: [],
+            });
+        } catch (error) {
+            setLoading(false);
+            console.error(error);
+
+            return;
+        }
 
         props.onClose();
         setLoading(false);

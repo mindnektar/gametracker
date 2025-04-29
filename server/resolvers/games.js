@@ -44,8 +44,8 @@ ${aiData.gameplay}
 ## History
 
 ${aiData.history}` : giantbombData.description;
-            const release = aiData?.releaseYear || giantbombData.release;
-            const developer = aiData?.developer || giantbombData.developer;
+            const release = aiData.releaseYear || giantbombData.release;
+            const developer = aiData.developer || giantbombData.developer;
 
             return {
                 description,
