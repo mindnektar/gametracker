@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ErrorMessage from 'atoms/ErrorMessage';
 import Collapsible from 'molecules/Collapsible';
 
 const FormItem = (props) => (
@@ -12,9 +13,9 @@ const FormItem = (props) => (
             </div>
 
             <Collapsible collapsed={!props.error}>
-                <div className="ui-form-item__error">
+                <ErrorMessage>
                     {props.error}
-                </div>
+                </ErrorMessage>
             </Collapsible>
         </div>
     </div>

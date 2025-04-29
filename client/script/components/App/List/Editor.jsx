@@ -12,6 +12,8 @@ import TextField from 'atoms/TextField';
 import Slider from 'atoms/Slider';
 import Button from 'atoms/Button';
 import TextArea from 'atoms/TextArea';
+import ErrorMessage from 'atoms/ErrorMessage';
+import Collapsible from 'molecules/Collapsible';
 import Dialog from 'molecules/Dialog';
 import Form, { FormItem } from 'molecules/Form';
 
@@ -32,6 +34,7 @@ const Editor = (props) => {
         a.name.localeCompare(b.name)
     ));
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
     const defaultState = {
         title: '',
         system: () => ({
@@ -138,6 +141,7 @@ const Editor = (props) => {
 
     const autoFillFields = async () => {
         setLoading(true);
+        setErrorMessage(null);
 
         try {
             const { data } = await fetchGameData({
@@ -172,7 +176,7 @@ const Editor = (props) => {
                 }),
             }));
         } catch (error) {
-            console.error(error);
+            setErrorMessage(error.message);
         }
 
         setLoading(false);
@@ -355,6 +359,12 @@ const Editor = (props) => {
                         />
                     </FormItem>
                 )}
+
+                <Collapsible collapsed={!errorMessage}>
+                    <ErrorMessage>
+                        {errorMessage}
+                    </ErrorMessage>
+                </Collapsible>
             </Form>
         </Dialog>
     );
