@@ -215,7 +215,7 @@ const Editor = (props) => {
             system: formatSelectValue(state.system),
             developer: formatSelectValue(state.developer),
             compilation: formatSelectValue(state.compilation, 'title'),
-            genres: state.genres.map(formatSelectValue),
+            genres: state.genres.map((genre) => formatSelectValue(genre)),
             lists: [{ id: props.listId }],
             dlcs: [],
         });
