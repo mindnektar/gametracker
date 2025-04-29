@@ -120,6 +120,7 @@ const Editor = (props) => {
     useEffect(() => {
         if (props.open) {
             setErrors({});
+            setErrorMessage(null);
             setState(prepareValues(props.game, defaultState));
         }
     }, [props.open]);
