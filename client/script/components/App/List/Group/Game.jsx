@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Markdown from 'react-markdown';
 import Button from 'atoms/Button';
+import Collapsible from 'molecules/Collapsible';
 import Rating from './Game/Rating';
 
 const Game = (props) => {
@@ -126,77 +126,64 @@ const Game = (props) => {
                 )}
             </div>
 
-            <TransitionGroup>
-                {props.expanded && (
-                    <CSSTransition
-                        classNames="game__body-"
-                        key={props.game.id}
-                        mountOnEnter
-                        timeout={{
-                            enter: 300,
-                            exit: 300,
-                        }}
-                        unmountOnExit
-                    >
-                        <div className="game__body">
-                            <div className="game__info">
-                                {props.game.youTubeId ? (
-                                    <iframe
-                                        title={props.game.youTubeId}
-                                        allowFullScreen
-                                        className="game__video"
-                                        src={`https://www.youtube.com/embed/${props.game.youTubeId}`}
-                                    />
-                                ) : (
-                                    <div className="game__video-placeholder" />
-                                )}
+            <Collapsible collapsed={!props.expanded}>
+                <div className="game__body">
+                    <div className="game__info">
+                        {props.game.youTubeId ? (
+                            <iframe
+                                title={props.game.youTubeId}
+                                allowFullScreen
+                                className="game__video"
+                                src={`https://www.youtube.com/embed/${props.game.youTubeId}`}
+                            />
+                        ) : (
+                            <div className="game__video-placeholder" />
+                        )}
 
-                                <div className="game__description">
-                                    <Markdown>{props.game.description}</Markdown>
+                        <div className="game__description">
+                            <Markdown>{props.game.description}</Markdown>
 
-                                    {props.game.dlcs.length > 0 && (
-                                        <div className="game__dlcs">
-                                            <div className="game__dlcs-header">DLCs</div>
+                            {props.game.dlcs.length > 0 && (
+                                <div className="game__dlcs">
+                                    <div className="game__dlcs-header">DLCs</div>
 
-                                            <div>
-                                                {props.game.dlcs.map((dlc) => (
-                                                    <div
-                                                        className="game__dlc"
-                                                        key={dlc.id}
-                                                    >
-                                                        <div>{dlc.title}</div>
+                                    <div>
+                                        {props.game.dlcs.map((dlc) => (
+                                            <div
+                                                className="game__dlc"
+                                                key={dlc.id}
+                                            >
+                                                <div>{dlc.title}</div>
 
-                                                        <Rating value={dlc.rating} />
-                                                    </div>
-                                                ))}
+                                                <Rating value={dlc.rating} />
                                             </div>
-                                        </div>
-                                    )}
-
-                                    <div className="game__actions">
-                                        {props.game.status === 'planned' && (
-                                            <Button onClick={skipGame}>
-                                                Skip game
-                                            </Button>
-                                        )}
-
-                                        <Button
-                                            destructive
-                                            onClick={deleteGame}
-                                        >
-                                            Delete game
-                                        </Button>
-
-                                        <Button onClick={editGame}>
-                                            Edit game
-                                        </Button>
+                                        ))}
                                     </div>
                                 </div>
+                            )}
+
+                            <div className="game__actions">
+                                {props.game.status === 'planned' && (
+                                    <Button onClick={skipGame}>
+                                        Skip game
+                                    </Button>
+                                )}
+
+                                <Button
+                                    destructive
+                                    onClick={deleteGame}
+                                >
+                                    Delete game
+                                </Button>
+
+                                <Button onClick={editGame}>
+                                    Edit game
+                                </Button>
                             </div>
                         </div>
-                    </CSSTransition>
-                )}
-            </TransitionGroup>
+                    </div>
+                </div>
+            </Collapsible>
         </div>
     );
 };

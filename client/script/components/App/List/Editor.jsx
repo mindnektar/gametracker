@@ -139,37 +139,41 @@ const Editor = (props) => {
     const autoFillFields = async () => {
         setLoading(true);
 
-        const { data } = await fetchGameData({
-            title: state.title.trim(),
-            system: (
-                allSystems.find(({ id }) => id === state.system.value)?.name
+        try {
+            const { data } = await fetchGameData({
+                title: state.title.trim(),
+                system: (
+                    allSystems.find(({ id }) => id === state.system.value)?.name
                 || state.system.value
-            ),
-        });
+                ),
+            });
 
-        const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
+            const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
 
-        setState((previous) => ({
-            ...previous,
-            description: data.fetchGameData.description,
-            release: data.fetchGameData.release,
-            youTubeId: data.fetchGameData.youTubeId,
-            developer: developer ? {
-                value: developer.id,
-                label: developer.name,
-            } : {
-                value: data.fetchGameData.developer,
-                label: data.fetchGameData.developer,
-                __isNew__: true,
-            },
-            genres: data.fetchGameData.genres.map((genre) => {
-                const existingGenre = allGenres.find(({ name }) => name === genre);
+            setState((previous) => ({
+                ...previous,
+                description: data.fetchGameData.description,
+                release: data.fetchGameData.release,
+                youTubeId: data.fetchGameData.youTubeId,
+                developer: developer ? {
+                    value: developer.id,
+                    label: developer.name,
+                } : {
+                    value: data.fetchGameData.developer,
+                    label: data.fetchGameData.developer,
+                    __isNew__: true,
+                },
+                genres: data.fetchGameData.genres.map((genre) => {
+                    const existingGenre = allGenres.find(({ name }) => name === genre);
 
-                return existingGenre
-                    ? { value: existingGenre.id, label: existingGenre.name }
-                    : { value: genre, label: genre, __isNew__: true };
-            }),
-        }));
+                    return existingGenre
+                        ? { value: existingGenre.id, label: existingGenre.name }
+                        : { value: genre, label: genre, __isNew__: true };
+                }),
+            }));
+        } catch (error) {
+            console.error(error);
+        }
 
         setLoading(false);
     };
@@ -195,28 +199,21 @@ const Editor = (props) => {
 
         const mutation = props.game ? updateGame : createGame;
 
-        try {
-            await mutation({
-                id: props.game?.id,
-                title: state.title.trim(),
-                rating: state.rating * 10,
-                release: state.release,
-                description: state.description.trim(),
-                youTubeId: state.youTubeId.trim(),
-                status: state.status.value,
-                system: formatSelectValue(state.system),
-                developer: formatSelectValue(state.developer),
-                compilation: formatSelectValue(state.compilation, 'title'),
-                genres: state.genres.map(formatSelectValue),
-                lists: [{ id: props.listId }],
-                dlcs: [],
-            });
-        } catch (error) {
-            setLoading(false);
-            console.error(error);
-
-            return;
-        }
+        await mutation({
+            id: props.game?.id,
+            title: state.title.trim(),
+            rating: state.rating * 10,
+            release: state.release,
+            description: state.description.trim(),
+            youTubeId: state.youTubeId.trim(),
+            status: state.status.value,
+            system: formatSelectValue(state.system),
+            developer: formatSelectValue(state.developer),
+            compilation: formatSelectValue(state.compilation, 'title'),
+            genres: state.genres.map(formatSelectValue),
+            lists: [{ id: props.listId }],
+            dlcs: [],
+        });
 
         props.onClose();
         setLoading(false);
