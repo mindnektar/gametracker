@@ -9,12 +9,18 @@ const generateGameInfo = async (system, title, model) => {
             model,
             contents: `
                 Please provide a JSON document describing the ${system} game "${title}" with the following structure:
-                "story": a spoiler-free description of the game's story and/or theme, about 100 words.
-                "gameplay": a spoiler-free description of the game's main gameplay mechanics, about 100 words. if the game is a sequel, feel
+                "story": a spoiler-free description of the game's story and what it is about, about 100 words.
+                "gameplay": a spoiler-free description of the game's main gameplay mechanics, about 100 words. If the game is a sequel, feel
                     free to incorporate relevant differences to the previous game.
                 "history": interesting background information about how and by whom the game was created, about 100 words.
                 "releaseYear": the year the game was first released in any region.
-                "developer": the name of the game's developer without any company suffixes such as "inc.", "gmbh", "co." or "ltd.".
+                "developer": the name of the game's developer without any company suffixes such as "inc.", "gmbh", "co." or "ltd.". Avoid
+                    abbreviations (e.g. use "Electronic Arts" rather than "EA"). Favor names as they are used colloquially (e.g. use
+                    "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment").
+
+                Additional instructions:
+                - If the specified system is not the one the game was originally developed for, base your information on the system that was
+                    specified (such as "Okami" on the Wii, which was developed by Ready at Dawn rather than Clover Studios).
             `,
         });
 
