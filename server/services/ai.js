@@ -20,8 +20,7 @@ const generateGameInfo = async (system, title, model) => {
 
         return JSON.parse(response.text.replace(/```(json)?/g, '').trim());
     } catch (error) {
-        console.error(error);
-        if (error.code === 503) {
+        if (error.message.includes('The model is overloaded')) {
             return null;
         }
 
