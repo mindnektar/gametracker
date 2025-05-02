@@ -45,6 +45,7 @@ const Editor = (props) => {
                     : null
             ),
         }),
+        aiInstructions: '',
         rating: () => ({
             defaultValue: 5,
             modify: (rating) => (
@@ -147,10 +148,8 @@ const Editor = (props) => {
         try {
             const { data } = await fetchGameData({
                 title: state.title.trim(),
-                system: (
-                    allSystems.find(({ id }) => id === state.system.value)?.name
-                || state.system.value
-                ),
+                system: allSystems.find(({ id }) => id === state.system.value)?.name || state.system.value,
+                aiInstructions: state.aiInstructions.trim(),
             });
 
             const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
@@ -254,6 +253,15 @@ const Editor = (props) => {
                         }))}
                         onChange={changeValueHandler('system')}
                         value={state.system}
+                    />
+                </FormItem>
+
+                <FormItem
+                    label="AI instructions"
+                >
+                    <TextField
+                        value={state.aiInstructions}
+                        onChange={changeValueHandler('aiInstructions')}
                     />
                 </FormItem>
 

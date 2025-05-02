@@ -30,10 +30,10 @@ export default {
             ))
         ),
         fetchGameData: async (parent, { input }) => {
-            const aiData = await fetchAiData(input.title, input.system);
+            const aiData = await fetchAiData(input.title, input.system, input.aiInstructions);
             const giantbombData = await fetchGiantbombData(input.title);
             const youTubeData = await fetchYouTubeData(input.title, input.system);
-            const description = aiData.story && aiData.gameplay && aiData.history ? `## Story & Theme
+            const description = `## Story & Theme
 
 ${aiData.story}
 
@@ -43,15 +43,15 @@ ${aiData.gameplay}
 
 ## History
 
-${aiData.history}` : giantbombData.description;
-            const release = aiData.releaseYear || giantbombData.release;
-            const developer = aiData.developer || giantbombData.developer;
+${aiData.history}`;
+            const release = aiData.releaseYear;
+            const developer = aiData.developer;
 
             return {
                 description,
                 release,
                 developer: developerMap[developer] || developer,
-                genres: giantbombData.genres,
+                genres: giantbombData?.genres || [],
                 youTubeId: youTubeData.youTubeId || '',
             };
         },

@@ -54,7 +54,7 @@ Meta.propTypes = {
     pickRandom: PropTypes.func.isRequired,
     setGroupBy: PropTypes.func.isRequired,
     groupBy: PropTypes.object.isRequired,
-    statusFilter: PropTypes.string.isRequired,
+    statusFilter: PropTypes.object.isRequired,
     setStatusFilter: PropTypes.func.isRequired,
 };
 

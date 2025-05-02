@@ -7,8 +7,12 @@ const ErrorMessage = (props) => (
     </div>
 );
 
+ErrorMessage.defaultProps = {
+    children: null,
+};
+
 ErrorMessage.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
 };
 
 export default ErrorMessage;

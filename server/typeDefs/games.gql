@@ -64,6 +64,7 @@ input UpdateGameInput {
 input FetchGameDataInput {
     title: String!
     system: String!
+    aiInstructions: String
 }
 
 type FetchGameDataResult {

@@ -3,7 +3,7 @@ import config from '../config';
 
 const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
-const generateGameInfo = async (system, title, model) => {
+const generateGameInfo = async (system, title, model, instructions) => {
     try {
         const response = await ai.models.generateContent({
             model,
@@ -18,13 +18,18 @@ const generateGameInfo = async (system, title, model) => {
                     abbreviations (e.g. use "Electronic Arts" rather than "EA"). Favor names as they are used colloquially (e.g. use
                     "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment").
 
-                Additional instructions:
+                Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
                     specified (such as "Okami" on the Wii, which was developed by Ready at Dawn rather than Clover Studios).
+                - Please only provide factual details that you can confirm. If you are unable to find accurate information, please
+                    just return null and do not invent or extrapolate any details.
+                ${instructions ? `- ${instructions}` : ''}
             `,
         });
 
-        return JSON.parse(response.text.replace(/```(json)?/g, '').trim());
+        console.log(response.text);
+
+        return JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
     } catch (error) {
         if (error.message.includes('The model is overloaded')) {
             return null;
@@ -34,12 +39,12 @@ const generateGameInfo = async (system, title, model) => {
     }
 };
 
-export default async (title, system) => {
+export default async (title, system, instructions) => {
     let response;
     const models = ['gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 
     while (!response && models.length > 0) {
-        response = await generateGameInfo(system, title, models.shift());
+        response = await generateGameInfo(system, title, models.shift(), instructions);
     }
 
     return response;
