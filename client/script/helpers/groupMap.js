@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { systemOrder } from './systems';
 
 export default {
@@ -22,11 +21,9 @@ export default {
         resolver: (game) => game.rating,
         sort: (a, b) => b.name - a.name,
     },
-    completed: {
-        label: 'Date of completion',
-        resolver: (game) => (
-            game.status === 'completed' ? moment(game.updatedAt).format('MMMM YYYY') : null
-        ),
-        sort: (a, b) => moment(a.updatedAt).diff(b.updatedAt),
+    franchise: {
+        label: 'Franchise',
+        resolver: (game) => game.franchise?.name || 'None',
+        sort: (a, b) => a.name.localeCompare(b.name),
     },
 };

@@ -27,6 +27,10 @@ const query = gql`
             id
             name
         }
+        franchises {
+            id
+            name
+        }
     }
 `;
 

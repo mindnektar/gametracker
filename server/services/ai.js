@@ -3,12 +3,13 @@ import config from '../config';
 
 const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
-const generateGameInfo = async (system, title, model, instructions) => {
+const generateGameInfo = async (system, title, compilation, model, instructions) => {
     try {
         const response = await ai.models.generateContent({
             model,
             contents: `
-                Please provide a JSON document describing the ${system} game "${title}" with the following structure:
+                Please provide a JSON document describing the ${system} game "${title}"
+                ${compilation ? ` from the compilation "${compilation}"` : ''} with the following structure:
                 "story": a spoiler-free description of the game's story and what it is about, about 100 words.
                 "gameplay": a spoiler-free description of the game's main gameplay mechanics, about 100 words. If the game is a sequel, feel
                     free to incorporate relevant differences to the previous game.
@@ -17,6 +18,9 @@ const generateGameInfo = async (system, title, model, instructions) => {
                 "developer": the name of the game's developer without any company suffixes such as "inc.", "gmbh", "co." or "ltd.". Avoid
                     abbreviations (e.g. use "Electronic Arts" rather than "EA"). Favor names as they are used colloquially (e.g. use
                     "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment").
+                "franchise": if the game is part of a franchise spanning multiple titles, please provide the name of the franchise. For
+                    example, "The Legend of Zelda" is part of the "Zelda" franchise, and "Super Mario Galaxy" belongs to "Mario". "Celeste"
+                    has no franchise because it is just a single game.
 
                 Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
@@ -26,8 +30,6 @@ const generateGameInfo = async (system, title, model, instructions) => {
                 ${instructions ? `- ${instructions}` : ''}
             `,
         });
-
-        console.log(response.text);
 
         return JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
     } catch (error) {
@@ -39,12 +41,12 @@ const generateGameInfo = async (system, title, model, instructions) => {
     }
 };
 
-export default async (title, system, instructions) => {
+export default async (title, system, compilation, instructions) => {
     let response;
     const models = ['gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 
     while (!response && models.length > 0) {
-        response = await generateGameInfo(system, title, models.shift(), instructions);
+        response = await generateGameInfo(system, title, compilation, models.shift(), instructions);
     }
 
     return response;

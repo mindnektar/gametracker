@@ -8,6 +8,7 @@ const MUTATION = gql`
             release
             description
             youTubeId
+            franchise
         }
     }
 `;

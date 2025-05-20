@@ -24,6 +24,9 @@ const FormData = (props) => {
     const allGenres = [...props.genres].sort((a, b) => (
         a.name.localeCompare(b.name)
     ));
+    const allFranchises = [...props.franchises].sort((a, b) => (
+        a.name.localeCompare(b.name)
+    ));
 
     const autoFillFields = async () => {
         modal.setLoading(true);
@@ -32,29 +35,23 @@ const FormData = (props) => {
         try {
             const { data } = await fetchGameData({
                 title: modal.formValues.title.trim(),
-                system: allSystems.find(({ id }) => id === modal.formValues.system.value)?.name || modal.formValues.system.value,
+                system: allSystems.find(({ id }) => id === modal.formValues.system)?.name || modal.formValues.system,
+                compilation: allCompilations.find(({ id }) => id === modal.formValues.compilation)?.title || modal.formValues.compilation,
                 aiInstructions: modal.formValues.aiInstructions.trim(),
             });
 
             const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
+            const franchise = allFranchises.find(({ name }) => name === data.fetchGameData.franchise);
 
             modal.setFormValue('description', data.fetchGameData.description);
             modal.setFormValue('release', data.fetchGameData.release);
             modal.setFormValue('youTubeId', data.fetchGameData.youTubeId);
-            modal.setFormValue('developer', developer ? {
-                value: developer.id,
-                label: developer.name,
-            } : {
-                value: data.fetchGameData.developer,
-                label: data.fetchGameData.developer,
-                __isNew__: true,
-            });
+            modal.setFormValue('developer', developer ? developer.id : data.fetchGameData.developer);
+            modal.setFormValue('franchise', franchise ? franchise.id : data.fetchGameData.franchise);
             modal.setFormValue('genres', data.fetchGameData.genres.map((genre) => {
                 const existingGenre = allGenres.find(({ name }) => name === genre);
 
-                return existingGenre
-                    ? { value: existingGenre.id, label: existingGenre.name }
-                    : { value: genre, label: genre, __isNew__: true };
+                return existingGenre?.id || genre;
             }));
         } catch (error) {
             modal.setErrorMessageHandler('title', error.message);
@@ -74,6 +71,18 @@ const FormData = (props) => {
                     }]}
                 >
                     <Form.Control.TextField />
+                </Form.Control>
+            </Form.Row>
+
+            <Form.Row label="Compilation">
+                <Form.Control name="compilation">
+                    <Form.Control.Select
+                        clearable
+                        options={allCompilations.map((compilation) => ({
+                            value: compilation.id, label: compilation.title,
+                        }))}
+                        withCustom
+                    />
                 </Form.Control>
             </Form.Row>
 
@@ -110,12 +119,12 @@ const FormData = (props) => {
                 </Button>
             </Form.Row>
 
-            <Form.Row label="Compilation">
-                <Form.Control name="compilation">
+            <Form.Row label="Franchise">
+                <Form.Control name="franchise">
                     <Form.Control.Select
                         clearable
-                        options={allCompilations.map((compilation) => ({
-                            value: compilation.id, label: compilation.title,
+                        options={allFranchises.map((franchise) => ({
+                            value: franchise.id, label: franchise.name,
                         }))}
                         withCustom
                     />
@@ -223,6 +232,7 @@ FormData.propTypes = {
     genres: PropTypes.array.isRequired,
     systems: PropTypes.array.isRequired,
     compilations: PropTypes.array.isRequired,
+    franchises: PropTypes.array.isRequired,
 };
 
 export default FormData;

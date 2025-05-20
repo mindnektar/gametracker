@@ -32,6 +32,28 @@ export default () => {
                         },
                     },
                 });
+
+                cache.modify({
+                    fields: {
+                        franchises: (existingFranchises, { readField }) => {
+                            if (existingFranchises.some((franchise) => readField('id', franchise) === createGame.franchise.id)) {
+                                return existingFranchises;
+                            }
+
+                            const franchiseRef = cache.writeFragment({
+                                data: createGame.franchise,
+                                fragment: gql`
+                                    fragment FranchiseFragment on Franchise {
+                                        id
+                                        name
+                                    }
+                                `,
+                            });
+
+                            return [...existingFranchises, franchiseRef];
+                        },
+                    },
+                });
             },
         })
     );

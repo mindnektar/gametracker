@@ -134,6 +134,7 @@ const List = () => {
                         compilations={data.compilations}
                         genres={data.genres}
                         listId={data.list.id}
+                        franchises={data.franchises}
                     />
                 </div>
             )}

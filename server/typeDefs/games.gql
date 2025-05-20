@@ -21,6 +21,7 @@ type Game {
     status: GameStatus!
     skipCount: Int!
     updatedAt: DateTime!
+    franchise: Franchise
 }
 
 enum GameStatus {
@@ -43,6 +44,7 @@ input CreateGameInput {
     compilation: RelateCompilationInput
     dlcs: [CreateDlcInput!]
     status: GameStatus!
+    franchise: RelateFranchiseInput
 }
 
 input UpdateGameInput {
@@ -59,11 +61,13 @@ input UpdateGameInput {
     compilation: RelateCompilationInput
     dlcs: [CreateDlcInput!]
     status: GameStatus
+    franchise: RelateFranchiseInput
 }
 
 input FetchGameDataInput {
     title: String!
     system: String!
+    compilation: String
     aiInstructions: String
 }
 
@@ -73,4 +77,5 @@ type FetchGameDataResult {
     release: Int
     description: String
     youTubeId: String
+    franchise: String
 }

@@ -63,6 +63,14 @@ export default class Game extends BaseModel {
                     to: 'dlc.gameId',
                 },
             },
+            franchise: {
+                relation: BaseModel.BelongsToOneRelation,
+                modelClass: 'Franchise',
+                join: {
+                    from: 'game.franchiseId',
+                    to: 'franchise.id',
+                },
+            },
         };
     }
 }

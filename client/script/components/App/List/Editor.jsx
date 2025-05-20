@@ -29,11 +29,12 @@ const Editor = (props) => {
             release: values.release,
             description: values.description.trim(),
             youTubeId: values.youTubeId.trim(),
-            status: values.status.value,
+            status: values.status,
             system: formatSelectValue(values.system, props.systems),
             developer: formatSelectValue(values.developer, props.developers),
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
+            franchise: formatSelectValue(values.franchise, props.franchises),
             lists: [{ id: props.listId }],
             dlcs: [],
         });
@@ -71,6 +72,10 @@ const Editor = (props) => {
                     _default: [],
                     _map: (value) => value.id,
                 },
+                franchise: {
+                    _default: null,
+                    _modify: (value) => value.id,
+                },
             }}
             formSubject={props.game}
             isOpen={props.open}
@@ -82,6 +87,7 @@ const Editor = (props) => {
                     genres={props.genres}
                     systems={props.systems}
                     compilations={props.compilations}
+                    franchises={props.franchises}
                 />
             </Modal.Screen>
         </Modal>
@@ -100,6 +106,7 @@ Editor.propTypes = {
     developers: PropTypes.array.isRequired,
     compilations: PropTypes.array.isRequired,
     genres: PropTypes.array.isRequired,
+    franchises: PropTypes.array.isRequired,
     listId: PropTypes.string.isRequired,
 };
 

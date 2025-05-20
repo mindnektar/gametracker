@@ -13,7 +13,7 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .insertGraphAndFetch(input, {
-                        relate: ['lists', 'system', 'developer', 'genres', 'compilation'],
+                        relate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
                     })
             ))
         ),
@@ -23,14 +23,14 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .upsertGraphAndFetch(input, {
-                        relate: ['lists', 'system', 'developer', 'genres', 'compilation'],
-                        unrelate: ['lists', 'system', 'developer', 'genres', 'compilation'],
+                        relate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
+                        unrelate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
                         noGraphTransform: true,
                     })
             ))
         ),
         fetchGameData: async (parent, { input }) => {
-            const aiData = await fetchAiData(input.title, input.system, input.aiInstructions);
+            const aiData = await fetchAiData(input.title, input.system, input.compilation, input.aiInstructions);
             const giantbombData = await fetchGiantbombData(input.title);
             const youTubeData = await fetchYouTubeData(input.title, input.system);
             const description = `## Story & Theme
@@ -53,6 +53,7 @@ ${aiData.history}`;
                 developer: developerMap[developer] || developer,
                 genres: giantbombData?.genres || [],
                 youTubeId: youTubeData.youTubeId || '',
+                franchise: aiData.franchise,
             };
         },
         skipGame: (parent, { id }, context, info) => (

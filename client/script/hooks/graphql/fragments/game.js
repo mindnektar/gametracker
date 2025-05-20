@@ -32,5 +32,9 @@ export default gql`
             title
             rating
         }
+        franchise {
+            id
+            name
+        }
     }
 `;

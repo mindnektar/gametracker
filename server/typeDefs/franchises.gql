@@ -1,0 +1,14 @@
+type Query {
+    franchises: [Franchise!]!
+}
+
+type Franchise {
+    id: ID!
+    name: String!
+    games: [Game!]!
+}
+
+input RelateFranchiseInput {
+    id: ID
+    name: String
+}

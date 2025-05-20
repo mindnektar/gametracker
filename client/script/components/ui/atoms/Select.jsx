@@ -16,20 +16,14 @@ const Select = (props) => {
     const [style, setStyle] = useState({});
     const [isAdding, startAddMode, endAddMode] = useToggle(false);
     const [newOptionValue, setNewOptionValue] = useState('');
-    const [customOptions, setCustomOptions] = useState([]);
     const selectRef = useRef();
     const repeat = useRepeatFor(300);
-    const options = [
-        ...props.options.filter((option) => (
-            option.available !== false
-        )),
-        ...customOptions.map((option) => ({
-            value: option,
-            label: option,
-        })),
-    ];
-    const selectedOptions = options.filter((option) => (
-        props.multiple ? props.value.includes(option.value) : option.value === props.value
+    const options = props.options.filter((option) => (
+        option.available !== false
+    ));
+    const sanitizedValue = (props.value ? [props.value] : []);
+    const selectedOptions = (props.multiple ? props.value : sanitizedValue).map((item) => (
+        options.find((option) => option.value === item) || { value: item, label: item }
     ));
 
     useEffect(() => {
@@ -106,7 +100,6 @@ const Select = (props) => {
     };
 
     const addOption = (value) => {
-        setCustomOptions([...customOptions, value.trim()]);
         onChangeHandler(value.trim())();
         endAddMode();
         close();
