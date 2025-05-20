@@ -1,32 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import OutsideClickHandler from 'react-outside-click-handler';
+import useToggle from 'hooks/useToggle';
 
 const Button = (props) => {
-    const [confirmation, setConfirmation] = useState(false);
+    const [confirmation, showConfirmation, hideConfirmation] = useToggle(false);
 
     const onClick = () => {
         if (confirmation || !props.destructive) {
             props.onClick();
         } else if (props.destructive) {
-            setConfirmation(true);
+            showConfirmation();
         }
     };
 
     return (
-        <button
-            className={classnames(
-                'ui-button',
-                {
-                    'ui-button--disabled': props.disabled,
-                    'ui-button--destructive': props.destructive,
-                }
-            )}
-            onClick={onClick}
-            type="button"
-        >
-            {confirmation ? 'Really?' : props.children}
-        </button>
+        <OutsideClickHandler onOutsideClick={hideConfirmation}>
+            <button
+                className={classnames(
+                    'ui-button',
+                    {
+                        'ui-button--disabled': props.disabled,
+                        'ui-button--destructive': props.destructive,
+                    }
+                )}
+                onClick={onClick}
+                type="button"
+            >
+                {confirmation ? 'Really?' : props.children}
+            </button>
+        </OutsideClickHandler>
     );
 };
 

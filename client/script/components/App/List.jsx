@@ -3,7 +3,6 @@ import useListQuery from 'hooks/graphql/queries/list';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
 import groupMap from 'helpers/groupMap';
-import statusMap from 'helpers/statusMap';
 import LoadingContainer from 'molecules/LoadingContainer';
 import Header from './List/Header';
 import Meta from './List/Meta';
@@ -14,8 +13,8 @@ const List = () => {
     const { loading, data } = useListQuery();
     const skipGame = useSkipGame();
     const deleteGame = useDeleteGame();
-    const [groupBy, setGroupBy] = useState({ value: 'system', label: 'System' });
-    const [statusFilter, setStatusFilter] = useState({ value: 'completed', label: statusMap.completed });
+    const [groupBy, setGroupBy] = useState('system');
+    const [statusFilter, setStatusFilter] = useState('completed');
     const [expandedGame, setExpandedGame] = useState(null);
     const [genreFilter, setGenreFilter] = useState([]);
     const [editorState, setEditorState] = useState({ id: null, isOpen: false });
@@ -25,14 +24,14 @@ const List = () => {
             return [];
         }
 
-        if (groupBy.value === 'none') {
+        if (groupBy === 'none') {
             return [{ name: 'All games', games: data.list.games }];
         }
 
         const groups = data.list.games.reduce((result, current) => {
-            const name = groupMap[groupBy.value].resolver(current);
+            const name = groupMap[groupBy].resolver(current);
 
-            if (current.status !== statusFilter.value && statusFilter.value !== 'all') {
+            if (current.status !== statusFilter && statusFilter !== 'all') {
                 return result;
             }
 
@@ -49,7 +48,7 @@ const List = () => {
             };
         }, {});
 
-        return Object.values(groups).sort(groupMap[groupBy.value].sort);
+        return Object.values(groups).sort(groupMap[groupBy].sort);
     };
 
     const toggleGenreFilter = (genreId) => {
@@ -118,7 +117,7 @@ const List = () => {
                             expandedGame={expandedGame}
                             editGame={openEditor}
                             genreFilter={genreFilter}
-                            groupBy={groupBy.value}
+                            groupBy={groupBy}
                             toggleGenreFilter={toggleGenreFilter}
                             name={group.name}
                             games={group.games}

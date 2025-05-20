@@ -14,7 +14,7 @@ const Meta = (props) => {
         <div className="meta">
             <div className="meta__options">
                 <Select
-                    items={[
+                    options={[
                         ...Object.entries(groupMap).map(([value, { label }]) => ({
                             value, label,
                         })),
@@ -25,7 +25,7 @@ const Meta = (props) => {
                 />
 
                 <Select
-                    items={[
+                    options={[
                         ...Object.entries(statusMap).map(([value, label]) => ({
                             value, label,
                         })),
@@ -53,8 +53,8 @@ Meta.propTypes = {
     openEditor: PropTypes.func.isRequired,
     pickRandom: PropTypes.func.isRequired,
     setGroupBy: PropTypes.func.isRequired,
-    groupBy: PropTypes.object.isRequired,
-    statusFilter: PropTypes.object.isRequired,
+    groupBy: PropTypes.string.isRequired,
+    statusFilter: PropTypes.string.isRequired,
     setStatusFilter: PropTypes.func.isRequired,
 };
 

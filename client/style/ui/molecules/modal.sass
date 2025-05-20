@@ -1,0 +1,167 @@
+.ui-modal
+    align-items: stretch
+    display: flex
+    flex-direction: column
+    height: 100%
+    left: 0
+    position: fixed
+    top: 0
+    transition: opacity 300ms
+    width: 100%
+    z-index: 1
+
+.ui-modal--enter,
+.ui-modal--exit
+    opacity: 0
+
+.ui-modal--enter-active
+    opacity: 1
+
+.ui-modal--loading
+    .ui-modal__loading
+        opacity: 1
+        pointer-events: all
+
+    .ui-modal__buttons,
+    .ui-modal__close
+        opacity: 0
+        pointer-events: none
+
+.ui-modal--transitioning
+    .ui-modal__buttons
+        opacity: 0
+        pointer-events: none
+
+.ui-modal__container
+    flex-grow: 1
+    position: relative
+
+.ui-modal__overlay
+    background-color: rgba(#000000, 0.8)
+    height: 100%
+    left: 0
+    position: absolute
+    top: 0
+    width: 100%
+
+.ui-modal__wrapper
+    align-items: center
+    display: flex
+    flex-direction: column
+    height: 100%
+    justify-content: center
+    left: 0
+    position: absolute
+    top: 0
+    transform-origin: bottom
+    transition: transform 300ms
+    width: 100%
+
+    .ui-modal--enter &,
+    .ui-modal--exit &
+        transform: scale(0.9)
+
+    .ui-modal--enter-active &
+        transform: scale(1)
+
+.ui-modal__content
+    background-color: #999999
+    border-radius: 16px
+    box-shadow: 0 2px 6px 0 rgba(#000000, 0.1)
+    box-sizing: border-box
+    display: flex
+    flex-direction: column
+    max-height: 80%
+    overflow: hidden
+    position: relative
+    width: 800px
+
+.ui-modal__header
+    background-color: #777777
+    border-radius: 16px 16px 0 0
+    color: #ffffff
+    flex-shrink: 0
+    font-size: 18px
+    height: 92px
+    overflow: hidden
+    position: relative
+    text-align: center
+    text-transform: uppercase
+
+.ui-modal__header-content
+    align-items: center
+    display: flex
+    height: 100%
+    justify-content: center
+    transition: opacity 300ms
+
+.ui-modal__header-content--enter,
+.ui-modal__header-content--exit
+    opacity: 0
+
+.ui-modal__header-content--enter-active
+    opacity: 1
+
+.ui-modal__header-text
+    align-items: center
+    display: flex
+    flex-direction: column
+    margin: 0 128px
+
+.ui-modal__body
+    flex-grow: 1
+    overflow-y: auto
+    padding: 24px 0
+    position: relative
+
+    &--empty
+        height: 400px
+
+    .ui-form-item,
+    .ui-form-row
+        justify-content: center
+
+    .ui-form-row
+        .ui-form-item
+            justify-content: flex-start
+
+.ui-modal__unhandled-error
+    margin: 0 16px
+
+    a
+        color: #ffffff
+
+.ui-modal__buttons
+    align-items: center
+    display: flex
+    justify-content: center
+    margin-top: -18px
+    position: relative
+    transition: 300ms opacity
+
+    .ui-button
+        margin: 0 8px
+
+.ui-modal__close
+    color: #ffffff
+    cursor: pointer
+    font-size: 24px
+    font-weight: 700
+    right: 32px
+    position: absolute
+    top: 32px
+
+.ui-modal__loading
+    align-items: center
+    background-color: rgba(white, .5)
+    border-radius: 4px
+    display: flex
+    height: 100%
+    justify-content: center
+    left: 0
+    opacity: 0
+    pointer-events: none
+    position: absolute
+    top: 0
+    transition: opacity 300ms
+    width: 100%
