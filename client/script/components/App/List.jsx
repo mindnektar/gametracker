@@ -122,6 +122,7 @@ const List = () => {
                             name={group.name}
                             games={group.games}
                             skipGame={onSkipGame}
+                            statusFilter={statusFilter}
                         />
                     ))}
 

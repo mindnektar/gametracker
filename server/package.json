@@ -43,6 +43,7 @@
     "graphql-shield": "^7.5.0",
     "graphql-tools": "7.0.4",
     "graphql-yoga": "^1.18.3",
+    "howlongtobeat": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.4",
     "merge-graphql-schemas": "^1.7.8",

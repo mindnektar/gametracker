@@ -21,6 +21,21 @@ export default {
         resolver: (game) => game.rating,
         sort: (a, b) => b.name - a.name,
     },
+    timeToBeat: {
+        label: 'Time to beat',
+        resolver: (game) => game.timeToBeat || 'N/A',
+        sort: (a, b) => {
+            if (a.name === 'N/A') {
+                return 1;
+            }
+
+            if (b.name === 'N/A') {
+                return -1;
+            }
+
+            return a.name - b.name;
+        },
+    },
     franchise: {
         label: 'Franchise',
         resolver: (game) => game.franchise?.name || 'None',

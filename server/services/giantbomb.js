@@ -1,12 +1,16 @@
 import axios from 'axios';
 import config from '../config';
 
-export default async (title) => {
+export default async (input) => {
+    if (!input.types.includes('genres')) {
+        return {};
+    }
+
     try {
         const giantBombSearch = await axios.get('https://www.giantbomb.com/api/search', {
             params: {
                 api_key: config.giantbomb.apiKey,
-                query: title,
+                query: input.title,
                 resources: 'game',
                 limit: 1,
                 field_list: 'guid',
@@ -30,6 +34,6 @@ export default async (title) => {
         };
     } catch (error) {
         console.error(error);
-        return null;
+        return {};
     }
 };

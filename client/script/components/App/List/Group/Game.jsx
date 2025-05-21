@@ -118,7 +118,13 @@ const Game = (props) => {
                     </div>
                 )}
 
-                {props.groupBy !== 'rating' && props.game.status === 'completed' && (
+                {props.groupBy !== 'timeToBeat' && (
+                    <div className="game__time-to-beat">
+                        {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½') : ''}
+                    </div>
+                )}
+
+                {props.groupBy !== 'rating' && (props.game.status === 'completed' || props.statusFilter === 'all') && (
                     <Rating
                         value={props.game.rating}
                         visible={props.game.status === 'completed'}
@@ -197,6 +203,7 @@ Game.propTypes = {
     skipGame: PropTypes.func.isRequired,
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
+    statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
 };
 

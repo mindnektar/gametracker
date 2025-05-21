@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import gameFragment from '../fragments/game';
+import { addDataToCache } from '../cacheUpdates/game';
 
 const MUTATION = gql`
     ${gameFragment}
@@ -32,25 +33,33 @@ export default () => {
                         },
                     },
                 });
+                addDataToCache(cache, createGame.franchise, 'franchises', 'Franchise');
+                addDataToCache(cache, createGame.developer, 'developers', 'Developer');
+                addDataToCache(cache, createGame.compilation, 'compilations', 'Compilation');
+                addDataToCache(cache, createGame.system, 'systems', 'System');
 
                 cache.modify({
                     fields: {
-                        franchises: (existingFranchises, { readField }) => {
-                            if (existingFranchises.some((franchise) => readField('id', franchise) === createGame.franchise.id)) {
-                                return existingFranchises;
+                        genres: (existingGenres, { readField }) => {
+                            const newGenres = createGame.genres.filter((genre) => (
+                                !existingGenres.some((existingGenre) => readField('id', existingGenre) === genre.id)
+                            ));
+
+                            if (newGenres.length === 0) {
+                                return existingGenres;
                             }
 
-                            const franchiseRef = cache.writeFragment({
-                                data: createGame.franchise,
+                            const genreRefs = newGenres.map((genre) => cache.writeFragment({
+                                data: genre,
                                 fragment: gql`
-                                    fragment FranchiseFragment on Franchise {
+                                    fragment GenreFragment on Genre {
                                         id
                                         name
                                     }
                                 `,
-                            });
+                            }));
 
-                            return [...existingFranchises, franchiseRef];
+                            return [...existingGenres, ...genreRefs];
                         },
                     },
                 });

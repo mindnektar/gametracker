@@ -11,6 +11,7 @@ export default gql`
         status
         skipCount
         updatedAt
+        timeToBeat
         system {
             id
             name

@@ -11,6 +11,7 @@ import useRepeatFor from 'hooks/useRepeatFor';
 import useFormReducer from 'hooks/useFormReducer';
 import useKeyHandlers from 'hooks/useKeyHandlers';
 import Button from 'atoms/Button';
+import Error from 'atoms/Error';
 import Loader from 'atoms/Loader';
 import Collapsible from 'molecules/Collapsible';
 import Screen from './Modal/Screen';
@@ -388,10 +389,9 @@ const Modal = (props) => {
                                         {screen}
 
                                         <Collapsible collapsed={!unhandledErrors}>
-                                            <div className="ui-modal__unhandled-error">
-                                                Leider ist ein Fehler aufgetreten. Bitte melden Sie ihn uns, damit wir ihn
-                                                schnellstmöglich beheben können. Klicken Sie dazu auf den folgenden Button:
-                                            </div>
+                                            <Error>
+                                                An unknown error occurred.
+                                            </Error>
                                         </Collapsible>
                                     </ModalContext.Provider>
                                 </Collapsible>

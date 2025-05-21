@@ -9,6 +9,7 @@ const MUTATION = gql`
             description
             youTubeId
             franchise
+            timeToBeat
         }
     }
 `;

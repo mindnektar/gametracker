@@ -45,6 +45,7 @@ const Group = (props) => {
                     groupBy={props.groupBy}
                     key={game.id}
                     skipGame={props.skipGame}
+                    statusFilter={props.statusFilter}
                     toggleGenreFilter={props.toggleGenreFilter}
                     game={game}
                 />
@@ -67,6 +68,7 @@ Group.propTypes = {
     groupBy: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     skipGame: PropTypes.func.isRequired,
+    statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
 };
 

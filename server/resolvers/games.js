@@ -1,8 +1,8 @@
 import transaction from './helpers/transaction';
 import fetchGiantbombData from '../services/giantbomb';
 import fetchYouTubeData from '../services/youTube';
+import fetchHowLongToBeatData from '../services/howlongtobeat';
 import fetchAiData from '../services/ai';
-import developerMap from '../services/developerMap';
 import Game from '../models/Game';
 
 export default {
@@ -30,30 +30,19 @@ export default {
             ))
         ),
         fetchGameData: async (parent, { input }) => {
-            const aiData = await fetchAiData(input.title, input.system, input.compilation, input.aiInstructions);
-            const giantbombData = await fetchGiantbombData(input.title);
-            const youTubeData = await fetchYouTubeData(input.title, input.system);
-            const description = `## Story & Theme
-
-${aiData.story}
-
-## Gameplay
-
-${aiData.gameplay}
-
-## History
-
-${aiData.history}`;
-            const release = aiData.releaseYear;
-            const developer = aiData.developer;
+            const result = await Promise.all([
+                fetchAiData(input),
+                fetchGiantbombData(input),
+                fetchYouTubeData(input),
+                fetchHowLongToBeatData(input),
+            ]);
+            const [aiData, giantbombData, youTubeData, hltbData] = result;
 
             return {
-                description,
-                release,
-                developer: developerMap[developer] || developer,
-                genres: giantbombData?.genres || [],
-                youTubeId: youTubeData.youTubeId || '',
-                franchise: aiData.franchise,
+                ...aiData,
+                ...giantbombData,
+                ...youTubeData,
+                ...hltbData,
             };
         },
         skipGame: (parent, { id }, context, info) => (

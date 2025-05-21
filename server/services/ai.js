@@ -1,15 +1,16 @@
 import { GoogleGenAI } from '@google/genai';
 import config from '../config';
+import developerMap from './developerMap';
 
 const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
-const generateGameInfo = async (system, title, compilation, model, instructions) => {
+const generateGameInfo = async (input, model) => {
     try {
         const response = await ai.models.generateContent({
             model,
             contents: `
-                Please provide a JSON document describing the ${system} game "${title}"
-                ${compilation ? ` from the compilation "${compilation}"` : ''} with the following structure:
+                Please provide a JSON document describing the ${input.system} game "${input.title}"
+                ${input.compilation ? ` from the compilation "${input.compilation}"` : ''} with the following structure:
                 "story": a spoiler-free description of the game's story and what it is about, about 100 words.
                 "gameplay": a spoiler-free description of the game's main gameplay mechanics, about 100 words. If the game is a sequel, feel
                     free to incorporate relevant differences to the previous game.
@@ -27,11 +28,34 @@ const generateGameInfo = async (system, title, compilation, model, instructions)
                     specified (such as "Okami" on the Wii, which was developed by Ready at Dawn rather than Clover Studios).
                 - Please only provide factual details that you can confirm. If you are unable to find accurate information, please
                     just return null and do not invent or extrapolate any details.
-                ${instructions ? `- ${instructions}` : ''}
+                ${input.aiInstructions ? `- ${input.aiInstructions}` : ''}
             `,
         });
 
-        return JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
+        const result = JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
+        const description = `## Story & Theme
+
+${result.story}
+
+## Gameplay
+
+${result.gameplay}
+
+## History
+
+${result.history}`;
+
+        const data = {
+            description,
+            release: result.releaseYear,
+            developer: developerMap[result.developer] || result.developer,
+            franchise: result.franchise,
+        };
+
+        return input.types.reduce((acc, type) => ({
+            ...acc,
+            [type]: data[type],
+        }), {});
     } catch (error) {
         if (error.message.includes('The model is overloaded')) {
             return null;
@@ -41,12 +65,16 @@ const generateGameInfo = async (system, title, compilation, model, instructions)
     }
 };
 
-export default async (title, system, compilation, instructions) => {
+export default async (input) => {
+    if (!['description', 'release', 'developer', 'franchise'].some((type) => input.types.includes(type))) {
+        return {};
+    }
+
     let response;
     const models = ['gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 
     while (!response && models.length > 0) {
-        response = await generateGameInfo(system, title, compilation, models.shift(), instructions);
+        response = await generateGameInfo(input, models.shift());
     }
 
     return response;

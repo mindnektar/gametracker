@@ -22,6 +22,7 @@ type Game {
     skipCount: Int!
     updatedAt: DateTime!
     franchise: Franchise
+    timeToBeat: Float
 }
 
 enum GameStatus {
@@ -45,6 +46,7 @@ input CreateGameInput {
     dlcs: [CreateDlcInput!]
     status: GameStatus!
     franchise: RelateFranchiseInput
+    timeToBeat: Float
 }
 
 input UpdateGameInput {
@@ -62,6 +64,7 @@ input UpdateGameInput {
     dlcs: [CreateDlcInput!]
     status: GameStatus
     franchise: RelateFranchiseInput
+    timeToBeat: Float
 }
 
 input FetchGameDataInput {
@@ -69,6 +72,7 @@ input FetchGameDataInput {
     system: String!
     compilation: String
     aiInstructions: String
+    types: [String!]
 }
 
 type FetchGameDataResult {
@@ -78,4 +82,5 @@ type FetchGameDataResult {
     description: String
     youTubeId: String
     franchise: String
+    timeToBeat: Float
 }

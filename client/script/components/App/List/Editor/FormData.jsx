@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import getYear from 'date-fns/getYear';
 import ModalContext from 'contexts/modal';
@@ -7,9 +7,21 @@ import statusMap from 'helpers/statusMap';
 import { systemOrder } from 'helpers/systems';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import Button from 'atoms/Button';
+import Select from 'atoms/Select';
 import Form from 'molecules/Form';
 
+const autofillOptions = [
+    { value: 'description', label: 'Description' },
+    { value: 'developer', label: 'Developer' },
+    { value: 'franchise', label: 'Franchise' },
+    { value: 'genres', label: 'Genres' },
+    { value: 'release', label: 'Release' },
+    { value: 'timeToBeat', label: 'Time to beat' },
+    { value: 'youTubeId', label: 'YouTube ID' },
+];
+
 const FormData = (props) => {
+    const [autoFillTypes, setAutoFillTypes] = useState(autofillOptions.map(({ value }) => value));
     const modal = useContext(ModalContext);
     const fetchGameData = useFetchGameDataMutation();
     const allSystems = [...props.systems].sort((a, b) => (
@@ -38,21 +50,43 @@ const FormData = (props) => {
                 system: allSystems.find(({ id }) => id === modal.formValues.system)?.name || modal.formValues.system,
                 compilation: allCompilations.find(({ id }) => id === modal.formValues.compilation)?.title || modal.formValues.compilation,
                 aiInstructions: modal.formValues.aiInstructions.trim(),
+                types: autoFillTypes,
             });
 
             const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
             const franchise = allFranchises.find(({ name }) => name === data.fetchGameData.franchise);
 
-            modal.setFormValue('description', data.fetchGameData.description);
-            modal.setFormValue('release', data.fetchGameData.release);
-            modal.setFormValue('youTubeId', data.fetchGameData.youTubeId);
-            modal.setFormValue('developer', developer ? developer.id : data.fetchGameData.developer);
-            modal.setFormValue('franchise', franchise ? franchise.id : data.fetchGameData.franchise);
-            modal.setFormValue('genres', data.fetchGameData.genres.map((genre) => {
-                const existingGenre = allGenres.find(({ name }) => name === genre);
+            if (autoFillTypes.includes('description')) {
+                modal.setFormValue('description', data.fetchGameData.description);
+            }
 
-                return existingGenre?.id || genre;
-            }));
+            if (autoFillTypes.includes('release')) {
+                modal.setFormValue('release', data.fetchGameData.release);
+            }
+
+            if (autoFillTypes.includes('timeToBeat')) {
+                modal.setFormValue('timeToBeat', data.fetchGameData.timeToBeat);
+            }
+
+            if (autoFillTypes.includes('youTubeId')) {
+                modal.setFormValue('youTubeId', data.fetchGameData.youTubeId);
+            }
+
+            if (autoFillTypes.includes('developer')) {
+                modal.setFormValue('developer', developer ? developer.id : data.fetchGameData.developer);
+            }
+
+            if (autoFillTypes.includes('franchise')) {
+                modal.setFormValue('franchise', franchise ? franchise.id : data.fetchGameData.franchise);
+            }
+
+            if (autoFillTypes.includes('genres')) {
+                modal.setFormValue('genres', data.fetchGameData.genres.map((genre) => {
+                    const existingGenre = allGenres.find(({ name }) => name === genre);
+
+                    return existingGenre?.id || genre;
+                }));
+            }
         } catch (error) {
             modal.setErrorMessageHandler('title', error.message);
         }
@@ -117,6 +151,13 @@ const FormData = (props) => {
                 >
                     Auto-fill
                 </Button>
+
+                <Select
+                    multiple
+                    options={autofillOptions}
+                    value={autoFillTypes}
+                    onChange={setAutoFillTypes}
+                />
             </Form.Row>
 
             <Form.Row label="Franchise">
@@ -199,6 +240,16 @@ const FormData = (props) => {
                     }]}
                 >
                     <Form.Control.TextField />
+                </Form.Control>
+            </Form.Row>
+
+            <Form.Row label="Time to beat">
+                <Form.Control name="timeToBeat">
+                    <Form.Control.Slider
+                        min={0}
+                        max={100}
+                        stepSize={0.5}
+                    />
                 </Form.Control>
             </Form.Row>
 

@@ -85,12 +85,6 @@ const Select = (props) => {
         }
     };
 
-    const onSelectKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            toggleOpened();
-        }
-    };
-
     const close = () => {
         toggleOpened(false);
     };
@@ -148,7 +142,6 @@ const Select = (props) => {
                     'ui-select--has-error': props.hasError,
                 },
             )}
-            onKeyDown={onSelectKeyDown}
             role="listbox"
             tabIndex={0}
         >
