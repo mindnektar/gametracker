@@ -38,7 +38,7 @@ export default {
     },
     franchise: {
         label: 'Franchise',
-        resolver: (game) => game.franchise?.name || 'None',
+        resolver: (game) => game.franchise?.name || 'Standalone',
         sort: (a, b) => a.name.localeCompare(b.name),
     },
 };
