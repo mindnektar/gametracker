@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, startTransition } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transitioning';
 import animateScrollTo from 'animated-scroll-to';
 import moment from 'moment';
 import ModalContext from 'contexts/modal';
@@ -355,22 +355,11 @@ const Modal = (props) => {
                 <div className="ui-modal__wrapper">
                     <div className="ui-modal__content">
                         <div className="ui-modal__header">
-                            <TransitionGroup component={React.Fragment}>
-                                {activeScreen !== null && (
-                                    <CSSTransition
-                                        classNames="ui-modal__header-content-"
-                                        mountOnEnter
-                                        timeout={400}
-                                        unmountOnExit
-                                    >
-                                        <div className="ui-modal__header-content">
-                                            <div className="ui-modal__header-text">
-                                                {screens[visibleScreen]?.props.headline}
-                                            </div>
-                                        </div>
-                                    </CSSTransition>
-                                )}
-                            </TransitionGroup>
+                            <div className="ui-modal__header-content">
+                                <div className="ui-modal__header-text">
+                                    {screens[visibleScreen]?.props.headline}
+                                </div>
+                            </div>
                         </div>
 
                         <div
@@ -434,18 +423,13 @@ const Modal = (props) => {
     );
 
     return (
-        <TransitionGroup component={React.Fragment}>
-            {props.isOpen && (
-                <CSSTransition
-                    classNames="ui-modal-"
-                    mountOnEnter
-                    timeout={300}
-                    unmountOnExit
-                >
-                    {renderContent()}
-                </CSSTransition>
-            )}
-        </TransitionGroup>
+        <CSSTransition
+            classNames="ui-modal-"
+            in={props.isOpen}
+            timeout={300}
+        >
+            {renderContent()}
+        </CSSTransition>
     );
 };
 

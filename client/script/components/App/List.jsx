@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useListQuery from 'hooks/graphql/queries/list';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
+import useLocalStorage from 'hooks/useLocalStorage';
 import groupMap from 'helpers/groupMap';
 import LoadingContainer from 'molecules/LoadingContainer';
 import Header from './List/Header';
@@ -13,10 +14,10 @@ const List = () => {
     const { loading, data } = useListQuery();
     const skipGame = useSkipGame();
     const deleteGame = useDeleteGame();
-    const [groupBy, setGroupBy] = useState('system');
-    const [statusFilter, setStatusFilter] = useState('completed');
+    const [groupBy, setGroupBy] = useLocalStorage('groupBy', 'system');
+    const [statusFilter, setStatusFilter] = useLocalStorage('statusFilter', 'completed');
     const [expandedGame, setExpandedGame] = useState(null);
-    const [genreFilter, setGenreFilter] = useState([]);
+    const [genreFilter, setGenreFilter] = useLocalStorage('genreFilter', []);
     const [editorState, setEditorState] = useState({ id: null, isOpen: false });
 
     const getGroups = () => {

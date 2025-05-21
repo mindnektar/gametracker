@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import getYear from 'date-fns/getYear';
 import ModalContext from 'contexts/modal';
@@ -6,6 +6,7 @@ import validate from 'helpers/validate';
 import statusMap from 'helpers/statusMap';
 import { systemOrder } from 'helpers/systems';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
+import useLocalStorage from 'hooks/useLocalStorage';
 import Button from 'atoms/Button';
 import Select from 'atoms/Select';
 import Form from 'molecules/Form';
@@ -21,7 +22,7 @@ const autofillOptions = [
 ];
 
 const FormData = (props) => {
-    const [autoFillTypes, setAutoFillTypes] = useState(autofillOptions.map(({ value }) => value));
+    const [autoFillTypes, setAutoFillTypes] = useLocalStorage('autoFillTypes', autofillOptions.map(({ value }) => value));
     const modal = useContext(ModalContext);
     const fetchGameData = useFetchGameDataMutation();
     const allSystems = [...props.systems].sort((a, b) => (

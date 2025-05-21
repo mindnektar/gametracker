@@ -43,9 +43,6 @@ module.exports = {
             'script/components/hoc',
             'node_modules',
         ],
-        alias: {
-            'react/jsx-runtime': 'react/jsx-runtime.js',
-        },
     },
 
     module: {
