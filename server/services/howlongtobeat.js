@@ -10,7 +10,7 @@ export default async (input) => {
     try {
         const searchData = {
             searchType: 'games',
-            searchTerms: input.title.split(' '),
+            searchTerms: input.title.split(' ').map((term) => term.replace(/[^a-zA-Z0-9]/g, '')).filter(Boolean),
             searchPage: 1,
             size: 1,
             searchOptions: {
