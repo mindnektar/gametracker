@@ -49,7 +49,7 @@ export default async (input) => {
         const { data } = await axios.post('https://howlongtobeat.com/api/seek/d4b2e330db04dbf3', searchData, config);
 
         return {
-            timeToBeat: Math.round(data.data[0]?.comp_main / 1800) / 2,
+            timeToBeat: data.data[0] ? Math.round(data.data[0].comp_main / 1800) / 2 : 0,
         };
     } catch (error) {
         console.error(error);
