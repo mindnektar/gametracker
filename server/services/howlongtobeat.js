@@ -16,7 +16,7 @@ export default async (input) => {
             searchOptions: {
                 games: {
                     userId: 0,
-                    platform: '',
+                    platform: input.system,
                     sortCategory: 'popular',
                     rangeCategory: 'main',
                     rangeTime: { min: null, max: null },
