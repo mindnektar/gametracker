@@ -2,6 +2,7 @@ import transaction from './helpers/transaction';
 import fetchGiantbombData from '../services/giantbomb';
 import fetchYouTubeData from '../services/youTube';
 import fetchHowLongToBeatData from '../services/howlongtobeat';
+import fetchMetacriticData from '../services/metacritic';
 import fetchAiData from '../services/ai';
 import Game from '../models/Game';
 
@@ -35,14 +36,16 @@ export default {
                 fetchGiantbombData(input),
                 fetchYouTubeData(input),
                 fetchHowLongToBeatData(input),
+                fetchMetacriticData(input),
             ]);
-            const [aiData, giantbombData, youTubeData, hltbData] = result;
+            const [aiData, giantbombData, youTubeData, hltbData, metacriticData] = result;
 
             return {
                 ...aiData,
                 ...giantbombData,
                 ...youTubeData,
                 ...hltbData,
+                ...metacriticData,
             };
         },
         skipGame: (parent, { id }, context, info) => (

@@ -6,7 +6,13 @@ const Rating = (props) => (
     <div
         className={classnames(
             'rating',
-            { 'rating--visible': props.visible },
+            {
+                'rating--personal': props.personal,
+                'rating--visible': props.visible,
+                'rating--good': props.value >= 75,
+                'rating--mediocre': props.value >= 50 && props.value < 75,
+                'rating--bad': props.value < 50,
+            },
         )}
     >
         <div
@@ -20,7 +26,12 @@ const Rating = (props) => (
     </div>
 );
 
+Rating.defaultProps = {
+    personal: false,
+};
+
 Rating.propTypes = {
+    personal: PropTypes.bool,
     value: PropTypes.number.isRequired,
     visible: PropTypes.bool.isRequired,
 };

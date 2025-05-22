@@ -10,6 +10,7 @@ const MUTATION = gql`
             youTubeId
             franchise
             timeToBeat
+            criticRating
         }
     }
 `;

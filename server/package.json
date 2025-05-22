@@ -40,6 +40,7 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-jwt": "^6.0.0",
+    "fastest-levenshtein": "^1.0.16",
     "graphql-shield": "^7.5.0",
     "graphql-tools": "7.0.4",
     "graphql-yoga": "^1.18.3",

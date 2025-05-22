@@ -19,6 +19,7 @@ const autofillOptions = [
     { value: 'release', label: 'Release' },
     { value: 'timeToBeat', label: 'Time to beat' },
     { value: 'youTubeId', label: 'YouTube ID' },
+    { value: 'criticRating', label: 'Critic rating' },
 ];
 
 const FormData = (props) => {
@@ -79,6 +80,10 @@ const FormData = (props) => {
 
             if (autoFillTypes.includes('franchise')) {
                 modal.setFormValue('franchise', franchise ? franchise.id : data.fetchGameData.franchise);
+            }
+
+            if (autoFillTypes.includes('criticRating')) {
+                modal.setFormValue('criticRating', data.fetchGameData.criticRating);
             }
 
             if (autoFillTypes.includes('genres')) {
@@ -250,6 +255,15 @@ const FormData = (props) => {
                         min={0}
                         max={100}
                         stepSize={0.5}
+                    />
+                </Form.Control>
+            </Form.Row>
+
+            <Form.Row label="Critic rating">
+                <Form.Control name="criticRating">
+                    <Form.Control.Slider
+                        min={0}
+                        max={100}
                     />
                 </Form.Control>
             </Form.Row>

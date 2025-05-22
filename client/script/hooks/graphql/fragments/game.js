@@ -12,6 +12,7 @@ export default gql`
         skipCount
         updatedAt
         timeToBeat
+        criticRating
         system {
             id
             name

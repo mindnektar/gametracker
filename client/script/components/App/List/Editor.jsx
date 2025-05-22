@@ -31,6 +31,7 @@ const Editor = (props) => {
             youTubeId: values.youTubeId.trim(),
             status: values.status,
             timeToBeat: values.timeToBeat,
+            criticRating: values.criticRating,
             system: formatSelectValue(values.system, props.systems),
             developer: formatSelectValue(values.developer, props.developers),
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
@@ -58,6 +59,7 @@ const Editor = (props) => {
                 youTubeId: '',
                 status: 'planned',
                 timeToBeat: 0,
+                criticRating: 0,
                 system: {
                     _default: null,
                     _modify: (value) => value.id,

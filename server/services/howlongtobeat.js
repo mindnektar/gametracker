@@ -75,8 +75,6 @@ export default async (input) => {
         };
     } catch (error) {
         console.error(error);
-        return {
-            timeToBeat: 0,
-        };
+        return {};
     }
 };

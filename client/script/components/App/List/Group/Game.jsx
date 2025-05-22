@@ -120,12 +120,20 @@ const Game = (props) => {
 
                 {props.groupBy !== 'timeToBeat' && (
                     <div className="game__time-to-beat">
-                        {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½') : ''}
+                        {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½').replace(/^0/, '') : ''}
                     </div>
+                )}
+
+                {props.groupBy !== 'criticRating' && (
+                    <Rating
+                        value={props.game.criticRating}
+                        visible={!!props.game.criticRating}
+                    />
                 )}
 
                 {props.groupBy !== 'rating' && (props.game.status === 'completed' || props.statusFilter === 'all') && (
                     <Rating
+                        personal
                         value={props.game.rating}
                         visible={props.game.status === 'completed'}
                     />
