@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import useCreateGameMutation from 'hooks/graphql/mutations/createGame';
 import useUpdateGameMutation from 'hooks/graphql/mutations/updateGame';
 import Modal from 'molecules/Modal';
-import FormData from './Editor/FormData';
+import FormData from './GameEditor/FormData';
 
-const Editor = (props) => {
+const GameEditor = (props) => {
     const createGame = useCreateGameMutation();
     const updateGame = useUpdateGameMutation();
 
@@ -26,11 +26,11 @@ const Editor = (props) => {
             id: props.game?.id,
             title: values.title.trim(),
             rating: values.rating * 10,
-            release: values.release,
+            release: values.release * 1,
             description: values.description.trim(),
             youTubeId: values.youTubeId.trim(),
             status: values.status,
-            timeToBeat: values.timeToBeat,
+            timeToBeat: values.timeToBeat * 1,
             criticRating: values.criticRating * 10,
             system: formatSelectValue(values.system, props.systems),
             developer: formatSelectValue(values.developer, props.developers),
@@ -38,7 +38,6 @@ const Editor = (props) => {
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
             franchise: formatSelectValue(values.franchise, props.franchises),
             lists: [{ id: props.listId }],
-            dlcs: [],
         });
 
         props.onClose();
@@ -101,11 +100,11 @@ const Editor = (props) => {
     );
 };
 
-Editor.defaultProps = {
+GameEditor.defaultProps = {
     game: null,
 };
 
-Editor.propTypes = {
+GameEditor.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     game: PropTypes.object,
@@ -117,4 +116,4 @@ Editor.propTypes = {
     listId: PropTypes.string.isRequired,
 };
 
-export default Editor;
+export default GameEditor;

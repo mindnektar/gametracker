@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
+import dlcFragment from './dlc';
 
 export default gql`
+    ${dlcFragment}
     fragment GameFragment on Game {
         id
         title
@@ -30,9 +32,7 @@ export default gql`
             title
         }
         dlcs {
-            id
-            title
-            rating
+            ...DlcFragment
         }
         franchise {
             id

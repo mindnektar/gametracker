@@ -9,7 +9,7 @@ export default async (input) => {
     const youTubeSearch = await axios.get('https://www.googleapis.com/youtube/v3/search', {
         params: {
             key: config.youTube.apiKey,
-            q: `${input.title} ${input.system} longplay`,
+            q: input.type === 'dlc' ? `${input.game.title}: ${input.title} DLC longplay` : `${input.title} ${input.system} longplay`,
             type: 'video',
             maxResults: 1,
             part: 'snippet',

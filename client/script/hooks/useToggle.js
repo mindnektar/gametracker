@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
-export default () => {
-    const [state, setState] = useState(false);
+export default (defaultValue) => {
+    const [value, setValue] = useState(defaultValue);
 
     return [
-        state,
-        () => setState(true),
-        () => setState(false),
+        value,
+        () => setValue(true),
+        () => setValue(false),
+        () => (
+            setValue((previous) => !previous)
+        ),
     ];
 };

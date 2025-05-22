@@ -1,0 +1,42 @@
+.ui-popup-dialog-item
+    align-items: center
+    background-color: #b1b1b1
+    border-bottom: 1px solid #777777
+    cursor: pointer
+    display: flex
+    padding: 8px 16px
+    position: relative
+    transition-duration: 200ms
+    transition-property: background-color, color
+
+    &:hover
+        background-color: #c2c2c2
+
+        .ui-icon-button
+            background-color: #b1b1b1
+
+    &--disabled
+        color: #777777
+        pointer-events: none
+
+    &:last-child
+        border-bottom: 0
+
+    .ui-icon-button
+        background-color: #c2c2c2
+        flex-shrink: 0
+
+    .ui-popup-dialog--small &
+        margin: 8px 224px 8px 0
+
+    &__label
+        font-size: 12px
+        overflow: hidden
+        padding-left: 1em
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    &__sub-label
+        color: #999999
+        font-weight: 400
+        transition: 200ms color

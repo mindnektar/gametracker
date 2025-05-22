@@ -14,7 +14,7 @@ const systemMap = {
     Android: 'Mobile',
 };
 
-const request = async (title, system = '') => {
+const request = async (title, type, system = '') => {
     const searchData = {
         searchType: 'games',
         searchTerms: title.split(' ').map((term) => term.replace(/[^a-zA-Z0-9-']/g, '')).filter(Boolean),
@@ -34,7 +34,7 @@ const request = async (title, system = '') => {
                     difficulty: '',
                 },
                 rangeYear: { min: '', max: '' },
-                modifier: 'hide_dlc',
+                modifier: type === 'dlc' ? 'only_dlc' : 'hide_dlc',
             },
             users: { sortCategory: 'postcount' },
             lists: { sortCategory: 'follows' },
@@ -64,10 +64,10 @@ export default async (input) => {
     }
 
     try {
-        let data = await request(input.title, input.system);
+        let data = await request(input.title, input.type, input.system);
 
         if (!data) {
-            data = await request(input.title);
+            data = await request(input.title, input.type);
         }
 
         return {

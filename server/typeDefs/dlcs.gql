@@ -1,11 +1,55 @@
+type Mutation {
+    createDlc(input: CreateDlcInput!): Dlc!
+    updateDlc(input: UpdateDlcInput!): Dlc!
+    fetchDlcData(input: FetchDlcDataInput!): FetchDlcDataResult!
+    deleteDlc(id: ID!): Dlc!
+}
+
 type Dlc {
     id: ID!
     game: Game!
     title: String!
     rating: Int!
+    criticRating: Int
+    release: Int!
+    description: String!
+    youTubeId: String!
+    timeToBeat: Float
 }
 
 input CreateDlcInput {
+    gameId: ID!
     title: String!
     rating: Int!
+    criticRating: Int
+    release: Int!
+    description: String!
+    youTubeId: String!
+    timeToBeat: Float
+}
+
+input UpdateDlcInput {
+    id: ID!
+    title: String
+    rating: Int
+    criticRating: Int
+    release: Int
+    description: String
+    youTubeId: String
+    timeToBeat: Float
+}
+
+input FetchDlcDataInput {
+    title: String!
+    gameId: ID!
+    aiInstructions: String
+    types: [String!]
+}
+
+type FetchDlcDataResult {
+    release: Int
+    description: String
+    youTubeId: String
+    timeToBeat: Float
+    criticRating: Int
 }

@@ -6,6 +6,40 @@ const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
 const generateGameInfo = async (input, model) => {
     try {
+        if (input.type === 'dlc') {
+            const response = await ai.models.generateContent({
+                model,
+                contents: `
+                    Please provide a JSON document describing the DLC "${input.title}" for the ${input.game.system.name} game
+                    "${input.game.title}" with the following structure:
+                    "story": a spoiler-free description of the DLC's story, what it is about and how it pertains to the main game, about
+                        100 words.
+                    "gameplay": a spoiler-free description of the DLC's main gameplay mechanics, about 100 words. Focus on the differences
+                        to the main game.
+                    "history": interesting background information about how the DLC was created, about 100 words.
+                    "release": the year the DLC was first released in any region.
+                `,
+            });
+
+            const result = JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
+            const description = `## Story & Theme
+
+${result.story}
+
+## Gameplay
+
+${result.gameplay}
+
+## History
+
+${result.history}`;
+
+            return {
+                description,
+                release: result.release,
+            };
+        }
+
         const response = await ai.models.generateContent({
             model,
             contents: `
@@ -15,7 +49,7 @@ const generateGameInfo = async (input, model) => {
                 "gameplay": a spoiler-free description of the game's main gameplay mechanics, about 100 words. If the game is a sequel, feel
                     free to incorporate relevant differences to the previous game.
                 "history": interesting background information about how and by whom the game was created, about 100 words.
-                "releaseYear": the year the game was first released in any region.
+                "release": the year the game was first released in any region.
                 "developer": the name of the game's developer without any company suffixes such as "inc.", "gmbh", "co." or "ltd.". Avoid
                     abbreviations (e.g. use "Electronic Arts" rather than "EA"). Favor names as they are used colloquially (e.g. use
                     "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment"). Omit location-specific details
@@ -48,7 +82,7 @@ ${result.history}`;
 
         const data = {
             description,
-            release: result.releaseYear,
+            release: result.release,
             developer: developerMap[result.developer] || result.developer,
             franchise: result.franchise,
         };

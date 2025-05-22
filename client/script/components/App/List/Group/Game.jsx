@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Markdown from 'react-markdown';
-import Button from 'atoms/Button';
+import IconButton from 'atoms/IconButton';
 import Collapsible from 'molecules/Collapsible';
+import PopupDialog from 'molecules/PopupDialog';
 import Rating from './Game/Rating';
 
 const Game = (props) => {
@@ -12,7 +13,7 @@ const Game = (props) => {
     };
 
     const editGame = () => {
-        props.editGame(props.game.id);
+        props.openGameEditor(props.game.id);
     };
 
     const skipGame = () => {
@@ -21,6 +22,18 @@ const Game = (props) => {
 
     const deleteGame = () => {
         props.deleteGame(props.game.id);
+    };
+
+    const addDlc = () => {
+        props.openDlcEditor({ gameId: props.game.id });
+    };
+
+    const editDlcHandler = (dlcId) => () => {
+        props.openDlcEditor({ gameId: props.game.id, dlcId });
+    };
+
+    const deleteDlcHandler = (dlcId) => () => {
+        props.deleteDlc(dlcId);
     };
 
     const toggleGenreFilterHandler = (genreId) => (event) => {
@@ -138,6 +151,37 @@ const Game = (props) => {
                         visible={props.game.status === 'completed'}
                     />
                 )}
+
+                <div className="game__actions">
+                    <PopupDialog
+                        items={[{
+                            icon: 'edit',
+                            label: 'Edit game',
+                            onClick: editGame,
+                        }, {
+                            icon: 'double_arrow',
+                            label: 'Skip game',
+                            onClick: skipGame,
+                            available: props.game.status === 'planned',
+                        }, {
+                            icon: 'add',
+                            label: 'Add DLC',
+                            onClick: addDlc,
+                            available: props.game.status === 'completed',
+                        }, {
+                            icon: 'delete',
+                            label: 'Delete game',
+                            onClick: deleteGame,
+                        }]}
+                    >
+                        {({ toggle }) => (
+                            <IconButton
+                                type="more_horiz"
+                                onClick={toggle}
+                            />
+                        )}
+                    </PopupDialog>
+                </div>
             </div>
 
             <Collapsible collapsed={!props.expanded}>
@@ -159,7 +203,7 @@ const Game = (props) => {
 
                             {props.game.dlcs.length > 0 && (
                                 <div className="game__dlcs">
-                                    <div className="game__dlcs-header">DLCs</div>
+                                    <h2>DLCs</h2>
 
                                     <div>
                                         {props.game.dlcs.map((dlc) => (
@@ -167,33 +211,52 @@ const Game = (props) => {
                                                 className="game__dlc"
                                                 key={dlc.id}
                                             >
-                                                <div>{dlc.title}</div>
+                                                <div className="game__title">{dlc.title}</div>
 
-                                                <Rating value={dlc.rating} />
+                                                <div className="game__release">
+                                                    {dlc.release}
+                                                </div>
+
+                                                <div className="game__time-to-beat">
+                                                    {dlc.timeToBeat ? `${dlc.timeToBeat} h`.replace('.5', '½').replace(/^0/, '') : ''}
+                                                </div>
+
+                                                <Rating
+                                                    value={dlc.criticRating}
+                                                    visible={!!dlc.criticRating}
+                                                />
+
+                                                <Rating
+                                                    personal
+                                                    value={dlc.rating}
+                                                    visible
+                                                />
+
+                                                <div className="game__actions">
+                                                    <PopupDialog
+                                                        items={[{
+                                                            icon: 'edit',
+                                                            label: 'Edit DLC',
+                                                            onClick: editDlcHandler(dlc.id),
+                                                        }, {
+                                                            icon: 'delete',
+                                                            label: 'Delete DLC',
+                                                            onClick: deleteDlcHandler(dlc.id),
+                                                        }]}
+                                                    >
+                                                        {({ toggle }) => (
+                                                            <IconButton
+                                                                type="more_horiz"
+                                                                onClick={toggle}
+                                                            />
+                                                        )}
+                                                    </PopupDialog>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
-
-                            <div className="game__actions">
-                                {props.game.status === 'planned' && (
-                                    <Button onClick={skipGame}>
-                                        Skip game
-                                    </Button>
-                                )}
-
-                                <Button
-                                    destructive
-                                    onClick={deleteGame}
-                                >
-                                    Delete game
-                                </Button>
-
-                                <Button onClick={editGame}>
-                                    Edit game
-                                </Button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,11 +266,13 @@ const Game = (props) => {
 };
 
 Game.propTypes = {
+    deleteDlc: PropTypes.func.isRequired,
     deleteGame: PropTypes.func.isRequired,
     game: PropTypes.object.isRequired,
     expanded: PropTypes.bool.isRequired,
     expandGame: PropTypes.func.isRequired,
-    editGame: PropTypes.func.isRequired,
+    openGameEditor: PropTypes.func.isRequired,
+    openDlcEditor: PropTypes.func.isRequired,
     skipGame: PropTypes.func.isRequired,
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,

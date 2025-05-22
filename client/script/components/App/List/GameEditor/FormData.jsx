@@ -280,7 +280,7 @@ const FormData = (props) => {
             </Form.Row>
 
             {modal.formValues.status === 'completed' && (
-                <Form.Row label="Rating" required>
+                <Form.Row label="Personal rating" required>
                     <Form.Control name="rating">
                         <Form.Control.Slider
                             min={0}

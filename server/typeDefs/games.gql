@@ -44,7 +44,6 @@ input CreateGameInput {
     developer: RelateDeveloperInput!
     genres: [RelateGenreInput!]!
     compilation: RelateCompilationInput
-    dlcs: [CreateDlcInput!]
     status: GameStatus!
     franchise: RelateFranchiseInput
     timeToBeat: Float
@@ -63,7 +62,6 @@ input UpdateGameInput {
     developer: RelateDeveloperInput
     genres: [RelateGenreInput!]
     compilation: RelateCompilationInput
-    dlcs: [CreateDlcInput!]
     status: GameStatus
     franchise: RelateFranchiseInput
     timeToBeat: Float

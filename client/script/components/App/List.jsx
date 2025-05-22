@@ -2,23 +2,27 @@ import React, { useState } from 'react';
 import useListQuery from 'hooks/graphql/queries/list';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
+import useDeleteDlc from 'hooks/graphql/mutations/deleteDlc';
 import useLocalStorage from 'hooks/useLocalStorage';
 import groupMap from 'helpers/groupMap';
 import LoadingContainer from 'molecules/LoadingContainer';
 import Header from './List/Header';
 import Meta from './List/Meta';
 import Group from './List/Group';
-import Editor from './List/Editor';
+import GameEditor from './List/GameEditor';
+import DlcEditor from './List/DlcEditor';
 
 const List = () => {
     const { loading, data } = useListQuery();
     const skipGame = useSkipGame();
     const deleteGame = useDeleteGame();
+    const deleteDlc = useDeleteDlc();
     const [groupBy, setGroupBy] = useLocalStorage('groupBy', 'system');
     const [statusFilter, setStatusFilter] = useLocalStorage('statusFilter', 'completed');
     const [expandedGame, setExpandedGame] = useState(null);
     const [genreFilter, setGenreFilter] = useLocalStorage('genreFilter', []);
-    const [editorState, setEditorState] = useState({ id: null, isOpen: false });
+    const [gameEditorState, setGameEditorState] = useState({ id: null, isOpen: false });
+    const [dlcEditorState, setDlcEditorState] = useState({ id: null, isOpen: false });
 
     const getGroups = () => {
         if (!data) {
@@ -65,12 +69,20 @@ const List = () => {
         setGenreFilter(value);
     };
 
-    const openEditor = (id) => {
-        setEditorState({ id, isOpen: true });
+    const openGameEditor = (id) => {
+        setGameEditorState({ id, isOpen: true });
     };
 
-    const closeEditor = () => {
-        setEditorState((previous) => ({ ...previous, isOpen: false }));
+    const closeGameEditor = () => {
+        setGameEditorState((previous) => ({ ...previous, isOpen: false }));
+    };
+
+    const openDlcEditor = ({ gameId, dlcId }) => {
+        setDlcEditorState({ gameId, dlcId, isOpen: true });
+    };
+
+    const closeDlcEditor = () => {
+        setDlcEditorState((previous) => ({ ...previous, isOpen: false }));
     };
 
     const onSkipGame = (id) => {
@@ -102,7 +114,7 @@ const List = () => {
                     />
 
                     <Meta
-                        openEditor={openEditor}
+                        openGameEditor={openGameEditor}
                         pickRandom={pickRandom}
                         groupBy={groupBy}
                         setGroupBy={setGroupBy}
@@ -113,10 +125,12 @@ const List = () => {
                     {groups.map((group) => (
                         <Group
                             key={group.name}
+                            deleteDlc={deleteDlc}
                             deleteGame={deleteGame}
                             expandGame={toggleExpandedGame}
                             expandedGame={expandedGame}
-                            editGame={openEditor}
+                            openGameEditor={openGameEditor}
+                            openDlcEditor={openDlcEditor}
                             genreFilter={genreFilter}
                             groupBy={groupBy}
                             toggleGenreFilter={toggleGenreFilter}
@@ -127,16 +141,28 @@ const List = () => {
                         />
                     ))}
 
-                    <Editor
-                        open={editorState.isOpen}
-                        game={data.list.games.find(({ id }) => id === editorState.id)}
-                        onClose={closeEditor}
+                    <GameEditor
+                        open={gameEditorState.isOpen}
+                        game={data.list.games.find(({ id }) => id === gameEditorState.id)}
+                        onClose={closeGameEditor}
                         systems={data.systems}
                         developers={data.developers}
                         compilations={data.compilations}
                         genres={data.genres}
                         listId={data.list.id}
                         franchises={data.franchises}
+                    />
+
+                    <DlcEditor
+                        open={dlcEditorState.isOpen}
+                        dlc={
+                            data.list.games
+                                .find(({ id }) => id === dlcEditorState.gameId)
+                                ?.dlcs
+                                .find(({ id }) => id === dlcEditorState.dlcId)
+                        }
+                        gameId={dlcEditorState.gameId}
+                        onClose={closeDlcEditor}
                     />
                 </div>
             )}

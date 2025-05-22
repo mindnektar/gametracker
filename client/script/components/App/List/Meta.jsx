@@ -7,7 +7,7 @@ import Select from 'atoms/Select';
 
 const Meta = (props) => {
     const openEditor = () => {
-        props.openEditor();
+        props.openGameEditor();
     };
 
     return (
@@ -50,7 +50,7 @@ const Meta = (props) => {
 };
 
 Meta.propTypes = {
-    openEditor: PropTypes.func.isRequired,
+    openGameEditor: PropTypes.func.isRequired,
     pickRandom: PropTypes.func.isRequired,
     setGroupBy: PropTypes.func.isRequired,
     groupBy: PropTypes.string.isRequired,
