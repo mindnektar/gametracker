@@ -83,7 +83,7 @@ const FormData = (props) => {
             }
 
             if (autoFillTypes.includes('criticRating')) {
-                modal.setFormValue('criticRating', data.fetchGameData.criticRating);
+                modal.setFormValue('criticRating', data.fetchGameData.criticRating / 10);
             }
 
             if (autoFillTypes.includes('genres')) {
