@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import bigDecimal from 'js-big-decimal';
 import Draggable from 'Draggable';
 
 const Slider = (props) => {
@@ -15,11 +16,17 @@ const Slider = (props) => {
             props.min,
             Math.min(
                 props.max,
-                (leftWithinBar * (props.max - props.min)) + props.min,
+                bigDecimal.add(
+                    bigDecimal.multiply(
+                        bigDecimal.subtract(props.max, props.min),
+                        leftWithinBar,
+                    ),
+                    props.min,
+                ),
             ),
         );
 
-        props.onChange(Math.round(value / props.stepSize) * props.stepSize);
+        props.onChange(bigDecimal.multiply(bigDecimal.divide(value, props.stepSize, 0), props.stepSize));
     };
 
     return (

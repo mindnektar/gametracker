@@ -263,7 +263,8 @@ const FormData = (props) => {
                 <Form.Control name="criticRating">
                     <Form.Control.Slider
                         min={0}
-                        max={100}
+                        max={10}
+                        stepSize={0.1}
                     />
                 </Form.Control>
             </Form.Row>
