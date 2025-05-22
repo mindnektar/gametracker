@@ -18,7 +18,8 @@ const generateGameInfo = async (input, model) => {
                 "releaseYear": the year the game was first released in any region.
                 "developer": the name of the game's developer without any company suffixes such as "inc.", "gmbh", "co." or "ltd.". Avoid
                     abbreviations (e.g. use "Electronic Arts" rather than "EA"). Favor names as they are used colloquially (e.g. use
-                    "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment").
+                    "Nintendo" rather than "Nintendo EAD" or "Remedy" rather than "Remedy Entertainment"). Omit location-specific details
+                    (e.g. use "Ubisoft" rather than "Ubisoft Montpellier" or "2K Games" rather than "2K Boston").
                 "franchise": if the game is part of a franchise spanning multiple titles, please provide the name of the franchise. For
                     example, "The Legend of Zelda" is part of the "Zelda" franchise, and "Super Mario Galaxy" belongs to "Mario". "Celeste"
                     has no franchise because it is just a single game.

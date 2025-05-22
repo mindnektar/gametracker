@@ -3,6 +3,7 @@ import { closest } from 'fastest-levenshtein';
 
 const systemMap = {
     Switch: 'Nintendo Switch',
+    'PlayStation Portable': 'PSP',
 };
 
 export default async (input) => {
