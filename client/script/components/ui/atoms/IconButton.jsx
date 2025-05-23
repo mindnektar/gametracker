@@ -4,6 +4,10 @@ import Icon from 'atoms/Icon';
 
 const IconButton = (props) => {
     const onClick = (event) => {
+        if (!props.onClick) {
+            return;
+        }
+
         event.stopPropagation();
         props.onClick();
     };
@@ -19,8 +23,12 @@ const IconButton = (props) => {
     );
 };
 
+IconButton.defaultProps = {
+    onClick: null,
+};
+
 IconButton.propTypes = {
-    onClick: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
     type: PropTypes.string.isRequired,
 };
 

@@ -9,6 +9,10 @@
         .ui-select__current
             border-color: #777777
 
+    &:hover
+        .ui-select__current
+            background-color: #c2c2c2
+
 .ui-select--has-error
     .ui-select__current
         border-color: #ff2d55
@@ -67,6 +71,9 @@
         border-bottom-left-radius: 0
         border-bottom-right-radius: 0
 
+    .ui-select__arrow
+        transform: rotate(180deg)
+
 .ui-select__options
     overflow-y: auto
 
@@ -84,6 +91,9 @@
 
     &:focus-visible
         color: #777777
+
+    &:hover
+        background-color: #c2c2c2
 
     &:last-child
         border-bottom: 0
@@ -123,8 +133,10 @@
     white-space: nowrap
     width: 100%
 
-.ui-select__clear
+.ui-select__clear,
+.ui-select__arrow
     align-items: center
+    color: #444444
     cursor: pointer
     display: flex
     height: 100%

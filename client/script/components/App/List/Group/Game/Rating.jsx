@@ -8,7 +8,6 @@ const Rating = (props) => (
             'rating',
             {
                 'rating--personal': props.personal,
-                'rating--visible': props.visible,
                 'rating--good': props.value >= 75,
                 'rating--mediocre': props.value >= 50 && props.value < 75,
                 'rating--bad': props.value < 50,
@@ -21,19 +20,19 @@ const Rating = (props) => (
         />
 
         <div className="rating__text">
-            {props.value / 10}
+            {!props.value ? '-' : props.value / 10}
         </div>
     </div>
 );
 
 Rating.defaultProps = {
     personal: false,
+    value: null,
 };
 
 Rating.propTypes = {
     personal: PropTypes.bool,
-    value: PropTypes.number.isRequired,
-    visible: PropTypes.bool.isRequired,
+    value: PropTypes.number,
 };
 
 export default Rating;

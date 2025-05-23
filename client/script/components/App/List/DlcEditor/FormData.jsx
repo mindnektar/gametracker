@@ -89,6 +89,7 @@ const FormData = (props) => {
                 </Button>
 
                 <Select
+                    clearable
                     multiple
                     options={autofillOptions}
                     value={autoFillTypes}

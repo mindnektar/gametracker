@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -7,11 +7,13 @@ import { arrayToggle } from 'helpers/objects';
 import useSimpleToggle from 'hooks/useSimpleToggle';
 import useToggle from 'hooks/useToggle';
 import useRepeatFor from 'hooks/useRepeatFor';
+import Icon from 'atoms/Icon';
 import TextField from 'atoms/TextField';
 import Collapsible from 'molecules/Collapsible';
 
 const Select = (props) => {
     const newOptionRef = useRef();
+    const selectedOptionRef = useRef();
     const [opened, toggleOpened] = useSimpleToggle(false);
     const [style, setStyle] = useState({});
     const [isAdding, startAddMode, endAddMode] = useToggle(false);
@@ -41,6 +43,14 @@ const Select = (props) => {
             findScrollParent(selectRef.current).removeEventListener('scroll', calculatePosition);
         };
     }, [opened, props.value]);
+
+    useLayoutEffect(() => {
+        if (opened) {
+            window.setTimeout(() => {
+                selectedOptionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+    }, [opened]);
 
     const calculatePosition = () => {
         if (!selectRef.current) {
@@ -99,7 +109,7 @@ const Select = (props) => {
         close();
     };
 
-    const renderCurrent = () => (
+    const renderCurrent = (withArrow = false) => (
         <div
             className="ui-select__current"
             onClick={toggleOpened}
@@ -107,12 +117,19 @@ const Select = (props) => {
             <div className="ui-select__label">
                 {selectedOptions.map((option) => option.label).join(', ')}
             </div>
+
+            {withArrow && (
+                <div className="ui-select__arrow">
+                    <Icon type="arrow_drop_down" />
+                </div>
+            )}
         </div>
     );
 
     const renderOption = (option) => (
         <div
             key={option.value}
+            ref={selectedOptions.some(({ value }) => value === option.value) ? selectedOptionRef : null}
             aria-label={option.label}
             aria-selected="false"
             className={classNames(
@@ -151,7 +168,7 @@ const Select = (props) => {
                     style={style.wrapper}
                 >
                     <Collapsible collapsed={!opened}>
-                        {renderCurrent()}
+                        {renderCurrent(true)}
 
                         <div
                             className="ui-select__options"
@@ -180,7 +197,7 @@ const Select = (props) => {
                     </Collapsible>
                 </div>
 
-                {renderCurrent()}
+                {renderCurrent(!props.clearable || selectedOptions.length === 0)}
 
                 {props.clearable && selectedOptions.length > 0 && (
                     <div

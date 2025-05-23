@@ -58,6 +58,22 @@ const Game = (props) => {
                 className="game__head"
                 onClick={expandGame}
             >
+
+                {props.groupBy !== 'status' && (
+                    <div
+                        className={classnames(
+                            'game__status',
+                            {
+                                'game__status--active': props.game.status === 'active',
+                                'game__status--dropped': props.game.status === 'dropped',
+                                'game__status--planned': props.game.status === 'planned',
+                                'game__status--completed': props.game.status === 'completed',
+                            }
+                        )}
+                    >
+                        {props.game.status}
+                    </div>
+                )}
                 <div className="game__title">
                     <div className="game__title-text">
                         {props.game.title}
@@ -81,22 +97,6 @@ const Game = (props) => {
                         </span>
                     )}
                 </div>
-
-                {props.groupBy !== 'status' && (
-                    <div
-                        className={classnames(
-                            'game__status',
-                            {
-                                'game__status--active': props.game.status === 'active',
-                                'game__status--dropped': props.game.status === 'dropped',
-                                'game__status--planned': props.game.status === 'planned',
-                                'game__status--completed': props.game.status === 'completed',
-                            }
-                        )}
-                    >
-                        {props.game.status}
-                    </div>
-                )}
 
                 <div className="game__genre">
                     {props.game.genres.map((genre) => (
@@ -138,17 +138,13 @@ const Game = (props) => {
                 )}
 
                 {props.groupBy !== 'criticRating' && (
-                    <Rating
-                        value={props.game.criticRating}
-                        visible={!!props.game.criticRating}
-                    />
+                    <Rating value={props.game.criticRating} />
                 )}
 
                 {props.groupBy !== 'rating' && (props.game.status === 'completed' || props.statusFilter === 'all') && (
                     <Rating
                         personal
-                        value={props.game.rating}
-                        visible={props.game.status === 'completed'}
+                        value={props.game.status === 'completed' ? props.game.rating : null}
                     />
                 )}
 
