@@ -146,7 +146,7 @@ const FormData = (props) => {
 
             <Form.Row label="AI instructions">
                 <Form.Control name="aiInstructions">
-                    <Form.Control.TextField />
+                    <Form.Control.TextField onSubmit={autoFillFields} />
                 </Form.Control>
             </Form.Row>
 

@@ -115,7 +115,7 @@ const Select = (props) => {
             onClick={toggleOpened}
         >
             <div className="ui-select__label">
-                {selectedOptions.map((option) => option.label).join(', ')}
+                {selectedOptions.map((option) => option.label).join(', ') || 'All'}
             </div>
 
             {withArrow && (

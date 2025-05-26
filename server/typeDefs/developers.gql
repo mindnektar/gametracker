@@ -2,6 +2,12 @@ type Query {
     developers: [Developer!]!
 }
 
+type Mutation {
+    createDeveloper(input: CreateDeveloperInput!): Developer!
+    updateDeveloper(input: UpdateDeveloperInput!): Developer!
+    deleteDeveloper(id: ID!): Developer!
+}
+
 type Developer {
     id: ID!
     name: String!
@@ -10,5 +16,14 @@ type Developer {
 
 input RelateDeveloperInput {
     id: ID
+    name: String
+}
+
+input CreateDeveloperInput {
+    name: String!
+}
+
+input UpdateDeveloperInput {
+    id: ID!
     name: String
 }

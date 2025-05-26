@@ -1,8 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
 import gameFragment from '../fragments/game';
+import systemFragment from '../fragments/system';
+import developerFragment from '../fragments/developer';
 
 const query = gql`
     ${gameFragment}
+    ${systemFragment}
+    ${developerFragment}
     query list {
         list {
             id
@@ -12,12 +16,10 @@ const query = gql`
             }
         }
         systems {
-            id
-            name
+            ...SystemFragment
         }
         developers {
-            id
-            name
+            ...DeveloperFragment
         }
         compilations {
             id

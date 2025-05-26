@@ -2,13 +2,35 @@ type Query {
     systems: [System!]!
 }
 
+type Mutation {
+    createSystem(input: CreateSystemInput!): System!
+    updateSystem(input: UpdateSystemInput!): System!
+    updateSystemOrder(input: UpdateSystemOrderInput!): [System!]!
+    deleteSystem(id: ID!): System!
+}
+
 type System {
     id: ID!
     name: String!
+    order: Int!
     games: [Game!]!
 }
 
 input RelateSystemInput {
     id: ID
     name: String
+}
+
+input CreateSystemInput {
+    name: String!
+}
+
+input UpdateSystemInput {
+    id: ID!
+    name: String
+}
+
+input UpdateSystemOrderInput {
+    id: ID!
+    order: Int!
 }

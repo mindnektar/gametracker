@@ -23,6 +23,9 @@ export default ({ onAfterChange } = {}) => {
             formControl.onAfterChange(value);
             onAfterChange?.(value);
         },
+        onSubmit: () => {
+            modal.confirm();
+        },
         onError: modal.setErrorMessageHandler(formControl.name),
         value: formValue,
         hasError: formControl.hasError,

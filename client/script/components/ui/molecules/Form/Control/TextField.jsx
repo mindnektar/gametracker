@@ -11,6 +11,7 @@ const TextField = forwardRef((props, ref) => {
             ariaLabel={formData.label}
             hasError={formData.hasError}
             onChange={formData.onChange}
+            onSubmit={formData.onSubmit}
             value={formData.value}
             {...props}
         />

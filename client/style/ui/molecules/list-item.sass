@@ -1,0 +1,58 @@
+.ui-list-item
+    background-color: #999999
+    border: 1px solid #bbbbbb
+    border-bottom-color: #777777
+    border-radius: 4px
+    border-right-color: #777777
+    display: flex
+    overflow: hidden
+    transition: ease 300ms
+    transition-property: background-color, height
+
+    .ui-icon-button
+        background-color: transparent
+        border: 0
+        height: 24px
+        width: 24px
+
+    h2
+        border-bottom: 1px solid #777777
+        font-weight: 300
+        margin-block-start: 0
+        padding-bottom: 4px
+
+    &:hover,
+    &--expanded
+        background-color: #a8a8a8
+
+    &__content
+        flex-grow: 1
+        min-width: 0
+        padding: 0 8px
+
+    &__head
+        align-items: center
+        cursor: pointer
+        display: flex
+        gap: 8px
+        height: 32px
+
+    &__status
+        align-self: stretch
+        border-radius: 2px
+        flex: 0 0 16px
+        font-weight: 700
+        text-align: center
+        text-transform: uppercase
+
+        .ui-list-item--active &
+            background-image: repeating-linear-gradient(-45deg, rgba(#93c9ef, .7), rgba(#93c9ef, .7) 4px, rgba(#b2daf7, .7) 4px, rgba(#b2daf7, .7) 8px)
+
+        .ui-list-item--planned &
+            background-image: repeating-linear-gradient(-45deg, rgba(#ccc296, .7), rgba(#ccc296, .7) 4px, rgba(#e5d5b6, .7) 4px, rgba(#e5d5b6, .7) 8px)
+
+        .ui-list-item--completed &
+            background-image: repeating-linear-gradient(-45deg, rgba(#8ac375, .7), rgba(#8ac375, .7) 4px, rgba(#b0dc9f, .7) 4px, rgba(#b0dc9f, .7) 8px)
+
+        .ui-list-item--dropped &
+            background-image: repeating-linear-gradient(-45deg, rgba(#aa7969, .7), rgba(#aa7969, .7) 4px, rgba(#e5b6b6, .7) 4px, rgba(#e5b6b6, .7) 8px)
