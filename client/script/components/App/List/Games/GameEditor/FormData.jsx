@@ -60,6 +60,7 @@ const FormData = (props) => {
 
             const developer = allDevelopers.find(({ name }) => name === data.fetchGameData.developer);
             const franchise = allFranchises.find(({ name }) => name === data.fetchGameData.franchise);
+            const country = countries.find(({ name }) => name === data.fetchGameData.country)?.code;
 
             if (autoFillTypes.includes('description')) {
                 modal.setFormValue('description', data.fetchGameData.description);
@@ -82,7 +83,7 @@ const FormData = (props) => {
             }
 
             if (autoFillTypes.includes('country')) {
-                modal.setFormValue('country', data.fetchGameData.country);
+                modal.setFormValue('country', country);
             }
 
             if (autoFillTypes.includes('franchise')) {
