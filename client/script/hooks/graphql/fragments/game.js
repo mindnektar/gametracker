@@ -19,6 +19,7 @@ export default gql`
         updatedAt
         timeToBeat
         criticRating
+        country
         system {
             ...SystemFragment
         }

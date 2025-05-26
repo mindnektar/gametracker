@@ -32,6 +32,7 @@ const GameEditor = (props) => {
             status: values.status,
             timeToBeat: values.timeToBeat * 1,
             criticRating: values.criticRating * 10,
+            country: values.country,
             system: formatSelectValue(values.system, props.systems),
             developer: formatSelectValue(values.developer, props.developers),
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
@@ -82,6 +83,7 @@ const GameEditor = (props) => {
                     _default: null,
                     _modify: (value) => value.id,
                 },
+                country: null,
             }}
             formSubject={props.game}
             isOpen={props.open}

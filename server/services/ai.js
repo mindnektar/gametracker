@@ -57,6 +57,8 @@ ${result.history}`;
                 "franchise": if the game is part of a franchise spanning multiple titles, please provide the name of the franchise. For
                     example, "The Legend of Zelda" is part of the "Zelda" franchise, and "Super Mario Galaxy" belongs to "Mario". "Celeste"
                     has no franchise because it is just a single game.
+                "country": the country of origin of the game. If the game was developed in more than one country, return the one where the
+                    main force of the development was based.
 
                 Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
@@ -85,6 +87,7 @@ ${result.history}`;
             release: result.release,
             developer: developerMap[result.developer] || result.developer,
             franchise: result.franchise,
+            country: result.country,
         };
 
         return input.types.reduce((acc, type) => ({
@@ -101,7 +104,7 @@ ${result.history}`;
 };
 
 export default async (input) => {
-    if (!['description', 'release', 'developer', 'franchise'].some((type) => input.types.includes(type))) {
+    if (!['description', 'release', 'developer', 'franchise', 'country'].some((type) => input.types.includes(type))) {
         return {};
     }
 

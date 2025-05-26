@@ -4,6 +4,7 @@ const MUTATION = gql`
     mutation fetchGameData($input: FetchGameDataInput!) {
         fetchGameData(input: $input) {
             developer
+            country
             genres
             release
             description

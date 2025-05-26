@@ -4,16 +4,19 @@ import getYear from 'date-fns/getYear';
 import ModalContext from 'contexts/modal';
 import validate from 'helpers/validate';
 import statusMap from 'helpers/statusMap';
+import countries from 'helpers/countries';
 import { systemOrder } from 'helpers/systems';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Button from 'atoms/Button';
 import Select from 'atoms/Select';
+import Flag from 'atoms/Flag';
 import Form from 'molecules/Form';
 
 const autofillOptions = [
     { value: 'description', label: 'Description' },
     { value: 'developer', label: 'Developer' },
+    { value: 'country', label: 'Country' },
     { value: 'franchise', label: 'Franchise' },
     { value: 'genres', label: 'Genres' },
     { value: 'release', label: 'Release' },
@@ -76,6 +79,10 @@ const FormData = (props) => {
 
             if (autoFillTypes.includes('developer')) {
                 modal.setFormValue('developer', developer ? developer.id : data.fetchGameData.developer);
+            }
+
+            if (autoFillTypes.includes('country')) {
+                modal.setFormValue('country', data.fetchGameData.country);
             }
 
             if (autoFillTypes.includes('franchise')) {
@@ -193,6 +200,19 @@ const FormData = (props) => {
                             value: developer.id, label: developer.name,
                         }))}
                         withCustom
+                    />
+                </Form.Control>
+            </Form.Row>
+
+            <Form.Row label="Country">
+                <Form.Control name="country">
+                    <Form.Control.Select
+                        clearable
+                        options={countries.map((country) => ({
+                            value: country.code,
+                            label: country.name,
+                            image: <Flag code={country.code} />,
+                        }))}
                     />
                 </Form.Control>
             </Form.Row>

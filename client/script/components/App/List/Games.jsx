@@ -41,6 +41,7 @@ const Games = (props) => {
                 [name]: {
                     ...(result.name || {}),
                     name: `${name}`,
+                    displayValue: groupMap[groupBy].decorator?.(current, name) || name,
                     games: [
                         ...(result[name]?.games || []),
                         current,
@@ -171,6 +172,7 @@ const Games = (props) => {
                     groupBy={groupBy}
                     toggleGenreFilter={toggleGenreFilter}
                     name={group.name}
+                    displayValue={group.displayValue}
                     games={group.games}
                     skipGame={onSkipGame}
                     statusFilter={statusFilter}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Markdown from 'react-markdown';
 import IconButton from 'atoms/IconButton';
+import Flag from 'atoms/Flag';
 import PopupDialog from 'molecules/PopupDialog';
 import ListItem from 'molecules/ListItem';
 import Rating from './Game/Rating';
@@ -103,6 +104,12 @@ const Game = (props) => {
             {props.groupBy !== 'timeToBeat' && (
                 <div className="game__time-to-beat">
                     {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½').replace(/^0/, '') : ''}
+                </div>
+            )}
+
+            {props.groupBy !== 'country' && (
+                <div className="game__country">
+                    <Flag code={props.game.country} />
                 </div>
             )}
 

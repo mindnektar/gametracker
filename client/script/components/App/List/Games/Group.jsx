@@ -27,7 +27,7 @@ const Group = (props) => {
         <div className="group">
             <div className="group__header">
                 <div className="group__label">
-                    {props.name}
+                    {props.displayValue}
                 </div>
 
                 <div className="group__count">
@@ -71,6 +71,7 @@ Group.propTypes = {
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    displayValue: PropTypes.string.isRequired,
     skipGame: PropTypes.func.isRequired,
     statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,

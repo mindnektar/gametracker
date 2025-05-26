@@ -1,4 +1,7 @@
-import { systemOrder } from './systems';
+import React from 'react';
+import { systemOrder } from 'helpers/systems';
+import countries from 'helpers/countries';
+import Flag from 'atoms/Flag';
 
 export default {
     system: {
@@ -10,6 +13,17 @@ export default {
         label: 'Developer',
         resolver: (game) => game.developer.name,
         sort: (a, b) => a.name.localeCompare(b.name),
+    },
+    country: {
+        label: 'Country',
+        resolver: (game) => countries.find((country) => country.code === game.country)?.name || 'N/A',
+        sort: (a, b) => a.name.localeCompare(b.name),
+        decorator: (game, resolvedName) => (
+            <>
+                <Flag code={game.country} />
+                {resolvedName}
+            </>
+        ),
     },
     release: {
         label: 'Release year',

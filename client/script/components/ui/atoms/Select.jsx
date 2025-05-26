@@ -47,7 +47,7 @@ const Select = (props) => {
     useLayoutEffect(() => {
         if (opened) {
             window.setTimeout(() => {
-                selectedOptionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                selectedOptionRef.current?.scrollIntoView({ block: 'center' });
             }, 300);
         }
     }, [opened]);
@@ -115,7 +115,11 @@ const Select = (props) => {
             onClick={toggleOpened}
         >
             <div className="ui-select__label">
-                {selectedOptions.map((option) => option.label).join(', ') || 'All'}
+                {!props.multiple && selectedOptions.length > 0 && selectedOptions[0].image}
+
+                <span>
+                    {selectedOptions.map((option) => option.label).join(', ') || (props.multiple ? 'All' : '')}
+                </span>
             </div>
 
             {withArrow && (
@@ -142,7 +146,11 @@ const Select = (props) => {
             tabIndex={0}
         >
             <div className="ui-select__label">
-                {option.label}
+                {option.image}
+
+                <span>
+                    {option.label}
+                </span>
             </div>
         </div>
     );
