@@ -133,6 +133,7 @@ const Games = (props) => {
 
                     <OptionBar.Item label="Genres">
                         <Select
+                            fallback="All"
                             multiple
                             options={props.genres.map(({ id, name }) => ({
                                 value: id,

@@ -37,27 +37,12 @@
     &__genre
         display: flex
         flex: 0 0 400px
+        gap: 4px
         overflow-x: auto
         position: relative
 
         &::-webkit-scrollbar
             display: none
-
-    &__genre-item
-        background-color: rgba(255, 255, 255, .2)
-        border-radius: 2px
-        box-shadow: 0 1px 2px rgba(black, .1)
-        font-size: 0.9em
-        font-weight: 300
-        line-height: 16px
-        margin-right: 4px
-        padding: 0 8px
-        transition: 300ms ease background-color
-        white-space: nowrap
-
-    &__genre-item--active,
-    &__genre-item:hover
-        background-color: rgba(255, 255, 255, .4)
 
     &__system
         flex: 0 0 104px

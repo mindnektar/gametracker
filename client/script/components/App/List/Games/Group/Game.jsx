@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import Markdown from 'react-markdown';
 import IconButton from 'atoms/IconButton';
 import Flag from 'atoms/Flag';
+import Genre from 'atoms/Genre';
 import PopupDialog from 'molecules/PopupDialog';
 import ListItem from 'molecules/ListItem';
 import Rating from './Game/Rating';
@@ -70,16 +70,12 @@ const Game = (props) => {
 
             <div className="game__genre">
                 {props.game.genres.map((genre) => (
-                    <span
-                        className={classnames(
-                            'game__genre-item',
-                            { 'game__genre-item--active': props.genreFilter.includes(genre.id) }
-                        )}
+                    <Genre
                         key={genre.id}
+                        active={props.genreFilter.includes(genre.id)}
+                        name={genre.name}
                         onClick={toggleGenreFilterHandler(genre.id)}
-                    >
-                        {genre.name}
-                    </span>
+                    />
                 ))}
             </div>
 

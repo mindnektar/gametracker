@@ -1,6 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import config from '../config';
 import developerMap from './developerMap';
+import genres from './genres.json';
 
 const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
@@ -59,6 +60,8 @@ ${result.history}`;
                     has no franchise because it is just a single game.
                 "country": the country of origin of the game. If the game was developed in more than one country, return the one where the
                     main force of the development was based.
+                "genres": an array of strings, each of which should be an item matching the game picked from the following list:
+                    ${genres.join(', ')}
 
                 Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
@@ -88,6 +91,7 @@ ${result.history}`;
             developer: developerMap[result.developer] || result.developer,
             franchise: result.franchise,
             country: result.country,
+            genres: result.genres,
         };
 
         return input.types.reduce((acc, type) => ({
@@ -104,7 +108,7 @@ ${result.history}`;
 };
 
 export default async (input) => {
-    if (!['description', 'release', 'developer', 'franchise', 'country'].some((type) => input.types.includes(type))) {
+    if (!['description', 'release', 'developer', 'franchise', 'country', 'genres'].some((type) => input.types.includes(type))) {
         return {};
     }
 

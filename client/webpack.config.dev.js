@@ -6,7 +6,6 @@ const path = require('path');
 module.exports = merge(require('./webpack.config.common.js'), {
     devServer: {
         contentBase: path.join(__dirname, 'public'),
-        writeToDisk: true,
         disableHostCheck: true,
         host: '0.0.0.0',
         hot: true,

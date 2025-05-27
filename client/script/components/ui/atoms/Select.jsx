@@ -109,26 +109,40 @@ const Select = (props) => {
         close();
     };
 
-    const renderCurrent = (withArrow = false) => (
-        <div
-            className="ui-select__current"
-            onClick={toggleOpened}
-        >
-            <div className="ui-select__label">
-                {!props.multiple && selectedOptions.length > 0 && selectedOptions[0].image}
+    const renderCurrent = (withArrow = false) => {
+        const fallback = selectedOptions.length === 0 ? props.fallback : null;
+        const displayValue = props.decorator ? (
+            selectedOptions
+                .toSorted((a, b) => a.label.localeCompare(b.label))
+                .map((option) => props.decorator(option.label))
+        ) : (
+            <span>
+                {selectedOptions
+                    .toSorted((a, b) => a.label.localeCompare(b.label))
+                    .map((option) => option.label)
+                    .join(', ')}
+            </span>
+        );
 
-                <span>
-                    {selectedOptions.map((option) => option.label).join(', ') || (props.multiple ? 'All' : '')}
-                </span>
-            </div>
+        return (
+            <div
+                className="ui-select__current"
+                onClick={toggleOpened}
+            >
+                <div className="ui-select__label">
+                    {!props.multiple && selectedOptions.length > 0 && selectedOptions[0].image}
 
-            {withArrow && (
-                <div className="ui-select__arrow">
-                    <Icon type="arrow_drop_down" />
+                    {fallback ?? displayValue}
                 </div>
-            )}
-        </div>
-    );
+
+                {withArrow && (
+                    <div className="ui-select__arrow">
+                        <Icon type="arrow_drop_down" />
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     const renderOption = (option) => (
         <div
@@ -223,7 +237,9 @@ const Select = (props) => {
 Select.defaultProps = {
     ariaLabel: null,
     clearable: false,
+    decorator: null,
     disabled: false,
+    fallback: '',
     hasError: false,
     multiple: false,
     onChange: null,
@@ -234,7 +250,9 @@ Select.defaultProps = {
 Select.propTypes = {
     ariaLabel: PropTypes.string,
     clearable: PropTypes.bool,
+    decorator: PropTypes.func,
     disabled: PropTypes.bool,
+    fallback: PropTypes.string,
     hasError: PropTypes.bool,
     multiple: PropTypes.bool,
     onChange: PropTypes.func,

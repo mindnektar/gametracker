@@ -9,6 +9,7 @@ import { systemOrder } from 'helpers/systems';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Button from 'atoms/Button';
+import Genre from 'atoms/Genre';
 import Select from 'atoms/Select';
 import Flag from 'atoms/Flag';
 import Form from 'molecules/Form';
@@ -228,6 +229,9 @@ const FormData = (props) => {
                 >
                     <Form.Control.Select
                         clearable
+                        decorator={(label) => (
+                            <Genre name={label} />
+                        )}
                         multiple
                         options={allGenres.map((genre) => ({
                             value: genre.id, label: genre.name,

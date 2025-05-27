@@ -33,16 +33,14 @@ export default {
         fetchGameData: async (parent, { input }) => {
             const result = await Promise.all([
                 fetchAiData(input),
-                fetchGiantbombData(input),
                 fetchYouTubeData(input),
                 fetchHowLongToBeatData(input),
                 fetchMetacriticData(input),
             ]);
-            const [aiData, giantbombData, youTubeData, hltbData, metacriticData] = result;
+            const [aiData, youTubeData, hltbData, metacriticData] = result;
 
             return {
                 ...aiData,
-                ...giantbombData,
                 ...youTubeData,
                 ...hltbData,
                 ...metacriticData,
