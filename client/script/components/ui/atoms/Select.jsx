@@ -23,9 +23,12 @@ const Select = (props) => {
     const options = props.options.filter((option) => (
         option.available !== false
     ));
-    const sanitizedValue = (props.value ? [props.value] : []);
+    const sanitizedValue = props.value ? [props.value] : [];
     const selectedOptions = (props.multiple ? props.value : sanitizedValue).map((item) => (
         options.find((option) => option.value === item) || { value: item, label: item }
+    ));
+    const newOptions = selectedOptions.filter((option) => (
+        !options.some(({ value }) => value === option.value)
     ));
 
     useEffect(() => {
@@ -196,7 +199,7 @@ const Select = (props) => {
                             className="ui-select__options"
                             style={style.options}
                         >
-                            {options.map(renderOption)}
+                            {[...options, ...newOptions].toSorted((a, b) => a.label.localeCompare(b.label)).map(renderOption)}
 
                             {props.withCustom && (
                                 <div
