@@ -69,7 +69,7 @@ const Game = (props) => {
             </div>
 
             <div className="game__genre">
-                {props.game.genres.map((genre) => (
+                {props.game.genres.toSorted((a, b) => a.name.localeCompare(b.name)).map((genre) => (
                     <Genre
                         key={genre.id}
                         active={props.genreFilter.includes(genre.id)}
