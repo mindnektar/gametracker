@@ -1,5 +1,4 @@
 import transaction from './helpers/transaction';
-import fetchGiantbombData from '../services/giantbomb';
 import fetchYouTubeData from '../services/youTube';
 import fetchHowLongToBeatData from '../services/howlongtobeat';
 import fetchMetacriticData from '../services/metacritic';
