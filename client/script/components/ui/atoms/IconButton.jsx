@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import Icon from 'atoms/Icon';
 
 const IconButton = (props) => {
-    const onClick = () => {
+    const onClick = (event) => {
         if (!props.onClick) {
             return;
         }
 
+        event.stopPropagation();
         props.onClick();
     };
 
