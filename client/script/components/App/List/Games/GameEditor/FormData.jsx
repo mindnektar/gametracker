@@ -298,8 +298,9 @@ const FormData = (props) => {
             <Form.Row label="Status" required>
                 <Form.Control name="status">
                     <Form.Control.Select
-                        options={Object.entries(statusMap).map(([value, label]) => ({
-                            value, label,
+                        options={Object.entries(statusMap).map(([value, status]) => ({
+                            value,
+                            ...status,
                         }))}
                     />
                 </Form.Control>

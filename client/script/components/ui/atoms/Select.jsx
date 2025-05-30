@@ -133,7 +133,20 @@ const Select = (props) => {
                 onClick={toggleOpened}
             >
                 <div className="ui-select__label">
-                    {!props.multiple && selectedOptions.length > 0 && selectedOptions[0].image}
+                    {!props.multiple && selectedOptions.length > 0 && (
+                        <>
+                            {selectedOptions[0].image}
+
+                            {selectedOptions[0].icon && (
+                                <div
+                                    className="ui-select__icon"
+                                    style={{ color: selectedOptions[0].iconColor }}
+                                >
+                                    <Icon type={selectedOptions[0].icon} />
+                                </div>
+                            )}
+                        </>
+                    )}
 
                     {fallback ?? displayValue}
                 </div>
@@ -164,6 +177,15 @@ const Select = (props) => {
         >
             <div className="ui-select__label">
                 {option.image}
+
+                {option.icon && (
+                    <div
+                        className="ui-select__icon"
+                        style={{ color: option.iconColor }}
+                    >
+                        <Icon type={option.icon} />
+                    </div>
+                )}
 
                 <span>
                     {option.label}

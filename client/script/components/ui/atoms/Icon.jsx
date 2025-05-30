@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Icon = (props) => (
-    <span className="ui-icon material-symbols-outlined">
+    <div className="ui-icon">
         {props.type}
-    </span>
+    </div>
 );
 
 Icon.propTypes = {

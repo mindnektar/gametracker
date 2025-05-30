@@ -5,6 +5,7 @@ import SortableContext from 'contexts/sortable';
 import Icon from 'atoms/Icon';
 import Collapsible from 'molecules/Collapsible';
 import Sortable from 'Sortable';
+import statusMap from 'helpers/statusMap';
 
 const ListItem = (props) => {
     const sortable = useContext(SortableContext);
@@ -24,7 +25,9 @@ const ListItem = (props) => {
             {...props.dataProps}
         >
             {props.status && (
-                <div className="ui-list-item__status" />
+                <div className="ui-list-item__status" style={{ color: statusMap[props.status].iconColor }}>
+                    <Icon type={statusMap[props.status].icon} />
+                </div>
             )}
 
             <div className="ui-list-item__content">

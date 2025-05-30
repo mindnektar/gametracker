@@ -17,7 +17,7 @@ export default {
     },
     country: {
         label: 'Country',
-        resolver: (game) => countries.find((country) => country.code === game.country)?.name || 'N/A',
+        resolver: (game) => countries.find((country) => country.code === game.country)?.name || 'None',
         sort: (a, b) => a.name.localeCompare(b.name),
         decorator: (game, resolvedName) => (
             <>

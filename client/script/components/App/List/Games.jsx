@@ -82,7 +82,7 @@ const Games = (props) => {
         const game = games[Math.floor(Math.random() * games.length)];
 
         setExpandedGame(game.id);
-        window.scrollTo({ top: document.querySelector(`[data-game="${game.id}"]`).offsetTop - 80, behavior: 'smooth' });
+        window.scrollTo({ top: document.querySelector(`[data-game="${game.id}"]`).offsetTop, behavior: 'smooth', block: 'center' });
     };
 
     const openGameEditor = (id) => {
@@ -121,10 +121,11 @@ const Games = (props) => {
                     <OptionBar.Item label="Status">
                         <Select
                             options={[
-                                ...Object.entries(statusMap).map(([value, label]) => ({
-                                    value, label,
+                                ...Object.entries(statusMap).map(([value, status]) => ({
+                                    value,
+                                    ...status,
                                 })),
-                                { value: 'all', label: 'All' },
+                                { value: 'all', label: 'All', icon: 'public' },
                             ]}
                             onChange={setStatusFilter}
                             value={statusFilter}

@@ -26,9 +26,6 @@
         .ui-select__current
             border-color: #ffffff
 
-    .ui-select__icon
-        transform: rotate(180deg)
-
     .ui-select__options-wrapper
         box-shadow: 0 5px 6px 0 rgba(#000000, 0.1)
         opacity: 1
@@ -40,6 +37,9 @@
         background-color: rgba(#ffffff, 0.5)
         border-color: transparent
         color: #777777
+
+.ui-select__icon
+    margin-left: -8px
 
 .ui-select__current
     align-items: center
@@ -112,16 +112,6 @@
         &:focus-visible
             background-color: transparent
 
-.ui-select__icon
-    pointer-events: none
-    position: absolute
-    right: -1px
-
-    .ui-icon
-        color: #777777
-        margin: 0 12px
-        transform: rotate(-90deg)
-
 .ui-select__label
     align-items: center
     box-sizing: border-box
@@ -140,6 +130,9 @@
         overflow: hidden
         text-overflow: ellipsis
         white-space: nowrap
+
+    .ui-flag
+        margin-left: -8px
 
 .ui-select__clear,
 .ui-select__arrow

@@ -38,12 +38,18 @@
         height: 32px
 
     &__status
+        align-items: center
         align-self: stretch
         border-radius: 2px
-        flex: 0 0 16px
-        font-weight: 700
+        display: flex
+        flex: 0 0 24px
+        min-width: 0
+        justify-content: center
         text-align: center
         text-transform: uppercase
+
+        .ui-icon
+            font-size: 20px
 
         .ui-list-item--active &
             background-image: repeating-linear-gradient(-45deg, rgba(#93c9ef, .7), rgba(#93c9ef, .7) 4px, rgba(#b2daf7, .7) 4px, rgba(#b2daf7, .7) 8px)
