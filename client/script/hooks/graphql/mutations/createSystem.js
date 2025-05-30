@@ -1,37 +1,25 @@
-import { gql, useMutation } from '@apollo/client';
-import systemFragment from '../fragments/system';
+import { useMutation } from 'apollo-augmented-hooks';
+import SYSTEM from '../fragments/system';
 
-const MUTATION = gql`
-    ${systemFragment}
+const mutation = `
     mutation createSystem($input: CreateSystemInput!) {
         createSystem(input: $input) {
-            ...SystemFragment
+            ${SYSTEM}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
-            update: (cache, { data: { createSystem } }) => {
-                cache.modify({
-                    fields: {
-                        systems: (existingSystems) => {
-                            const systemRef = cache.writeFragment({
-                                data: createSystem,
-                                fragment: systemFragment,
-                            });
-
-                            return [...existingSystems, systemRef];
-                        },
-                    },
-                });
-            },
+        mutate({
+            input,
+            modifiers: [{
+                fields: {
+                    systems: ({ includeIf }) => includeIf(true),
+                },
+            }],
         })
     );
 };

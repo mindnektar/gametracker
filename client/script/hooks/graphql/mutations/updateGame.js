@@ -1,56 +1,29 @@
-import { gql, useMutation } from '@apollo/client';
-import gameFragment from '../fragments/game';
-import { addDataToCache } from '../cacheUpdates/game';
+import { useMutation } from 'apollo-augmented-hooks';
+import GAME from '../fragments/game';
 
-const MUTATION = gql`
-    ${gameFragment}
+const mutation = `
     mutation updateGame($input: UpdateGameInput!) {
         updateGame(input: $input) {
-            ...GameFragment
+            ${GAME}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
-            update: (cache, { data: { updateGame } }) => {
-                addDataToCache(cache, updateGame.franchise, 'franchises', 'Franchise');
-                addDataToCache(cache, updateGame.developer, 'developers', 'Developer');
-                addDataToCache(cache, updateGame.compilation, 'compilations', 'Compilation');
-                addDataToCache(cache, updateGame.system, 'systems', 'System');
-
-                cache.modify({
-                    fields: {
-                        genres: (existingGenres, { readField }) => {
-                            const newGenres = updateGame.genres.filter((genre) => (
-                                !existingGenres.some((existingGenre) => readField('id', existingGenre) === genre.id)
-                            ));
-
-                            if (newGenres.length === 0) {
-                                return existingGenres;
-                            }
-
-                            const genreRefs = newGenres.map((genre) => cache.writeFragment({
-                                data: genre,
-                                fragment: gql`
-                                    fragment GenreFragment on Genre {
-                                        id
-                                        name
-                                    }
-                                `,
-                            }));
-
-                            return [...existingGenres, ...genreRefs];
-                        },
-                    },
-                });
-            },
+        mutate({
+            input,
+            modifiers: [{
+                fields: {
+                    franchises: ({ includeIf, item }) => includeIf(true, { subjects: [item.franchise] }),
+                    developers: ({ includeIf, item }) => includeIf(true, { subjects: [item.developer] }),
+                    compilations: ({ includeIf, item }) => includeIf(true, { subjects: [item.compilation] }),
+                    systems: ({ includeIf, item }) => includeIf(true, { subjects: [item.system] }),
+                    genres: ({ includeIf, item }) => includeIf(true, { subjects: item.genres }),
+                },
+            }],
         })
     );
 };

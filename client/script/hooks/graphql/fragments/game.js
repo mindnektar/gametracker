@@ -1,45 +1,39 @@
-import { gql } from '@apollo/client';
-import dlcFragment from './dlc';
-import systemFragment from './system';
-import developerFragment from './developer';
+import DLC from './dlc';
+import SYSTEM from './system';
+import DEVELOPER from './developer';
 
-export default gql`
-    ${dlcFragment}
-    ${systemFragment}
-    ${developerFragment}
-    fragment GameFragment on Game {
+export default `
+    id
+    title
+    rating
+    release
+    description
+    youTubeId
+    status
+    skipCount
+    updatedAt
+    timeToBeat
+    criticRating
+    country
+    system {
+        ${SYSTEM}
+    }
+    developer {
+        ${DEVELOPER}
+    }
+    genres {
+        id
+        name
+    }
+    compilation {
         id
         title
-        rating
-        release
-        description
-        youTubeId
-        status
-        skipCount
-        updatedAt
-        timeToBeat
-        criticRating
-        country
-        system {
-            ...SystemFragment
-        }
-        developer {
-            ...DeveloperFragment
-        }
-        genres {
-            id
-            name
-        }
-        compilation {
-            id
-            title
-        }
-        dlcs {
-            ...DlcFragment
-        }
-        franchise {
-            id
-            name
-        }
+    }
+    dlcs {
+        ${DLC}
+    }
+    franchise {
+        id
+        name
     }
 `;

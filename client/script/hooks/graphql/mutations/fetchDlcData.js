@@ -1,6 +1,6 @@
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from 'apollo-augmented-hooks';
 
-const MUTATION = gql`
+const mutation = `
     mutation fetchDlcData($input: FetchDlcDataInput!) {
         fetchDlcData(input: $input) {
             release
@@ -13,13 +13,11 @@ const MUTATION = gql`
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
+        mutate({
+            input,
         })
     );
 };

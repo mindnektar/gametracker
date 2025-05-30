@@ -1,23 +1,20 @@
-import { gql, useMutation } from '@apollo/client';
-import dlcFragment from '../fragments/dlc';
+import { useMutation } from 'apollo-augmented-hooks';
+import DLC from '../fragments/dlc';
 
-const MUTATION = gql`
-    ${dlcFragment}
+const mutation = `
     mutation updateDlc($input: UpdateDlcInput!) {
         updateDlc(input: $input) {
-            ...DlcFragment
+            ${DLC}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
+        mutate({
+            input,
         })
     );
 };

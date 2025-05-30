@@ -1,24 +1,26 @@
-import { gql, useMutation } from '@apollo/client';
-import systemFragment from '../fragments/system';
+import { useMutation } from 'apollo-augmented-hooks';
+import SYSTEM from '../fragments/system';
 
-const MUTATION = gql`
-    ${systemFragment}
+const mutation = `
     mutation updateSystemOrder($input: UpdateSystemOrderInput!) {
         updateSystemOrder(input: $input) {
-            ...SystemFragment
+            ${SYSTEM}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input, systems) => (
-        mutation({
-            variables: { input },
-            optimisticResponse: {
-                updateSystemOrder: systems,
-            },
+        mutate({
+            input,
+            optimisticResponse: systems,
+            modifiers: [{
+                fields: {
+                    systems: ({ includeIf }) => includeIf(true),
+                },
+            }],
         })
     );
 };

@@ -1,38 +1,29 @@
-import { gql, useMutation } from '@apollo/client';
-import dlcFragment from '../fragments/dlc';
+import { useMutation } from 'apollo-augmented-hooks';
+import DLC from '../fragments/dlc';
 
-const MUTATION = gql`
-    ${dlcFragment}
+const mutation = `
     mutation createDlc($input: CreateDlcInput!) {
         createDlc(input: $input) {
-            ...DlcFragment
+            ${DLC}
+            game {
+                id
+            }
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
-            update: (cache, { data: { createDlc } }) => {
-                cache.modify({
-                    id: `Game:${input.gameId}`,
-                    fields: {
-                        dlcs: (existingDlcs) => {
-                            const dlcRef = cache.writeFragment({
-                                data: createDlc,
-                                fragment: dlcFragment,
-                            });
-
-                            return [...existingDlcs, dlcRef];
-                        },
-                    },
-                });
-            },
+        mutate({
+            input,
+            modifiers: [{
+                cacheObject: (item) => item.game,
+                fields: {
+                    dlcs: ({ includeIf }) => includeIf(true),
+                },
+            }],
         })
     );
 };

@@ -1,6 +1,6 @@
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from 'apollo-augmented-hooks';
 
-const MUTATION = gql`
+const mutation = `
     mutation deleteSystem($id: ID!) {
         deleteSystem(id: $id) {
             id
@@ -9,16 +9,15 @@ const MUTATION = gql`
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
-    return (id) => (
-        mutation({
-            variables: {
-                id,
-            },
-            update: (cache) => {
-                cache.evict({ id: `System:${id}` });
-            },
+    return (input) => (
+        mutate({
+            input,
+            modifiers: [{
+                cacheObject: (item) => item,
+                evict: true,
+            }],
         })
     );
 };

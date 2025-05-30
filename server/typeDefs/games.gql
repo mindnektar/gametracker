@@ -25,6 +25,7 @@ type Game {
     timeToBeat: Float
     criticRating: Int
     country: String
+    lists: [List!]!
 }
 
 enum GameStatus {

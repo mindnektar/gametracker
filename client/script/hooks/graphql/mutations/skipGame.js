@@ -1,21 +1,20 @@
-import { gql, useMutation } from '@apollo/client';
-import gameFragment from '../fragments/game';
+import { useMutation } from 'apollo-augmented-hooks';
+import GAME from '../fragments/game';
 
-const MUTATION = gql`
-    ${gameFragment}
+const mutation = `
     mutation skipGame($id: ID!) {
         skipGame(id: $id) {
-            ...GameFragment
+            ${GAME}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (id) => (
-        mutation({
-            variables: {
+        mutate({
+            input: {
                 id,
             },
         })

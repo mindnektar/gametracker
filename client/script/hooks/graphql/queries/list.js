@@ -1,25 +1,22 @@
-import { gql, useQuery } from '@apollo/client';
-import gameFragment from '../fragments/game';
-import systemFragment from '../fragments/system';
-import developerFragment from '../fragments/developer';
+import { useQuery } from 'apollo-augmented-hooks';
+import GAME from '../fragments/game';
+import SYSTEM from '../fragments/system';
+import DEVELOPER from '../fragments/developer';
 
-const query = gql`
-    ${gameFragment}
-    ${systemFragment}
-    ${developerFragment}
+const query = `
     query list {
         list {
             id
             name
             games {
-                ...GameFragment
+                ${GAME}
             }
         }
         systems {
-            ...SystemFragment
+            ${SYSTEM}
         }
         developers {
-            ...DeveloperFragment
+            ${DEVELOPER}
         }
         compilations {
             id
@@ -36,4 +33,6 @@ const query = gql`
     }
 `;
 
-export default () => useQuery(query);
+export default () => (
+    useQuery(query)
+);

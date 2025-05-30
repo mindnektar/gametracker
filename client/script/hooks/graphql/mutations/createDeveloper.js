@@ -1,37 +1,27 @@
-import { gql, useMutation } from '@apollo/client';
-import developerFragment from '../fragments/developer';
+import { useMutation } from 'apollo-augmented-hooks';
+import DEVELOPER from '../fragments/developer';
 
-const MUTATION = gql`
-    ${developerFragment}
+const mutation = `
     mutation createDeveloper($input: CreateDeveloperInput!) {
         createDeveloper(input: $input) {
-            ...DeveloperFragment
+            ${DEVELOPER}
         }
     }
 `;
 
 export default () => {
-    const [mutation] = useMutation(MUTATION);
+    const [mutate] = useMutation(mutation);
 
     return (input) => (
-        mutation({
-            variables: {
-                input,
-            },
-            update: (cache, { data: { createDeveloper } }) => {
-                cache.modify({
-                    fields: {
-                        developers: (existingDevelopers) => {
-                            const developerRef = cache.writeFragment({
-                                data: createDeveloper,
-                                fragment: developerFragment,
-                            });
-
-                            return [...existingDevelopers, developerRef];
-                        },
-                    },
-                });
-            },
+        mutate({
+            input,
+            modifiers: [{
+                fields: {
+                    developers: ({ includeIf }) => (
+                        includeIf(true)
+                    ),
+                },
+            }],
         })
     );
 };
