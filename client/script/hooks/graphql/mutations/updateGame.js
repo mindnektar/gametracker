@@ -17,11 +17,21 @@ export default () => {
             input,
             modifiers: [{
                 fields: {
-                    franchises: ({ includeIf, item }) => includeIf(true, { subjects: [item.franchise] }),
-                    developers: ({ includeIf, item }) => includeIf(true, { subjects: [item.developer] }),
-                    compilations: ({ includeIf, item }) => includeIf(true, { subjects: [item.compilation] }),
-                    systems: ({ includeIf, item }) => includeIf(true, { subjects: [item.system] }),
-                    genres: ({ includeIf, item }) => includeIf(true, { subjects: item.genres }),
+                    franchises: ({ previous, includeIf, item }) => (
+                        item.franchise ? includeIf(true, { subjects: [item.franchise] }) : previous
+                    ),
+                    developers: ({ includeIf, item }) => (
+                        includeIf(true, { subjects: [item.developer] })
+                    ),
+                    compilations: ({ previous, includeIf, item }) => (
+                        item.compilation ? includeIf(true, { subjects: [item.compilation] }) : previous
+                    ),
+                    systems: ({ includeIf, item }) => (
+                        includeIf(true, { subjects: [item.system] })
+                    ),
+                    genres: ({ includeIf, item }) => (
+                        includeIf(true, { subjects: item.genres })
+                    ),
                 },
             }],
         })
