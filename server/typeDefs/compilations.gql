@@ -2,6 +2,12 @@ type Query {
     compilations: [Compilation!]!
 }
 
+type Mutation {
+    createCompilation(input: CreateCompilationInput!): Compilation!
+    updateCompilation(input: UpdateCompilationInput!): Compilation!
+    deleteCompilation(id: ID!): Compilation!
+}
+
 type Compilation {
     id: ID!
     title: String!
@@ -12,3 +18,13 @@ input RelateCompilationInput {
     id: ID
     title: String
 }
+
+input CreateCompilationInput {
+    title: String!
+}
+
+input UpdateCompilationInput {
+    id: ID!
+    title: String
+}
+

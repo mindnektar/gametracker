@@ -8,8 +8,6 @@
     "Card Game",
     "Collectathon",
     "Driving",
-    "Educational",
-    "Exploration",
     "Fighting",
     "Flight",
     "Hack & Slash",
@@ -18,17 +16,16 @@
     "Metroidvania",
     "Minigame Collection",
     "Music/Rhythm",
-    "Open world",
+    "Open World",
     "Platformer",
     "Puzzle",
     "Racing",
     "Roguelike",
     "Role-Playing",
-    "Shoot 'em Up",
     "Shooter",
     "Side-scrolling",
     "Simulation",
     "Sports",
     "Strategy",
-    "Top down"
+    "Top-down"
 ]

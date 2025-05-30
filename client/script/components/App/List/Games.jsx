@@ -26,7 +26,7 @@ const Games = (props) => {
 
     const getGroups = () => {
         if (groupBy === 'none') {
-            return [{ name: 'All games', games: props.games }];
+            return [{ name: 'All games', displayValue: 'All games', games: props.games }];
         }
 
         const groups = props.games.reduce((result, current) => {

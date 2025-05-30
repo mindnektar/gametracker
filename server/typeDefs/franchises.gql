@@ -2,6 +2,12 @@ type Query {
     franchises: [Franchise!]!
 }
 
+type Mutation {
+    createFranchise(input: CreateFranchiseInput!): Franchise!
+    updateFranchise(input: UpdateFranchiseInput!): Franchise!
+    deleteFranchise(id: ID!): Franchise!
+}
+
 type Franchise {
     id: ID!
     name: String!
@@ -10,5 +16,14 @@ type Franchise {
 
 input RelateFranchiseInput {
     id: ID
+    name: String
+}
+
+input CreateFranchiseInput {
+    name: String!
+}
+
+input UpdateFranchiseInput {
+    id: ID!
     name: String
 }

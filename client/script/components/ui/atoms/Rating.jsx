@@ -5,21 +5,21 @@ import classnames from 'classnames';
 const Rating = (props) => (
     <div
         className={classnames(
-            'rating',
+            'ui-rating',
             {
-                'rating--personal': props.personal,
-                'rating--good': props.value >= 75,
-                'rating--mediocre': props.value >= 50 && props.value < 75,
-                'rating--bad': props.value < 50,
+                'ui-rating--personal': props.personal,
+                'ui-rating--good': props.value >= 75,
+                'ui-rating--mediocre': props.value >= 50 && props.value < 75,
+                'ui-rating--bad': props.value < 50,
             },
         )}
     >
         <div
-            className="rating__inner"
+            className="ui-rating__inner"
             style={{ width: `${props.value}%` }}
         />
 
-        <div className="rating__text">
+        <div className="ui-rating__text">
             {!props.value ? '-' : props.value / 10}
         </div>
     </div>

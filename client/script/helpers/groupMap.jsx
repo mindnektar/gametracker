@@ -2,6 +2,7 @@ import React from 'react';
 import { systemOrder } from 'helpers/systems';
 import countries from 'helpers/countries';
 import Flag from 'atoms/Flag';
+import Rating from 'atoms/Rating';
 
 export default {
     system: {
@@ -32,13 +33,19 @@ export default {
     },
     rating: {
         label: 'Personal rating',
-        resolver: (game) => (game.rating && game.status === 'completed' ? `${game.rating / 10}/10` : 'N/A'),
+        resolver: (game) => (game.rating && game.status === 'completed' ? game.rating : null),
         sort: (a, b) => b.name - a.name,
+        decorator: (game) => (
+            <Rating value={game.rating && game.status === 'completed' ? game.rating : null} />
+        ),
     },
     criticRating: {
         label: 'Critic rating',
-        resolver: (game) => (game.criticRating ? `${game.criticRating / 10}/10` : 'N/A'),
+        resolver: (game) => (game.criticRating ? game.criticRating : null),
         sort: (a, b) => b.name - a.name,
+        decorator: (game) => (
+            <Rating value={game.criticRating} />
+        ),
     },
     timeToBeat: {
         label: 'Time to beat',

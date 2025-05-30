@@ -2,6 +2,12 @@ type Query {
     genres: [Genre!]!
 }
 
+type Mutation {
+    createGenre(input: CreateGenreInput!): Genre!
+    updateGenre(input: UpdateGenreInput!): Genre!
+    deleteGenre(id: ID!): Genre!
+}
+
 type Genre {
     id: ID!
     name: String!
@@ -10,5 +16,14 @@ type Genre {
 
 input RelateGenreInput {
     id: ID
+    name: String
+}
+
+input CreateGenreInput {
+    name: String!
+}
+
+input UpdateGenreInput {
+    id: ID!
     name: String
 }

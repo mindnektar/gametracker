@@ -5,24 +5,24 @@ import TextList from 'atoms/TextList';
 import ListItem from 'molecules/ListItem';
 import PopupDialog from 'molecules/PopupDialog';
 
-const System = (props) => {
-    const games = props.games.filter(({ system }) => system.id === props.system.id);
+const Compilation = (props) => {
+    const games = props.games.filter(({ compilation }) => compilation?.id === props.compilation.id);
 
-    const editSystem = () => {
-        props.openSystemEditor(props.system.id);
+    const editCompilation = () => {
+        props.openCompilationEditor(props.compilation.id);
     };
 
-    const deleteSystem = () => {
-        props.deleteSystem(props.system.id);
+    const deleteCompilation = () => {
+        props.deleteCompilation(props.compilation.id);
     };
 
     const toggleExpanded = () => {
-        props.toggleExpanded(props.system.id);
+        props.toggleExpanded(props.compilation.id);
     };
 
     const renderHead = () => (
         <div className="system__name">
-            {props.system.name}
+            {props.compilation.title}
 
             <span className="system__game-count">
                 ({games.length} game{games.length !== 1 ? 's' : ''})
@@ -34,12 +34,12 @@ const System = (props) => {
         <PopupDialog
             items={[{
                 icon: 'edit',
-                label: 'Edit system',
-                onClick: editSystem,
+                label: 'Edit compilation',
+                onClick: editCompilation,
             }, {
                 icon: 'delete',
-                label: 'Delete system',
-                onClick: deleteSystem,
+                label: 'Delete compilation',
+                onClick: deleteCompilation,
             }]}
         >
             {({ toggle }) => (
@@ -53,7 +53,7 @@ const System = (props) => {
 
     return (
         <ListItem
-            key={props.system.id}
+            key={props.compilation.id}
             head={renderHead()}
             actions={renderActions()}
             expanded={props.expanded}
@@ -67,13 +67,13 @@ const System = (props) => {
     );
 };
 
-System.propTypes = {
-    system: PropTypes.object.isRequired,
-    openSystemEditor: PropTypes.func.isRequired,
-    deleteSystem: PropTypes.func.isRequired,
+Compilation.propTypes = {
+    compilation: PropTypes.object.isRequired,
+    openCompilationEditor: PropTypes.func.isRequired,
+    deleteCompilation: PropTypes.func.isRequired,
     games: PropTypes.array.isRequired,
     expanded: PropTypes.bool.isRequired,
     toggleExpanded: PropTypes.func.isRequired,
 };
 
-export default System;
+export default Compilation;

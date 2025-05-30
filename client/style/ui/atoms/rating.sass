@@ -1,4 +1,4 @@
-.rating
+.ui-rating
     align-items: center
     background-color: #777777
     border-bottom: 1px solid #777777
@@ -6,28 +6,30 @@
     box-sizing: border-box
     display: flex
     flex: 0 0 48px
+    font-family: 'Roboto', sans-serif
+    font-size: 12px
     height: 20px
     justify-content: center
     overflow: hidden
     position: relative
 
-.rating--personal
-    .rating__inner
+.ui-rating--personal
+    .ui-rating__inner
         opacity: 1
 
-.rating--good
-    .rating__inner
+.ui-rating--good
+    .ui-rating__inner
         background-image: repeating-linear-gradient(-45deg, #8ac375, #8ac375 4px, #b0dc9f 4px, #b0dc9f 8px)
 
-.rating--mediocre
-    .rating__inner
+.ui-rating--mediocre
+    .ui-rating__inner
         background-image: repeating-linear-gradient(-45deg, #ccc296, #ccc296 4px, #e5d5b6 4px, #e5d5b6 8px)
 
-.rating--bad
-    .rating__inner
+.ui-rating--bad
+    .ui-rating__inner
         background-image: repeating-linear-gradient(-45deg, #aa7969, #aa7969 4px, #e5b6b6 4px, #e5b6b6 8px)
 
-.rating__inner
+.ui-rating__inner
     background-image: repeating-linear-gradient(-45deg, #bbbbbb, #bbbbbb 4px, #cccccc 4px, #cccccc 8px)
     height: 100%
     left: 0
@@ -35,7 +37,7 @@
     position: absolute
     top: 0
 
-.rating__text
+.ui-rating__text
     color: white
     font-weight: bold
     position: relative

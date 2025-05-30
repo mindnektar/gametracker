@@ -5,24 +5,24 @@ import TextList from 'atoms/TextList';
 import ListItem from 'molecules/ListItem';
 import PopupDialog from 'molecules/PopupDialog';
 
-const System = (props) => {
-    const games = props.games.filter(({ system }) => system.id === props.system.id);
+const Genre = (props) => {
+    const games = props.games.filter(({ genres }) => genres.some(({ id }) => id === props.genre.id));
 
-    const editSystem = () => {
-        props.openSystemEditor(props.system.id);
+    const editGenre = () => {
+        props.openGenreEditor(props.genre.id);
     };
 
-    const deleteSystem = () => {
-        props.deleteSystem(props.system.id);
+    const deleteGenre = () => {
+        props.deleteGenre(props.genre.id);
     };
 
     const toggleExpanded = () => {
-        props.toggleExpanded(props.system.id);
+        props.toggleExpanded(props.genre.id);
     };
 
     const renderHead = () => (
         <div className="system__name">
-            {props.system.name}
+            {props.genre.name}
 
             <span className="system__game-count">
                 ({games.length} game{games.length !== 1 ? 's' : ''})
@@ -34,12 +34,12 @@ const System = (props) => {
         <PopupDialog
             items={[{
                 icon: 'edit',
-                label: 'Edit system',
-                onClick: editSystem,
+                label: 'Edit genre',
+                onClick: editGenre,
             }, {
                 icon: 'delete',
-                label: 'Delete system',
-                onClick: deleteSystem,
+                label: 'Delete genre',
+                onClick: deleteGenre,
             }]}
         >
             {({ toggle }) => (
@@ -53,7 +53,7 @@ const System = (props) => {
 
     return (
         <ListItem
-            key={props.system.id}
+            key={props.genre.id}
             head={renderHead()}
             actions={renderActions()}
             expanded={props.expanded}
@@ -67,13 +67,13 @@ const System = (props) => {
     );
 };
 
-System.propTypes = {
-    system: PropTypes.object.isRequired,
-    openSystemEditor: PropTypes.func.isRequired,
-    deleteSystem: PropTypes.func.isRequired,
+Genre.propTypes = {
+    genre: PropTypes.object.isRequired,
+    openGenreEditor: PropTypes.func.isRequired,
+    deleteGenre: PropTypes.func.isRequired,
     games: PropTypes.array.isRequired,
     expanded: PropTypes.bool.isRequired,
     toggleExpanded: PropTypes.func.isRequired,
 };
 
-export default System;
+export default Genre;

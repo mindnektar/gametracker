@@ -8,6 +8,9 @@ import Header from './List/Header';
 import Games from './List/Games';
 import Systems from './List/Systems';
 import Developers from './List/Developers';
+import Genres from './List/Genres';
+import Franchises from './List/Franchises';
+import Compilations from './List/Compilations';
 
 const List = () => {
     const { loading, data } = useListQuery();
@@ -64,7 +67,7 @@ const List = () => {
                         />
                     )}
 
-                    {/* {activeList === 'genres' && (
+                    {activeList === 'genres' && (
                         <Genres
                             games={data.list.games}
                             genres={data.genres}
@@ -83,7 +86,7 @@ const List = () => {
                             games={data.list.games}
                             compilations={data.compilations}
                         />
-                    )} */}
+                    )}
                 </div>
             )}
         </LoadingContainer>

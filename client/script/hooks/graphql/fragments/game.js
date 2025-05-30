@@ -1,6 +1,9 @@
 import DLC from './dlc';
 import SYSTEM from './system';
 import DEVELOPER from './developer';
+import GENRE from './genre';
+import FRANCHISE from './franchise';
+import COMPILATION from './compilation';
 
 export default `
     id
@@ -22,18 +25,15 @@ export default `
         ${DEVELOPER}
     }
     genres {
-        id
-        name
+        ${GENRE}
     }
     compilation {
-        id
-        title
+        ${COMPILATION}
     }
     dlcs {
         ${DLC}
     }
     franchise {
-        id
-        name
+        ${FRANCHISE}
     }
 `;

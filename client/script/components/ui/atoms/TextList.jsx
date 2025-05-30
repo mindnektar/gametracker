@@ -13,7 +13,7 @@ const TextList = (props) => (
             </div>
         )}
 
-        {props.items.map((item, index) => (
+        {props.items.toSorted().map((item, index) => (
             <div
                 key={index}
                 className="ui-text-list__item"

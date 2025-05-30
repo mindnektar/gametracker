@@ -5,24 +5,24 @@ import TextList from 'atoms/TextList';
 import ListItem from 'molecules/ListItem';
 import PopupDialog from 'molecules/PopupDialog';
 
-const System = (props) => {
-    const games = props.games.filter(({ system }) => system.id === props.system.id);
+const Franchise = (props) => {
+    const games = props.games.filter(({ franchise }) => franchise?.id === props.franchise.id);
 
-    const editSystem = () => {
-        props.openSystemEditor(props.system.id);
+    const editFranchise = () => {
+        props.openFranchiseEditor(props.franchise.id);
     };
 
-    const deleteSystem = () => {
-        props.deleteSystem(props.system.id);
+    const deleteFranchise = () => {
+        props.deleteFranchise(props.franchise.id);
     };
 
     const toggleExpanded = () => {
-        props.toggleExpanded(props.system.id);
+        props.toggleExpanded(props.franchise.id);
     };
 
     const renderHead = () => (
         <div className="system__name">
-            {props.system.name}
+            {props.franchise.name}
 
             <span className="system__game-count">
                 ({games.length} game{games.length !== 1 ? 's' : ''})
@@ -34,12 +34,12 @@ const System = (props) => {
         <PopupDialog
             items={[{
                 icon: 'edit',
-                label: 'Edit system',
-                onClick: editSystem,
+                label: 'Edit franchise',
+                onClick: editFranchise,
             }, {
                 icon: 'delete',
-                label: 'Delete system',
-                onClick: deleteSystem,
+                label: 'Delete franchise',
+                onClick: deleteFranchise,
             }]}
         >
             {({ toggle }) => (
@@ -53,7 +53,7 @@ const System = (props) => {
 
     return (
         <ListItem
-            key={props.system.id}
+            key={props.franchise.id}
             head={renderHead()}
             actions={renderActions()}
             expanded={props.expanded}
@@ -67,13 +67,13 @@ const System = (props) => {
     );
 };
 
-System.propTypes = {
-    system: PropTypes.object.isRequired,
-    openSystemEditor: PropTypes.func.isRequired,
-    deleteSystem: PropTypes.func.isRequired,
+Franchise.propTypes = {
+    franchise: PropTypes.object.isRequired,
+    openFranchiseEditor: PropTypes.func.isRequired,
+    deleteFranchise: PropTypes.func.isRequired,
     games: PropTypes.array.isRequired,
     expanded: PropTypes.bool.isRequired,
     toggleExpanded: PropTypes.func.isRequired,
 };
 
-export default System;
+export default Franchise;

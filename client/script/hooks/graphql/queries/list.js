@@ -2,6 +2,9 @@ import { useQuery } from 'apollo-augmented-hooks';
 import GAME from '../fragments/game';
 import SYSTEM from '../fragments/system';
 import DEVELOPER from '../fragments/developer';
+import GENRE from '../fragments/genre';
+import FRANCHISE from '../fragments/franchise';
+import COMPILATION from '../fragments/compilation';
 
 const query = `
     query list {
@@ -19,16 +22,13 @@ const query = `
             ${DEVELOPER}
         }
         compilations {
-            id
-            title
+            ${COMPILATION}
         }
         genres {
-            id
-            name
+            ${GENRE}
         }
         franchises {
-            id
-            name
+            ${FRANCHISE}
         }
     }
 `;

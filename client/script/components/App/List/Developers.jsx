@@ -10,7 +10,7 @@ const Developers = (props) => {
     const [developerEditorState, setDeveloperEditorState] = useState({ id: null, isOpen: false });
     const [expandedDeveloper, setExpandedDeveloper] = useState(null);
     const deleteDeveloper = useDeleteDeveloper();
-    const developers = props.developers.toSorted((a, b) => a.order - b.order);
+    const developers = props.developers.toSorted((a, b) => a.name.localeCompare(b.name));
 
     const toggleExpandedDeveloper = (id) => {
         setExpandedDeveloper((previous) => (previous === id ? null : id));

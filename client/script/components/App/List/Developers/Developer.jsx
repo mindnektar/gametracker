@@ -55,7 +55,6 @@ const Developer = (props) => {
         <ListItem
             key={props.developer.id}
             head={renderHead()}
-            status={props.developer.status}
             actions={renderActions()}
             expanded={props.expanded}
             toggleExpanded={toggleExpanded}

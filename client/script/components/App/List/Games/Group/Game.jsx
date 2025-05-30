@@ -4,9 +4,9 @@ import Markdown from 'react-markdown';
 import IconButton from 'atoms/IconButton';
 import Flag from 'atoms/Flag';
 import Genre from 'atoms/Genre';
+import Rating from 'atoms/Rating';
 import PopupDialog from 'molecules/PopupDialog';
 import ListItem from 'molecules/ListItem';
-import Rating from './Game/Rating';
 
 const Game = (props) => {
     const expandGame = () => {
@@ -85,6 +85,12 @@ const Game = (props) => {
                 </div>
             )}
 
+            {props.groupBy !== 'country' && (
+                <div className="game__country">
+                    <Flag code={props.game.country} />
+                </div>
+            )}
+
             {props.groupBy !== 'developer' && (
                 <div className="game__developer">
                     {props.game.developer.name}
@@ -100,12 +106,6 @@ const Game = (props) => {
             {props.groupBy !== 'timeToBeat' && (
                 <div className="game__time-to-beat">
                     {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½').replace(/^0/, '') : ''}
-                </div>
-            )}
-
-            {props.groupBy !== 'country' && (
-                <div className="game__country">
-                    <Flag code={props.game.country} />
                 </div>
             )}
 
