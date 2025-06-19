@@ -103,7 +103,7 @@ const FormData = (props) => {
                 }));
             }
         } catch (error) {
-            modal.setErrorMessageHandler('title', error.message);
+            modal.setErrorMessageHandler('title')(error.message);
         }
 
         modal.setLoading(false);

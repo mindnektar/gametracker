@@ -50,7 +50,7 @@ const config = convict({
     youTube: {
         apiKey: {
             format: String,
-            default: 'AIzaSyA07Y1XjytaowyA2F452XpEjtKEOGIAesI',
+            default: 'AIzaSyCznMOgkou2OW7VL04XK0ZZLiMyzPVzgbs',
             env: 'YOU_TUBE_API_KEY',
         },
     },

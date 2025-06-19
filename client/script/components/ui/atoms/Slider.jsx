@@ -9,7 +9,7 @@ const Slider = (props) => {
 
     const onDrag = (event) => {
         const sliderRect = sliderRef.current.getBoundingClientRect();
-        const mouseLeft = event.clientX - sliderRect.left;
+        const mouseLeft = (event.clientX || event.touches[0].clientX) - sliderRect.left;
         const rounder = 100 / props.stepSize;
         const leftWithinBar = Math.round((mouseLeft / sliderRect.width) * rounder) / rounder;
         const value = Math.max(

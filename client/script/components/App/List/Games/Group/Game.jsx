@@ -61,7 +61,7 @@ const Game = (props) => {
                     </span>
                 )}
 
-                {props.game.skipCount > 0 && (
+                {props.game.skipCount > 0 && props.game.status === 'planned' && (
                     <span className="game__title-skip-count">
                         {props.game.skipCount} Skip{props.game.skipCount !== 1 ? 's' : ''}
                     </span>

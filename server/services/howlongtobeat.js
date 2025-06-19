@@ -71,7 +71,7 @@ export default async (input) => {
         }
 
         return {
-            timeToBeat: data ? Math.round(data.comp_main / 1800) / 2 : 0,
+            timeToBeat: data ? Math.round((data.comp_main || data.comp_plus || data.comp_100) / 1800) / 2 : 0,
         };
     } catch (error) {
         console.error(error);

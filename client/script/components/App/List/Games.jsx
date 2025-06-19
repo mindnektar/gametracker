@@ -161,6 +161,10 @@ const Games = (props) => {
                 </OptionBar.Group>
             </OptionBar>
 
+            <div className="games__count">
+                {games.length} game{games.length !== 1 ? 's' : ''}
+            </div>
+
             {groups.map((group) => (
                 <Group
                     key={group.name}
