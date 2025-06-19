@@ -1,4 +1,4 @@
-FROM node:18.20.6-alpine as webpack
+FROM node:20.18.1-alpine as webpack
 
 LABEL maintainer="Martin Denk <ausdenk@gmail.com>"
 
