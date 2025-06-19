@@ -59,9 +59,11 @@ ${result.history}`;
                     example, "The Legend of Zelda" is part of the "Zelda" franchise, and "Super Mario Galaxy" belongs to "Mario". "Celeste"
                     has no franchise because it is just a single game.
                 "country": the country of origin of the game. If the game was developed in more than one country, return the one where the
-                    main force of the development was based.
-                "genres": an array of strings, each of which should be an item matching the game picked from the following list:
-                    ${genres.join(', ')}
+                    main force of the development was based. if the country is USA, return "United States". any UK countries should be
+                    returned as "United Kingdom".
+                "genres": an array of strings, each of which should be an item from the following list: ${genres.join(', ')}. only pick
+                    items that are essential in describing the game. for example, while BioShock has role-playing elements, it is not a
+                    role-playing game.
 
                 Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
