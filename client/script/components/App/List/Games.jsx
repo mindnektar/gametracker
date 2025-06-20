@@ -41,6 +41,9 @@ const Games = (props) => {
                 [name]: {
                     ...(result.name || {}),
                     name: `${name}`,
+                    order: groupBy === 'system' && !result[name]
+                        ? props.systems.find(({ id }) => id === current.system.id).order
+                        : result[name]?.order,
                     displayValue: groupMap[groupBy].decorator?.(current, name) || name,
                     games: [
                         ...(result[name]?.games || []),

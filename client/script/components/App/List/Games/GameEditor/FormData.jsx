@@ -5,7 +5,6 @@ import ModalContext from 'contexts/modal';
 import validate from 'helpers/validate';
 import statusMap from 'helpers/statusMap';
 import countries from 'helpers/countries';
-import { systemOrder } from 'helpers/systems';
 import useFetchGameDataMutation from 'hooks/graphql/mutations/fetchGameData';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Button from 'atoms/Button';
@@ -31,7 +30,7 @@ const FormData = (props) => {
     const modal = useContext(ModalContext);
     const fetchGameData = useFetchGameDataMutation();
     const allSystems = [...props.systems].sort((a, b) => (
-        systemOrder.indexOf(a.name) - systemOrder.indexOf(b.name)
+        a.order - b.order
     ));
     const allDevelopers = [...props.developers].sort((a, b) => (
         a.name.localeCompare(b.name)

@@ -1,5 +1,4 @@
 import React from 'react';
-import { systemOrder } from 'helpers/systems';
 import countries from 'helpers/countries';
 import Flag from 'atoms/Flag';
 import Rating from 'atoms/Rating';
@@ -8,7 +7,7 @@ export default {
     system: {
         label: 'System',
         resolver: (game) => game.system.name,
-        sort: (a, b) => systemOrder.indexOf(a.name) - systemOrder.indexOf(b.name),
+        sort: (a, b) => a.order - b.order,
     },
     developer: {
         label: 'Developer',
