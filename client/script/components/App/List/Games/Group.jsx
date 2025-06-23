@@ -30,15 +30,15 @@ const Group = (props) => {
     const totalTimeToBeat = gamesWithTimeToBeat.reduce((total, game) => (
         game.timeToBeat ? total + game.timeToBeat : total
     ), 0);
-    const averageTimeToBeat = bigDecimal.divide(totalTimeToBeat, gamesWithTimeToBeat.length || 1);
+    const averageTimeToBeat = bigDecimal.divide(totalTimeToBeat, gamesWithTimeToBeat.length || 1, 2);
     const gamesWithRating = games.filter((game) => game.rating);
     const averageRating = bigDecimal.divide(gamesWithRating.reduce((total, game) => (
         game.status === 'completed' ? bigDecimal.add(total, game.rating) : total
-    ), 0), gamesWithRating.length || 1);
+    ), 0), gamesWithRating.length || 1, 2);
     const gamesWithCriticRating = games.filter((game) => game.criticRating);
     const averageCriticRating = bigDecimal.divide(gamesWithCriticRating.reduce((total, game) => (
         game.criticRating ? bigDecimal.add(total, game.criticRating) : total
-    ), 0), gamesWithCriticRating.length || 1);
+    ), 0), gamesWithCriticRating.length || 1, 2);
 
     const formatTime = (value) => {
         const hours = Math.floor(value);
