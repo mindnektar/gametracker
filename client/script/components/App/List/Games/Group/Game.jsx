@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Markdown from 'react-markdown';
+import { formatTimeToBeat } from 'helpers/timeToBeat';
+import { isLoggedIn } from 'helpers/auth';
 import IconButton from 'atoms/IconButton';
 import Flag from 'atoms/Flag';
 import Genre from 'atoms/Genre';
@@ -105,7 +107,7 @@ const Game = (props) => {
 
             {props.groupBy !== 'timeToBeat' && (
                 <div className="game__time-to-beat">
-                    {props.game.timeToBeat ? `${props.game.timeToBeat} h`.replace('.5', '½').replace(/^0/, '') : ''}
+                    {formatTimeToBeat(props.game.timeToBeat)}
                 </div>
             )}
 
@@ -155,7 +157,7 @@ const Game = (props) => {
 
     return (
         <ListItem
-            actions={renderActions()}
+            actions={isLoggedIn() ? renderActions() : null}
             head={renderHead()}
             status={props.game.status}
             toggleExpanded={expandGame}

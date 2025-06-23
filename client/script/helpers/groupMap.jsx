@@ -1,5 +1,6 @@
 import React from 'react';
 import countries from 'helpers/countries';
+import { formatTimeToBeat } from 'helpers/timeToBeat';
 import Flag from 'atoms/Flag';
 import Rating from 'atoms/Rating';
 
@@ -50,7 +51,7 @@ export default {
         label: 'Time to beat',
         resolver: (game) => (
             game.timeToBeat
-                ? `${game.timeToBeat} hour${game.timeToBeat > 1 ? 's' : ''}`.replace('.5', '½').replace(/^0/, '')
+                ? formatTimeToBeat(game.timeToBeat)
                 : 'N/A'
         ),
         sort: (a, b) => {
@@ -62,7 +63,7 @@ export default {
                 return -1;
             }
 
-            return a.name - b.name;
+            return parseFloat(a.name.replace('h ', '').replace('30m', '.5')) - parseFloat(b.name.replace('h ', '').replace('30m', '.5'));
         },
     },
     franchise: {

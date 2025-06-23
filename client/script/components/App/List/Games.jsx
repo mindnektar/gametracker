@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { isLoggedIn } from 'helpers/auth';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
 import useDeleteDlc from 'hooks/graphql/mutations/deleteDlc';
@@ -156,16 +157,20 @@ const Games = (props) => {
                         </Button>
                     </OptionBar.Item>
 
-                    <OptionBar.Item>
-                        <Button onClick={openGameEditor}>
-                            Add game
-                        </Button>
-                    </OptionBar.Item>
+                    {isLoggedIn() && (
+                        <OptionBar.Item>
+                            <Button onClick={openGameEditor}>
+                                Add game
+                            </Button>
+                        </OptionBar.Item>
+                    )}
                 </OptionBar.Group>
             </OptionBar>
 
             <div className="games__count">
-                {games.length} game{games.length !== 1 ? 's' : ''}
+                <span>{games.length} game{games.length !== 1 ? 's' : ''}</span>
+
+                &nbsp;match{games.length === 1 ? 'es' : ''} the selected filters.
             </div>
 
             {groups.map((group) => (

@@ -1,4 +1,5 @@
 import React from 'react';
+import { isLoggedIn } from 'helpers/auth';
 import useListQuery from 'hooks/graphql/queries/list';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Select from 'atoms/Select';
@@ -22,24 +23,26 @@ const List = () => {
                 <div className="list">
                     <Header />
 
-                    <OptionBar>
-                        <OptionBar.Group>
-                            <OptionBar.Item label="List">
-                                <Select
-                                    options={[
-                                        { value: 'games', label: 'Games' },
-                                        { value: 'systems', label: 'Systems' },
-                                        { value: 'developers', label: 'Developers' },
-                                        { value: 'genres', label: 'Genres' },
-                                        { value: 'franchises', label: 'Franchises' },
-                                        { value: 'compilations', label: 'Compilations' },
-                                    ]}
-                                    onChange={setActiveList}
-                                    value={activeList}
-                                />
-                            </OptionBar.Item>
-                        </OptionBar.Group>
-                    </OptionBar>
+                    {isLoggedIn() && (
+                        <OptionBar>
+                            <OptionBar.Group>
+                                <OptionBar.Item label="List">
+                                    <Select
+                                        options={[
+                                            { value: 'games', label: 'Games' },
+                                            { value: 'systems', label: 'Systems' },
+                                            { value: 'developers', label: 'Developers' },
+                                            { value: 'genres', label: 'Genres' },
+                                            { value: 'franchises', label: 'Franchises' },
+                                            { value: 'compilations', label: 'Compilations' },
+                                        ]}
+                                        onChange={setActiveList}
+                                        value={activeList}
+                                    />
+                                </OptionBar.Item>
+                            </OptionBar.Group>
+                        </OptionBar>
+                    )}
 
                     {activeList === 'games' && (
                         <Games

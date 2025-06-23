@@ -14,17 +14,54 @@
         height: 40px
         gap: 16px
         justify-content: space-between
-        padding: 0 12px
+        padding-left: 12px
+
+        .ui-rating
+            background-color: #888888
+
+    &__title
+        align-items: center
+        display: flex
+        gap: 16px
 
     &__label
         align-items: center
         display: flex
-        font-family: "Boogaloo", sans-serif
+        font-family: "Bubblegum Sans", sans-serif
         font-size: 1.7em
         font-weight: 700
-        letter-spacing: .02em
         gap: 8px
+        text-shadow: 1px 1px 0px rgba(#aaaaaa, .5), -1px 1px 0px rgba(#aaaaaa, .5), 1px -1px 0px rgba(#999, .5), -1px -1px 0px rgba(#999, .5)
 
     &__count
         color: #cccccc
         font-weight: 700
+
+    &__meta
+        align-items: center
+        display: flex
+
+    &__meta-item
+        text-align: right
+
+        div
+            align-items: center
+            display: flex
+            gap: 4px
+
+    &__meta-rating
+        width: 56px
+
+    &__meta-time
+        color: #bbbbbb
+        font-size: 0.9em
+        width: 79px
+
+        span
+            color: #cccccc
+            font-size: 1.1em
+            font-weight: 700
+
+    &__meta-padder
+        width: 32px
+

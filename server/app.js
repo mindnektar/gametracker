@@ -5,6 +5,7 @@ import express from 'express';
 import { GraphQLServer } from 'graphql-yoga';
 import { mergeTypes, mergeResolvers, fileLoader } from 'merge-graphql-schemas';
 import aliasResolver from './middleware/graphql/aliasResolver';
+import auth from './middleware/graphql/auth';
 import config from './config';
 
 // postgres returns decimal types as strings because the values could potentially become larger than
@@ -15,13 +16,13 @@ pg.types.setTypeParser(1700, (value) => parseFloat(value));
 const server = new GraphQLServer({
     typeDefs: mergeTypes(fileLoader(path.join(__dirname, 'typeDefs'))),
     resolvers: mergeResolvers(fileLoader(path.join(__dirname, 'resolvers/!(*.test).js'))),
-    middlewares: [aliasResolver],
+    middlewares: [aliasResolver, auth],
+    context: ({ request }) => ({
+        authKey: request.headers['x-auth-key'],
+    }),
 });
 
-server.express.use(
-    cors(),
-);
-
+server.express.use(cors());
 server.express.use(express.static(path.join(__dirname, '../client/public')));
 
 const options = {
