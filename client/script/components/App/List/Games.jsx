@@ -26,14 +26,14 @@ const Games = (props) => {
     const [dlcEditorState, setDlcEditorState] = useState({ id: null, isOpen: false });
 
     const getGroups = () => {
-        if (groupBy === 'none') {
-            return [{ name: 'All games', displayValue: 'All games', games: props.games }];
-        }
-
         const groups = props.games.reduce((result, current) => {
             const name = groupMap[groupBy].resolver(current);
 
             if (current.status !== statusFilter && statusFilter !== 'all') {
+                return result;
+            }
+
+            if (genreFilter.length > 0 && !genreFilter.every((genreId) => current.genres.some(({ id }) => id === genreId))) {
                 return result;
             }
 
@@ -112,10 +112,9 @@ const Games = (props) => {
                     <OptionBar.Item label="Group by">
                         <Select
                             options={[
-                                ...Object.entries(groupMap).map(([value, { label }]) => ({
-                                    value, label,
+                                ...Object.entries(groupMap).map(([value, { label, icon }]) => ({
+                                    value, label, icon,
                                 })),
-                                { value: 'none', label: 'None' },
                             ]}
                             onChange={setGroupBy}
                             value={groupBy}
