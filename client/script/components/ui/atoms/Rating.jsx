@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import bigDecimal from 'js-big-decimal';
 
 const Rating = (props) => (
     <div
@@ -20,7 +21,7 @@ const Rating = (props) => (
         />
 
         <div className="ui-rating__text">
-            {!props.value ? '-' : props.value / 10}
+            {!props.value ? '-' : bigDecimal.divide(props.value, '10', 1).replace(/\.0$/, '')}
         </div>
     </div>
 );

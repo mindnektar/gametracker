@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bigDecimal from 'js-big-decimal';
+import { formatTimeToBeat } from 'helpers/timeToBeat';
 import { isLoggedIn } from 'helpers/auth';
 import Rating from 'atoms/Rating';
 import Game from './Group/Game';
@@ -28,28 +29,17 @@ const Group = (props) => {
 
     const gamesWithTimeToBeat = games.filter((game) => game.timeToBeat);
     const totalTimeToBeat = gamesWithTimeToBeat.reduce((total, game) => (
-        game.timeToBeat ? total + game.timeToBeat : total
-    ), 0);
-    const averageTimeToBeat = bigDecimal.divide(totalTimeToBeat, gamesWithTimeToBeat.length || 1, 2);
+        game.timeToBeat ? bigDecimal.add(total, `${game.timeToBeat}`) : total
+    ), '0');
+    const averageTimeToBeat = bigDecimal.divide(totalTimeToBeat, gamesWithTimeToBeat.length ? `${gamesWithTimeToBeat.length}` : '1', 1);
     const gamesWithRating = games.filter((game) => game.rating);
     const averageRating = bigDecimal.divide(gamesWithRating.reduce((total, game) => (
-        game.status === 'completed' ? bigDecimal.add(total, game.rating) : total
-    ), 0), gamesWithRating.length || 1, 2);
+        game.status === 'completed' ? bigDecimal.add(total, `${game.rating}`) : total
+    ), '0'), gamesWithRating.length ? `${gamesWithRating.length}` : '1', 1);
     const gamesWithCriticRating = games.filter((game) => game.criticRating);
     const averageCriticRating = bigDecimal.divide(gamesWithCriticRating.reduce((total, game) => (
-        game.criticRating ? bigDecimal.add(total, game.criticRating) : total
-    ), 0), gamesWithCriticRating.length || 1, 2);
-
-    const formatTime = (value) => {
-        const hours = Math.floor(value);
-        const minutes = Math.round((value - hours) * 60);
-
-        if (minutes === 0) {
-            return `${hours}h`;
-        }
-
-        return `${hours}h ${minutes}m`;
-    };
+        game.criticRating ? bigDecimal.add(total, `${game.criticRating}`) : total
+    ), '0'), gamesWithCriticRating.length ? `${gamesWithCriticRating.length}` : '1', 1);
 
     return (
         <div className="group">
@@ -63,26 +53,26 @@ const Group = (props) => {
                 </div>
 
                 <div className="group__meta">
-                    <div className="group__meta-item group__meta-time">
+                    <div className="group__meta-time">
                         <div>
-                            <span>&Sigma;</span> {formatTime(totalTimeToBeat)}
+                            <span>&Sigma;</span> {formatTimeToBeat(totalTimeToBeat) || 'N/A'}
                         </div>
 
                         <div>
-                            <span>&#8960;</span> {formatTime(averageTimeToBeat)}
+                            <span>&#8960;</span> {formatTimeToBeat(averageTimeToBeat) || 'N/A'}
                         </div>
                     </div>
 
-                    <div className="group__meta-item group__meta-rating">
-                        <Rating value={averageCriticRating} />
+                    <div className="group__meta-rating">
+                        <Rating value={averageCriticRating === '0' ? null : averageCriticRating} />
                     </div>
 
-                    <div className="group__meta-item group__meta-rating">
-                        <Rating personal value={averageRating} />
+                    <div className="group__meta-rating">
+                        <Rating personal value={averageRating === '0' ? null : averageRating} />
                     </div>
 
                     {isLoggedIn() && (
-                        <div className="group__meta-item group__meta-padder" />
+                        <div className="group__meta-padder" />
                     )}
                 </div>
             </div>
