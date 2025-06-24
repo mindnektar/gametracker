@@ -17,8 +17,8 @@ export default () => {
             input,
             modifiers: [{
                 fields: {
-                    franchises: ({ previous, includeIf, item }) => (
-                        item.franchise ? includeIf(true, { subjects: [item.franchise] }) : previous
+                    franchises: ({ includeIf, item }) => (
+                        includeIf(true, { subjects: item.franchises })
                     ),
                     developers: ({ includeIf, item }) => (
                         includeIf(true, { subjects: [item.developer] })

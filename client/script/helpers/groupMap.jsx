@@ -83,7 +83,7 @@ export default {
     franchise: {
         label: 'Franchise',
         icon: 'label',
-        resolver: (game) => game.franchise?.name || 'Standalone',
+        resolver: (game) => (game.franchises.length === 0 ? 'Standalone' : game.franchises.map(({ name }) => name)),
         sort: (a, b) => a.name.localeCompare(b.name),
     },
 };

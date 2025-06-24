@@ -20,7 +20,7 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .insertGraphAndFetch(input, {
-                        relate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
+                        relate: ['system', 'developer', 'genres', 'compilation', 'franchises'],
                     })
             ))
         ),
@@ -30,8 +30,8 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .upsertGraphAndFetch(input, {
-                        relate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
-                        unrelate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
+                        relate: ['system', 'developer', 'genres', 'compilation', 'franchises'],
+                        unrelate: ['system', 'developer', 'genres', 'compilation', 'franchises'],
                         noGraphTransform: true,
                     })
             ))

@@ -37,7 +37,7 @@ const GameEditor = (props) => {
             developer: formatSelectValue(values.developer, props.developers),
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
-            franchise: formatSelectValue(values.franchise, props.franchises),
+            franchises: values.franchises.map((franchise) => formatSelectValue(franchise, props.franchises)),
         });
 
         props.onClose();
@@ -78,9 +78,9 @@ const GameEditor = (props) => {
                     _default: [],
                     _map: (value) => value.id,
                 },
-                franchise: {
-                    _default: null,
-                    _modify: (value) => value.id,
+                franchises: {
+                    _default: [],
+                    _map: (value) => value.id,
                 },
                 country: null,
             }}

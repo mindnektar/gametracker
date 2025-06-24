@@ -51,11 +51,15 @@ export default class Game extends BaseModel {
                     to: 'dlc.gameId',
                 },
             },
-            franchise: {
-                relation: BaseModel.BelongsToOneRelation,
+            franchises: {
+                relation: BaseModel.ManyToManyRelation,
                 modelClass: 'Franchise',
                 join: {
-                    from: 'game.franchiseId',
+                    from: 'game.id',
+                    through: {
+                        from: 'game_franchise_xref.game_id',
+                        to: 'game_franchise_xref.franchise_id',
+                    },
                     to: 'franchise.id',
                 },
             },

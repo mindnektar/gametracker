@@ -87,7 +87,7 @@ const FormData = (props) => {
             }
 
             if (autoFillTypes.includes('franchise')) {
-                modal.setFormValue('franchise', franchise ? franchise.id : data.fetchGameData.franchise);
+                modal.setFormValue('franchises', [franchise ? franchise.id : data.fetchGameData.franchise]);
             }
 
             if (autoFillTypes.includes('criticRating')) {
@@ -175,10 +175,11 @@ const FormData = (props) => {
                 />
             </Form.Row>
 
-            <Form.Row label="Franchise">
-                <Form.Control name="franchise">
+            <Form.Row label="Franchises">
+                <Form.Control name="franchises">
                     <Form.Control.Select
                         clearable
+                        multiple
                         options={allFranchises.map((franchise) => ({
                             value: franchise.id, label: franchise.name,
                         }))}

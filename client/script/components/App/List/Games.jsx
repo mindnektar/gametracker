@@ -32,6 +32,7 @@ const Games = (props) => {
     const getGroups = () => {
         const groups = props.games.reduce((result, current) => {
             const name = groupMap[groupBy].resolver(current);
+            const names = Array.isArray(name) ? name : [name];
 
             if (current.status !== statusFilter && statusFilter !== 'all') {
                 return result;
@@ -41,22 +42,22 @@ const Games = (props) => {
                 return result;
             }
 
-            return {
-                ...result,
-                [name]: {
-                    ...(result.name || {}),
-                    name: `${name}`,
-                    order: groupBy === 'system' && !result[name]
+            return names.reduce((innerResult, value) => ({
+                ...innerResult,
+                [value]: {
+                    ...(innerResult[value] || {}),
+                    name: value,
+                    order: groupBy === 'system' && !innerResult[value]
                         ? props.systems.find(({ id }) => id === current.system.id).order
-                        : result[name]?.order,
-                    displayValue: groupMap[groupBy].decorator?.(current, name) || name,
+                        : innerResult[value]?.order,
+                    displayValue: groupMap[groupBy].decorator?.(current, value) || value,
                     subLabel: groupMap[groupBy].subLabel?.(current),
                     games: [
-                        ...(result[name]?.games || []),
+                        ...(innerResult[value]?.games || []),
                         current,
                     ],
                 },
-            };
+            }), result);
         }, {});
 
         const sortedGroups = Object.values(groups)

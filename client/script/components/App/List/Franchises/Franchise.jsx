@@ -6,7 +6,7 @@ import ListItem from 'molecules/ListItem';
 import PopupDialog from 'molecules/PopupDialog';
 
 const Franchise = (props) => {
-    const games = props.games.filter(({ franchise }) => franchise?.id === props.franchise.id);
+    const games = props.games.filter(({ franchises }) => franchises.some(({ id }) => id === props.franchise.id));
 
     const editFranchise = () => {
         props.openFranchiseEditor(props.franchise.id);
