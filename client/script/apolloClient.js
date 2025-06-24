@@ -8,7 +8,7 @@ const client = new ApolloClient({
         setContext((_, context) => ({
             ...context,
             headers: {
-                'X-Auth-Key': new URLSearchParams(window.location.search).get('adminKey'),
+                'X-Auth-Key': localStorage.getItem('adminKey'),
             },
         })),
         new HttpLink({

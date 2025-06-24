@@ -12,6 +12,13 @@ import '../style/app.sass';
 
 moment.locale('de');
 
+const adminKey = new URLSearchParams(window.location.search).get('adminKey');
+
+if (adminKey !== null) {
+    localStorage.setItem('adminKey', adminKey);
+    window.location = window.location.pathname;
+}
+
 const container = document.getElementById('app');
 const root = createRoot(container);
 
