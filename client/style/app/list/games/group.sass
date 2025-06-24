@@ -11,7 +11,7 @@
         box-sizing: border-box
         color: #222222
         display: flex
-        height: 40px
+        height: 48px
         gap: 16px
         justify-content: space-between
         padding-left: 12px
@@ -22,7 +22,13 @@
     &__title
         align-items: center
         display: flex
-        gap: 16px
+        gap: 8px
+
+    &__sub-label
+        color: #aaaaaa
+        font-size: 1.4em
+        font-weight: 700
+        text-shadow: 1px 1px 0px rgba(#333333, .5), -1px 1px 0px rgba(#333333, .5), 1px -1px 0px rgba(#333333, .5), -1px -1px 0px rgba(#333333, .5)
 
     &__label
         align-items: center
@@ -31,11 +37,12 @@
         font-size: 1.7em
         font-weight: 700
         gap: 8px
-        text-shadow: 1px 1px 0px rgba(#aaaaaa, .5), -1px 1px 0px rgba(#aaaaaa, .5), 1px -1px 0px rgba(#999, .5), -1px -1px 0px rgba(#999, .5)
+        text-shadow: 1px 1px 0px rgba(#999, .5), -1px 1px 0px rgba(#999, .5), 1px -1px 0px rgba(#999, .5), -1px -1px 0px rgba(#999, .5)
 
     &__count
         color: #cccccc
-        font-weight: 700
+        font-style: italic
+        margin-left: 8px
 
     &__meta
         align-items: center

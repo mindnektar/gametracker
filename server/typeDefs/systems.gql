@@ -14,6 +14,7 @@ type System {
     name: String!
     order: Int!
     games: [Game!]!
+    company: String
 }
 
 input RelateSystemInput {
@@ -23,11 +24,13 @@ input RelateSystemInput {
 
 input CreateSystemInput {
     name: String!
+    company: String
 }
 
 input UpdateSystemInput {
     id: ID!
     name: String
+    company: String
 }
 
 input UpdateSystemOrderInput {

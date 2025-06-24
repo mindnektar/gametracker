@@ -15,6 +15,7 @@ const SystemEditor = (props) => {
         await mutation({
             id: props.system?.id,
             name: values.name.trim(),
+            company: values.company.trim(),
         });
 
         props.onClose();
@@ -25,6 +26,7 @@ const SystemEditor = (props) => {
             close={props.onClose}
             formConfig={{
                 name: '',
+                company: '',
             }}
             formSubject={props.system}
             isOpen={props.open}

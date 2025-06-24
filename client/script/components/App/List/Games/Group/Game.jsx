@@ -115,7 +115,7 @@ const Game = (props) => {
                 <Rating value={props.game.criticRating} />
             )}
 
-            {props.groupBy !== 'rating' && (props.game.status === 'completed' || props.statusFilter === 'all') && (
+            {props.groupBy !== 'rating' && ['all', 'completed'].includes(props.statusFilter) && (
                 <Rating
                     personal
                     value={props.game.status === 'completed' ? props.game.rating : null}

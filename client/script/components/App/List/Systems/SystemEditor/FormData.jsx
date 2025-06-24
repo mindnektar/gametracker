@@ -15,6 +15,14 @@ const FormData = () => (
                 <Form.Control.TextField />
             </Form.Control>
         </Form.Row>
+
+        <Form.Row label="Company">
+            <Form.Control
+                name="company"
+            >
+                <Form.Control.TextField />
+            </Form.Control>
+        </Form.Row>
     </Form>
 );
 

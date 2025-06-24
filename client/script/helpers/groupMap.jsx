@@ -15,6 +15,7 @@ export default {
         label: 'System',
         icon: 'sports_esports',
         resolver: (game) => game.system.name,
+        subLabel: (game) => game.system.company,
         sort: (a, b) => a.order - b.order,
     },
     developer: {

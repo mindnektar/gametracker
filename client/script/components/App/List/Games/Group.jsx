@@ -1,63 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bigDecimal from 'js-big-decimal';
 import { formatTimeToBeat } from 'helpers/timeToBeat';
 import { isLoggedIn } from 'helpers/auth';
 import Rating from 'atoms/Rating';
 import Game from './Group/Game';
 
 const Group = (props) => {
-    if (props.games.length === 0) {
+    const games = props.group.games.toSorted((a, b) => a.title.localeCompare(b.title));
+
+    if (games.length === 0) {
         return null;
     }
-
-    const gamesWithTimeToBeat = props.games.filter((game) => game.timeToBeat);
-    const totalTimeToBeat = gamesWithTimeToBeat.reduce((total, game) => (
-        bigDecimal.add(total, `${game.timeToBeat}`)
-    ), '0');
-    const averageTimeToBeat = bigDecimal.divide(totalTimeToBeat, gamesWithTimeToBeat.length ? `${gamesWithTimeToBeat.length}` : '1', 1);
-    const gamesWithRating = props.games.filter((game) => game.status === 'completed');
-    const averageRating = bigDecimal.divide(gamesWithRating.reduce((total, game) => (
-        bigDecimal.add(total, `${game.rating}`)
-    ), '0'), gamesWithRating.length ? `${gamesWithRating.length}` : '1', 1);
-    const gamesWithCriticRating = props.games.filter((game) => game.criticRating);
-    const averageCriticRating = bigDecimal.divide(gamesWithCriticRating.reduce((total, game) => (
-        bigDecimal.add(total, `${game.criticRating}`)
-    ), '0'), gamesWithCriticRating.length ? `${gamesWithCriticRating.length}` : '1', 1);
 
     return (
         <div className="group">
             <div className="group__header">
                 <div className="group__title">
+                    {props.group.subLabel && (
+                        <div className="group__sub-label">
+                            {props.group.subLabel}
+                        </div>
+                    )}
+
                     <div className="group__label">
-                        {props.displayValue}
+                        {props.group.displayValue}
                     </div>
 
-                    <div className="group__count">{`${props.games.length} game${props.games.length !== 1 ? 's' : ''}`}</div>
+                    <div className="group__count">{`${games.length} game${games.length !== 1 ? 's' : ''}`}</div>
                 </div>
 
                 <div className="group__meta">
                     {props.groupBy !== 'timeToBeat' && (
                         <div className="group__meta-time">
                             <div>
-                                <span>&Sigma;</span> {formatTimeToBeat(totalTimeToBeat) || 'N/A'}
+                                <span>&Sigma;</span> {formatTimeToBeat(props.group.totalTimeToBeat) || 'N/A'}
                             </div>
 
                             <div>
-                                <span>&#8960;</span> {formatTimeToBeat(averageTimeToBeat) || 'N/A'}
+                                <span>&#8960;</span> {formatTimeToBeat(props.group.averageTimeToBeat) || 'N/A'}
                             </div>
                         </div>
                     )}
 
                     {props.groupBy !== 'criticRating' && (
                         <div className="group__meta-rating">
-                            <Rating value={averageCriticRating === '0' ? null : averageCriticRating} />
+                            <Rating value={props.group.averageCriticRating === '0' ? null : props.group.averageCriticRating} />
                         </div>
                     )}
 
-                    {props.groupBy !== 'rating' && (
+                    {props.groupBy !== 'rating' && ['all', 'completed'].includes(props.statusFilter) && (
                         <div className="group__meta-rating">
-                            <Rating personal value={averageRating === '0' ? null : averageRating} />
+                            <Rating personal value={props.group.averageRating === '0' ? null : props.group.averageRating} />
                         </div>
                     )}
 
@@ -67,7 +60,7 @@ const Group = (props) => {
                 </div>
             </div>
 
-            {props.games.map((game) => (
+            {games.map((game) => (
                 <Game
                     deleteDlc={props.deleteDlc}
                     deleteGame={props.deleteGame}
@@ -99,14 +92,12 @@ Group.propTypes = {
     expandedGame: PropTypes.string,
     openGameEditor: PropTypes.func.isRequired,
     openDlcEditor: PropTypes.func.isRequired,
-    games: PropTypes.array.isRequired,
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    displayValue: PropTypes.string.isRequired,
     skipGame: PropTypes.func.isRequired,
     statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
+    group: PropTypes.object.isRequired,
 };
 
 export default Group;

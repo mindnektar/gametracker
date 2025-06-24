@@ -51,9 +51,15 @@ const Select = (props) => {
         if (opened) {
             window.setTimeout(() => {
                 selectedOptionRef.current?.scrollIntoView({ block: 'center' });
-            }, 300);
+            }, 400);
         }
     }, [opened]);
+
+    useEffect(() => {
+        if (props.defaultValue && !props.options.some(({ value }) => value === props.value)) {
+            props.onChange(props.defaultValue);
+        }
+    }, [options.length]);
 
     const calculatePosition = () => {
         if (!selectRef.current) {
@@ -270,6 +276,7 @@ Select.defaultProps = {
     onChange: null,
     value: null,
     withCustom: false,
+    defaultValue: null,
 };
 
 Select.propTypes = {
@@ -292,6 +299,11 @@ Select.propTypes = {
         }),
     ).isRequired,
     value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    ]),
+    defaultValue: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
         PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),

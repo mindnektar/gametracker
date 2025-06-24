@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import bigDecimal from 'js-big-decimal';
 import { isLoggedIn } from 'helpers/auth';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
@@ -7,6 +8,7 @@ import useDeleteDlc from 'hooks/graphql/mutations/deleteDlc';
 import useLocalStorage from 'hooks/useLocalStorage';
 import statusMap from 'helpers/statusMap';
 import groupMap from 'helpers/groupMap';
+import sortMap from 'helpers/sortMap';
 import Select from 'atoms/Select';
 import Button from 'atoms/Button';
 import OptionBar from 'molecules/OptionBar';
@@ -19,6 +21,8 @@ const Games = (props) => {
     const deleteGame = useDeleteGame();
     const deleteDlc = useDeleteDlc();
     const [groupBy, setGroupBy] = useLocalStorage('groupBy', 'system');
+    const [sortBy, setSortBy] = useLocalStorage('sortBy', 'name');
+    const [sortDirection, setSortDirection] = useLocalStorage('sortDirection', 'asc');
     const [statusFilter, setStatusFilter] = useLocalStorage('statusFilter', 'completed');
     const [expandedGame, setExpandedGame] = useState(null);
     const [genreFilter, setGenreFilter] = useLocalStorage('genreFilter', []);
@@ -46,6 +50,7 @@ const Games = (props) => {
                         ? props.systems.find(({ id }) => id === current.system.id).order
                         : result[name]?.order,
                     displayValue: groupMap[groupBy].decorator?.(current, name) || name,
+                    subLabel: groupMap[groupBy].subLabel?.(current),
                     games: [
                         ...(result[name]?.games || []),
                         current,
@@ -54,7 +59,49 @@ const Games = (props) => {
             };
         }, {});
 
-        return Object.values(groups).sort(groupMap[groupBy].sort);
+        const sortedGroups = Object.values(groups)
+            .map((group) => {
+                const gamesWithTimeToBeat = group.games.filter((game) => game.timeToBeat);
+                const totalTimeToBeat = gamesWithTimeToBeat.reduce((total, game) => (
+                    bigDecimal.add(total, `${game.timeToBeat}`)
+                ), '0');
+                const averageTimeToBeat = bigDecimal.divide(
+                    totalTimeToBeat,
+                    gamesWithTimeToBeat.length ? `${gamesWithTimeToBeat.length}` : '1',
+                    1,
+                );
+                const gamesWithRating = group.games.filter((game) => game.status === 'completed');
+                const averageRating = bigDecimal.divide(
+                    gamesWithRating.reduce((total, game) => (
+                        bigDecimal.add(total, `${game.rating}`)
+                    ), '0'),
+                    gamesWithRating.length ? `${gamesWithRating.length}` : '1',
+                    1,
+                );
+                const gamesWithCriticRating = group.games.filter((game) => game.criticRating);
+                const averageCriticRating = bigDecimal.divide(
+                    gamesWithCriticRating.reduce((total, game) => (
+                        bigDecimal.add(total, `${game.criticRating}`)
+                    ), '0'),
+                    gamesWithCriticRating.length ? `${gamesWithCriticRating.length}` : '1',
+                    1,
+                );
+
+                return {
+                    ...group,
+                    totalTimeToBeat,
+                    averageTimeToBeat,
+                    averageRating,
+                    averageCriticRating,
+                };
+            })
+            .sort(sortMap[sortBy].sort);
+
+        if (sortDirection === 'desc') {
+            sortedGroups.reverse();
+        }
+
+        return sortedGroups;
     };
 
     const toggleGenreFilter = (genreId) => {
@@ -111,16 +158,44 @@ const Games = (props) => {
                 <OptionBar.Group>
                     <OptionBar.Item label="Group by">
                         <Select
-                            options={[
-                                ...Object.entries(groupMap).map(([value, { label, icon }]) => ({
+                            options={
+                                Object.entries(groupMap).map(([value, { label, icon }]) => ({
                                     value, label, icon,
-                                })),
-                            ]}
+                                }))
+                            }
                             onChange={setGroupBy}
                             value={groupBy}
                         />
                     </OptionBar.Item>
 
+                    <OptionBar.Item label="Sort by">
+                        <Select
+                            options={
+                                Object.entries(sortMap)
+                                    .filter(([, { usedBy }]) => !usedBy || usedBy.includes(groupBy))
+                                    .map(([value, { label, icon }]) => ({
+                                        value, label, icon,
+                                    }))
+                            }
+                            onChange={setSortBy}
+                            value={sortBy}
+                            defaultValue="name"
+                        />
+                    </OptionBar.Item>
+
+                    <OptionBar.Item label="Sort direction">
+                        <Select
+                            options={[
+                                { value: 'asc', label: 'Ascending', icon: 'arrow_circle_up' },
+                                { value: 'desc', label: 'Descending', icon: 'arrow_circle_down' },
+                            ]}
+                            onChange={setSortDirection}
+                            value={sortDirection}
+                        />
+                    </OptionBar.Item>
+                </OptionBar.Group>
+
+                <OptionBar.Group>
                     <OptionBar.Item label="Status">
                         <Select
                             options={[
@@ -148,6 +223,10 @@ const Games = (props) => {
                         />
                     </OptionBar.Item>
                 </OptionBar.Group>
+            </OptionBar>
+
+            <OptionBar>
+                <OptionBar.Group />
 
                 <OptionBar.Group>
                     <OptionBar.Item>
@@ -184,11 +263,9 @@ const Games = (props) => {
                     genreFilter={genreFilter}
                     groupBy={groupBy}
                     toggleGenreFilter={toggleGenreFilter}
-                    name={group.name}
-                    displayValue={group.displayValue}
-                    games={group.games}
                     skipGame={onSkipGame}
                     statusFilter={statusFilter}
+                    group={group}
                 />
             ))}
 
