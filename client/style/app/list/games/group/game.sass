@@ -8,6 +8,9 @@
         margin-right: 16px
         min-width: 240px
 
+        @media (max-width: 1000px)
+            min-width: 120px
+
     &__title-text
         overflow: hidden
         text-overflow: ellipsis
@@ -31,16 +34,23 @@
         padding: 2px 8px
         margin-left: 8px
         text-transform: uppercase
+        white-space: nowrap
 
     &__genre
         display: flex
-        flex: 0 1 400px
+        flex: 0 0 400px
         gap: 4px
         overflow-x: auto
         position: relative
 
         &::-webkit-scrollbar
             display: none
+
+        @media (max-width: 1200px)
+            flex: 0 0 200px
+
+        @media (max-width: 880px)
+            flex: 0 0 120px
 
     &__system
         flex: 0 0 104px

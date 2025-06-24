@@ -40,6 +40,11 @@ const config = convict({
             env: 'DATABASE_DEBUG',
         },
     },
+    adminKey: {
+        format: String,
+        default: '',
+        env: 'ADMIN_KEY',
+    },
     youTube: {
         apiKey: {
             format: String,

@@ -1,3 +1,3 @@
 export const isLoggedIn = () => (
-    !!window.localStorage.getItem('authKey')
+    new URLSearchParams(window.location.search).has('adminKey')
 );

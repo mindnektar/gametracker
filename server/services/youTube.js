@@ -6,6 +6,10 @@ export default async (input) => {
         return {};
     }
 
+    if (!config.youTube.apiKey) {
+        throw new Error('No YOU_TUBE_API_KEY environment variable found. See: https://developers.google.com/youtube/v3/getting-started');
+    }
+
     const youTubeSearch = await axios.get('https://www.googleapis.com/youtube/v3/search', {
         params: {
             key: config.youTube.apiKey,

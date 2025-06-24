@@ -114,6 +114,10 @@ export default async (input) => {
         return {};
     }
 
+    if (!config.ai.apiKey) {
+        throw new Error('No AI_API_KEY environment variable found. See: https://ai.google.dev/gemini-api/docs/api-key');
+    }
+
     let response;
     const models = ['gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 
