@@ -17,6 +17,8 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-debug}
       - DEBUG
       - DATABASE_DEBUG
+    env_file:
+      - .env
     command: ["npm", "run", "dev"]
 
   postgres:

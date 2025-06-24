@@ -40,24 +40,17 @@ const config = convict({
             env: 'DATABASE_DEBUG',
         },
     },
-    giantbomb: {
-        apiKey: {
-            format: String,
-            default: 'aebe8a5bc71b49509966b5ea50e7951d79d99cd8',
-            env: 'GIANTBOMB_API_KEY',
-        },
-    },
     youTube: {
         apiKey: {
             format: String,
-            default: 'AIzaSyCznMOgkou2OW7VL04XK0ZZLiMyzPVzgbs',
+            default: '',
             env: 'YOU_TUBE_API_KEY',
         },
     },
     ai: {
         apiKey: {
             format: String,
-            default: 'AIzaSyDVxXvPd3eJUbOcrm4i1d_8-gZ8VYZHaKM',
+            default: '',
             env: 'AI_API_KEY',
         },
     },

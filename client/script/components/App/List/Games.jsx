@@ -226,7 +226,13 @@ const Games = (props) => {
             </OptionBar>
 
             <OptionBar>
-                <OptionBar.Group />
+                <OptionBar.Group>
+                    <div className="games__count">
+                        <span>{games.length} game{games.length !== 1 ? 's' : ''}</span>
+
+                        &nbsp;match{games.length === 1 ? 'es' : ''} the selected filters.
+                    </div>
+                </OptionBar.Group>
 
                 <OptionBar.Group>
                     <OptionBar.Item>
@@ -245,29 +251,25 @@ const Games = (props) => {
                 </OptionBar.Group>
             </OptionBar>
 
-            <div className="games__count">
-                <span>{games.length} game{games.length !== 1 ? 's' : ''}</span>
-
-                &nbsp;match{games.length === 1 ? 'es' : ''} the selected filters.
+            <div className="games__groups">
+                {groups.map((group) => (
+                    <Group
+                        key={group.name}
+                        deleteDlc={deleteDlc}
+                        deleteGame={deleteGame}
+                        expandGame={toggleExpandedGame}
+                        expandedGame={expandedGame}
+                        openGameEditor={openGameEditor}
+                        openDlcEditor={openDlcEditor}
+                        genreFilter={genreFilter}
+                        groupBy={groupBy}
+                        toggleGenreFilter={toggleGenreFilter}
+                        skipGame={onSkipGame}
+                        statusFilter={statusFilter}
+                        group={group}
+                    />
+                ))}
             </div>
-
-            {groups.map((group) => (
-                <Group
-                    key={group.name}
-                    deleteDlc={deleteDlc}
-                    deleteGame={deleteGame}
-                    expandGame={toggleExpandedGame}
-                    expandedGame={expandedGame}
-                    openGameEditor={openGameEditor}
-                    openDlcEditor={openDlcEditor}
-                    genreFilter={genreFilter}
-                    groupBy={groupBy}
-                    toggleGenreFilter={toggleGenreFilter}
-                    skipGame={onSkipGame}
-                    statusFilter={statusFilter}
-                    group={group}
-                />
-            ))}
 
             <GameEditor
                 open={gameEditorState.isOpen}
