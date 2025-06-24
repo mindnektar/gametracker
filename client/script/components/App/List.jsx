@@ -1,6 +1,6 @@
 import React from 'react';
 import { isLoggedIn } from 'helpers/auth';
-import useListQuery from 'hooks/graphql/queries/list';
+import useGamesQuery from 'hooks/graphql/queries/games';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Select from 'atoms/Select';
 import LoadingContainer from 'molecules/LoadingContainer';
@@ -14,7 +14,7 @@ import Franchises from './List/Franchises';
 import Compilations from './List/Compilations';
 
 const List = () => {
-    const { loading, data } = useListQuery();
+    const { loading, data } = useGamesQuery();
     const [activeList, setActiveList] = useLocalStorage('activeList', 'games');
 
     return (
@@ -46,8 +46,7 @@ const List = () => {
 
                     {activeList === 'games' && (
                         <Games
-                            listId={data.list.id}
-                            games={data.list.games}
+                            games={data.games}
                             systems={data.systems}
                             developers={data.developers}
                             compilations={data.compilations}
@@ -58,35 +57,35 @@ const List = () => {
 
                     {activeList === 'systems' && (
                         <Systems
-                            games={data.list.games}
+                            games={data.games}
                             systems={data.systems}
                         />
                     )}
 
                     {activeList === 'developers' && (
                         <Developers
-                            games={data.list.games}
+                            games={data.games}
                             developers={data.developers}
                         />
                     )}
 
                     {activeList === 'genres' && (
                         <Genres
-                            games={data.list.games}
+                            games={data.games}
                             genres={data.genres}
                         />
                     )}
 
                     {activeList === 'franchises' && (
                         <Franchises
-                            games={data.list.games}
+                            games={data.games}
                             franchises={data.franchises}
                         />
                     )}
 
                     {activeList === 'compilations' && (
                         <Compilations
-                            games={data.list.games}
+                            games={data.games}
                             compilations={data.compilations}
                         />
                     )}

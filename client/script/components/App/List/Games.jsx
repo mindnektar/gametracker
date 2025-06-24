@@ -127,7 +127,9 @@ const Games = (props) => {
     };
 
     const groups = getGroups();
-    const games = groups.flatMap((group) => group.games);
+    const games = groups
+        .flatMap((group) => group.games)
+        .filter((game, index, self) => self.findIndex((item) => item.id === game.id) === index);
 
     const pickRandom = () => {
         const game = games[Math.floor(Math.random() * games.length)];
@@ -235,11 +237,13 @@ const Games = (props) => {
                 </OptionBar.Group>
 
                 <OptionBar.Group>
-                    <OptionBar.Item>
-                        <Button onClick={pickRandom}>
-                            Pick random game
-                        </Button>
-                    </OptionBar.Item>
+                    {games.length > 0 && (
+                        <OptionBar.Item>
+                            <Button onClick={pickRandom}>
+                                Pick random game
+                            </Button>
+                        </OptionBar.Item>
+                    )}
 
                     {isLoggedIn() && (
                         <OptionBar.Item>
@@ -279,7 +283,6 @@ const Games = (props) => {
                 developers={props.developers}
                 compilations={props.compilations}
                 genres={props.genres}
-                listId={props.listId}
                 franchises={props.franchises}
             />
 
@@ -299,7 +302,6 @@ const Games = (props) => {
 };
 
 Games.propTypes = {
-    listId: PropTypes.string.isRequired,
     games: PropTypes.object.isRequired,
     systems: PropTypes.array.isRequired,
     developers: PropTypes.array.isRequired,

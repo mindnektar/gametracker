@@ -5,9 +5,6 @@ const mutation = `
     mutation createGame($input: CreateGameInput!) {
         createGame(input: $input) {
             ${GAME}
-            lists {
-                id
-            }
         }
     }
 `;
@@ -19,7 +16,6 @@ export default () => {
         mutate({
             input,
             modifiers: [{
-                cacheObject: (item) => item.lists[0],
                 fields: {
                     games: ({ includeIf }) => (
                         includeIf(true)

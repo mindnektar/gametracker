@@ -38,7 +38,6 @@ const GameEditor = (props) => {
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
             franchise: formatSelectValue(values.franchise, props.franchises),
-            lists: [{ id: props.listId }],
         });
 
         props.onClose();
@@ -115,7 +114,6 @@ GameEditor.propTypes = {
     compilations: PropTypes.array.isRequired,
     genres: PropTypes.array.isRequired,
     franchises: PropTypes.array.isRequired,
-    listId: PropTypes.string.isRequired,
 };
 
 export default GameEditor;

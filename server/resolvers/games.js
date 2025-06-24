@@ -6,6 +6,13 @@ import fetchAiData from '../services/ai';
 import Game from '../models/Game';
 
 export default {
+    Query: {
+        games: (parent, variables, context, info) => (
+            Game
+                .query()
+                .graphqlEager(info)
+        ),
+    },
     Mutation: {
         createGame: (parent, { input }, context, info) => (
             transaction((trx) => (
@@ -13,7 +20,7 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .insertGraphAndFetch(input, {
-                        relate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
+                        relate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
                     })
             ))
         ),
@@ -23,8 +30,8 @@ export default {
                     .query(trx)
                     .graphqlEager(info)
                     .upsertGraphAndFetch(input, {
-                        relate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
-                        unrelate: ['lists', 'system', 'developer', 'genres', 'compilation', 'franchise'],
+                        relate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
+                        unrelate: ['system', 'developer', 'genres', 'compilation', 'franchise'],
                         noGraphTransform: true,
                     })
             ))

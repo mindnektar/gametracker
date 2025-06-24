@@ -7,18 +7,6 @@ export default class Game extends BaseModel {
 
     static get relationMappings() {
         return {
-            lists: {
-                relation: BaseModel.ManyToManyRelation,
-                modelClass: 'List',
-                join: {
-                    from: 'game.id',
-                    through: {
-                        from: 'list_game_xref.gameId',
-                        to: 'list_game_xref.listId',
-                    },
-                    to: 'list.id',
-                },
-            },
             system: {
                 relation: BaseModel.BelongsToOneRelation,
                 modelClass: 'System',

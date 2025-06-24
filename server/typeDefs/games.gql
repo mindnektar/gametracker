@@ -1,3 +1,7 @@
+type Query {
+    games: [Game!]!
+}
+
 type Mutation {
     createGame(input: CreateGameInput!): Game!
     updateGame(input: UpdateGameInput!): Game!
@@ -25,7 +29,6 @@ type Game {
     timeToBeat: Float
     criticRating: Int
     country: String
-    lists: [List!]!
 }
 
 enum GameStatus {
@@ -41,7 +44,6 @@ input CreateGameInput {
     release: Int!
     description: String!
     youTubeId: String!
-    lists: [RelateInput!]!
     system: RelateSystemInput!
     developer: RelateDeveloperInput!
     genres: [RelateGenreInput!]!
@@ -60,7 +62,6 @@ input UpdateGameInput {
     release: Int
     description: String
     youTubeId: String
-    lists: [RelateInput!]
     system: RelateSystemInput
     developer: RelateDeveloperInput
     genres: [RelateGenreInput!]

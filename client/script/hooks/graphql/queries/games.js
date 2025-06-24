@@ -7,13 +7,9 @@ import FRANCHISE from '../fragments/franchise';
 import COMPILATION from '../fragments/compilation';
 
 const query = `
-    query list {
-        list {
-            id
-            name
-            games {
-                ${GAME}
-            }
+    query games {
+        games {
+            ${GAME}
         }
         systems {
             ${SYSTEM}
