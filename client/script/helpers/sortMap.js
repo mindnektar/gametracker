@@ -10,7 +10,13 @@ export default {
     name: {
         label: 'Name',
         icon: 'abc',
-        sort: (a, b) => a.name.localeCompare(b.name),
+        sort: (a, b) => {
+            if (typeof a.name === 'string') {
+                return a.name.localeCompare(b.name);
+            }
+
+            return a.name - b.name;
+        },
     },
     gameCount: {
         label: 'Game count',
