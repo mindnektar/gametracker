@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import bigDecimal from 'js-big-decimal';
 import { isLoggedIn } from 'helpers/auth';
+import statusMap from 'helpers/statusMap';
+import groupMap from 'helpers/groupMap';
+import sortMap from 'helpers/sortMap';
+import useToggle from 'hooks/useToggle';
 import useSkipGame from 'hooks/graphql/mutations/skipGame';
 import useDeleteGame from 'hooks/graphql/mutations/deleteGame';
 import useDeleteDlc from 'hooks/graphql/mutations/deleteDlc';
 import useLocalStorage from 'hooks/useLocalStorage';
-import statusMap from 'helpers/statusMap';
-import groupMap from 'helpers/groupMap';
-import sortMap from 'helpers/sortMap';
 import Select from 'atoms/Select';
 import Button from 'atoms/Button';
+import Graph from 'atoms/Graph';
 import OptionBar from 'molecules/OptionBar';
+import Collapsible from 'molecules/Collapsible';
 import Group from './Games/Group';
 import GameEditor from './Games/GameEditor';
 import DlcEditor from './Games/DlcEditor';
@@ -28,6 +31,7 @@ const Games = (props) => {
     const [genreFilter, setGenreFilter] = useLocalStorage('genreFilter', []);
     const [gameEditorState, setGameEditorState] = useState({ id: null, isOpen: false });
     const [dlcEditorState, setDlcEditorState] = useState({ id: null, isOpen: false });
+    const [isGraphVisible, showGraph, hideGraph] = useToggle(false);
 
     const getGroups = () => {
         const groups = props.games.reduce((result, current) => {
@@ -238,6 +242,12 @@ const Games = (props) => {
                 </OptionBar.Group>
 
                 <OptionBar.Group>
+                    <OptionBar.Item>
+                        <Button onClick={isGraphVisible ? hideGraph : showGraph}>
+                            {isGraphVisible ? 'Hide graph' : 'Show graph'}
+                        </Button>
+                    </OptionBar.Item>
+
                     {games.length > 0 && (
                         <OptionBar.Item>
                             <Button onClick={pickRandom}>
@@ -255,6 +265,19 @@ const Games = (props) => {
                     )}
                 </OptionBar.Group>
             </OptionBar>
+
+            <Collapsible collapsed={!isGraphVisible}>
+                <Graph
+                    data={groups.map((group) => ({
+                        key: `${group.name}`,
+                        label: group.displayValue,
+                        dropped: group.games.filter((game) => game.status === 'dropped').length,
+                        active: group.games.filter((game) => game.status === 'active').length,
+                        planned: group.games.filter((game) => game.status === 'planned').length,
+                        completed: group.games.filter((game) => game.status === 'completed').length,
+                    }))}
+                />
+            </Collapsible>
 
             <div className="games__groups">
                 {groups.map((group) => (

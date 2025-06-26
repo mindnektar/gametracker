@@ -11,6 +11,7 @@ const Tooltip = (props) => {
             className="ui-tooltip"
             onMouseEnter={show}
             onMouseLeave={hide}
+            style={props.style}
         >
             {props.children}
 
@@ -21,9 +22,14 @@ const Tooltip = (props) => {
     );
 };
 
+Tooltip.defaultProps = {
+    style: null,
+};
+
 Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     content: PropTypes.node.isRequired,
+    style: PropTypes.object,
 };
 
 export default Tooltip;

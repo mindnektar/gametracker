@@ -1,0 +1,56 @@
+.ui-graph
+    display: flex
+    gap: 16px
+
+    &__sidebar
+        color: #bbbbbb
+        font-weight: 700
+        margin-top: 6px
+        text-align: right
+
+    &__sidebar-item
+        align-items: center
+        display: flex
+        flex-direction: row-reverse
+        gap: 8px
+        height: 32px
+        line-height: 32px
+
+    &__data
+        background-image: repeating-linear-gradient(-45deg, #444444, #444444 4px, #3f3f3f 4px, #3f3f3f 8px)
+        border-radius: 4px
+        box-shadow: inset 0 0 4px 4px rgba(#111111, 0.2)
+        flex-grow: 1
+        margin-bottom: 8px
+        padding: 4px 24px 4px 0
+
+    &__data-item
+        align-items: center
+        display: flex
+        flex: 1 0 0
+        height: 32px
+        gap: 2px
+
+        .ui-tooltip
+            &:last-child
+                .ui-graph__data-item-bar
+                    border-radius: 0 4px 4px 0
+
+    &__data-item-bar
+        height: 24px
+        transition: transform 200ms
+
+        &:hover
+            transform: scaleY(1.15)
+
+        &--active
+            background-image: repeating-linear-gradient(-45deg, rgba(#93c9ef, .7), rgba(#93c9ef, .7) 4px, rgba(#b2daf7, .7) 4px, rgba(#b2daf7, .7) 8px)
+
+        &--planned
+            background-image: repeating-linear-gradient(-45deg, rgba(#ccc296, .7), rgba(#ccc296, .7) 4px, rgba(#e5d5b6, .7) 4px, rgba(#e5d5b6, .7) 8px)
+
+        &--completed
+            background-image: repeating-linear-gradient(-45deg, rgba(#8ac375, .7), rgba(#8ac375, .7) 4px, rgba(#b0dc9f, .7) 4px, rgba(#b0dc9f, .7) 8px)
+
+        &--dropped
+            background-image: repeating-linear-gradient(-45deg, rgba(#caa397, .7), rgba(#caa397, .7) 4px, rgba(#e5b6b6, .7) 4px, rgba(#e5b6b6, .7) 8px)
