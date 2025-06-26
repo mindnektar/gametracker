@@ -81,7 +81,10 @@ const Collapsible = (props) => {
             ref={rootRef}
             className={classnames(
                 'ui-collapsible',
-                { 'ui-collapsible--collapsed': props.collapsed },
+                {
+                    'ui-collapsible--collapsed': props.collapsed,
+                    'ui-collapsible--expanded': height === null,
+                },
             )}
             style={{ height }}
         >

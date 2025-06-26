@@ -68,4 +68,9 @@ export default {
         icon: 'label',
         resolver: (game) => (game.franchises.length === 0 ? 'Standalone' : game.franchises.map(({ name }) => name)),
     },
+    genre: {
+        label: 'Genre',
+        icon: 'crossword',
+        resolver: (game) => game.genres.map(({ name }) => name),
+    },
 };
