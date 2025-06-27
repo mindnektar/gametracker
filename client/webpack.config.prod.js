@@ -17,7 +17,7 @@ module.exports = merge(require('./webpack.config.common.js'), {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
-            'process.env.API_HTTP_URL': JSON.stringify('https://completed-games.herokuapp.com/api'),
+            'process.env.API_HTTP_URL': JSON.stringify('/api'),
         }),
     ],
 
