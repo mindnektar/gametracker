@@ -79,7 +79,11 @@ const FormData = (props) => {
             }
 
             if (autoFillTypes.includes('developer')) {
-                modal.setFormValue('developer', developer ? developer.id : data.fetchGameData.developer);
+                if (developer) {
+                    modal.setFormValue('developer', developer.id);
+                } else if (data.fetchGameData.developer) {
+                    modal.setFormValue('developer', data.fetchGameData.developer);
+                }
             }
 
             if (autoFillTypes.includes('country')) {
@@ -87,7 +91,11 @@ const FormData = (props) => {
             }
 
             if (autoFillTypes.includes('franchise')) {
-                modal.setFormValue('franchises', [franchise ? franchise.id : data.fetchGameData.franchise]);
+                if (franchise) {
+                    modal.setFormValue('franchises', [franchise.id]);
+                } else if (data.fetchGameData.franchise) {
+                    modal.setFormValue('franchises', [data.fetchGameData.franchise]);
+                }
             }
 
             if (autoFillTypes.includes('criticRating')) {
