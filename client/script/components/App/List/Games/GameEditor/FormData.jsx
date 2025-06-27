@@ -307,15 +307,29 @@ const FormData = (props) => {
             </Form.Row>
 
             {modal.formValues.status === 'completed' && (
-                <Form.Row label="Personal rating" required>
-                    <Form.Control name="rating">
-                        <Form.Control.Slider
-                            min={0}
-                            max={10}
-                            stepSize={0.5}
-                        />
-                    </Form.Control>
-                </Form.Row>
+                <>
+                    <Form.Row label="Personal rating" required>
+                        <Form.Control name="rating">
+                            <Form.Control.Slider
+                                min={0}
+                                max={10}
+                                stepSize={0.5}
+                            />
+                        </Form.Control>
+                    </Form.Row>
+
+                    <Form.Row label="Date of completion">
+                        <Form.Control
+                            name="completedAt"
+                            validators={[{
+                                isValid: ({ value }) => !value || value.match(/^\d{4}-\d{2}-\d{2}$/),
+                                message: 'Date must be in the format YYYY-MM-DD.',
+                            }]}
+                        >
+                            <Form.Control.TextField />
+                        </Form.Control>
+                    </Form.Row>
+                </>
             )}
         </Form>
     );

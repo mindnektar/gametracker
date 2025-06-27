@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import countries from 'helpers/countries';
 import { formatTimeToBeat } from 'helpers/timeToBeat';
 import Flag from 'atoms/Flag';
@@ -72,5 +73,11 @@ export default {
         label: 'Genre',
         icon: 'crossword',
         resolver: (game) => game.genres.map(({ name }) => name),
+    },
+    completedAt: {
+        label: 'Date of completion',
+        icon: 'calendar_today',
+        resolver: (game) => game.completedAt,
+        decorator: (game) => (game.completedAt ? moment(game.completedAt).locale('en').format('MMMM YYYY') : 'N/A'),
     },
 };

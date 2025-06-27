@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import useCreateGameMutation from 'hooks/graphql/mutations/createGame';
 import useUpdateGameMutation from 'hooks/graphql/mutations/updateGame';
 import Modal from 'molecules/Modal';
@@ -38,6 +39,7 @@ const GameEditor = (props) => {
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
             franchises: values.franchises.map((franchise) => formatSelectValue(franchise, props.franchises)),
+            completedAt: values.completedAt,
         });
 
         props.onClose();
@@ -83,6 +85,10 @@ const GameEditor = (props) => {
                     _map: (value) => value.id,
                 },
                 country: null,
+                completedAt: {
+                    _default: null,
+                    _modify: (value) => (value ? moment(value).format('YYYY-MM-DD') : null),
+                },
             }}
             formSubject={props.game}
             isOpen={props.open}

@@ -2,13 +2,20 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SortableContext from 'contexts/sortable';
+import statusMap from 'helpers/statusMap';
 import Icon from 'atoms/Icon';
+import Tooltip from 'atoms/Tooltip';
 import Collapsible from 'molecules/Collapsible';
 import Sortable from 'Sortable';
-import statusMap from 'helpers/statusMap';
 
 const ListItem = (props) => {
     const sortable = useContext(SortableContext);
+
+    const renderStatus = () => (
+        <div className="ui-list-item__status-inner">
+            <Icon type={statusMap[props.status].icon} />
+        </div>
+    );
 
     return (
         <div
@@ -25,8 +32,17 @@ const ListItem = (props) => {
             {...props.dataProps}
         >
             {props.status && (
-                <div className="ui-list-item__status" style={{ color: statusMap[props.status].iconColor }}>
-                    <Icon type={statusMap[props.status].icon} />
+                <div
+                    className="ui-list-item__status"
+                    style={{ color: statusMap[props.status].iconColor }}
+                >
+                    {props.statusTooltip ? (
+                        <Tooltip content={props.statusTooltip}>
+                            {renderStatus()}
+                        </Tooltip>
+                    ) : (
+                        renderStatus()
+                    )}
                 </div>
             )}
 
@@ -61,6 +77,7 @@ const ListItem = (props) => {
 ListItem.defaultProps = {
     dataProps: {},
     status: null,
+    statusTooltip: null,
     actions: null,
 };
 
@@ -71,6 +88,7 @@ ListItem.propTypes = {
     head: PropTypes.node.isRequired,
     toggleExpanded: PropTypes.func.isRequired,
     status: PropTypes.string,
+    statusTooltip: PropTypes.string,
     actions: PropTypes.node,
 };
 

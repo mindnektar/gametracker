@@ -18,6 +18,7 @@ export default `
     timeToBeat
     criticRating
     country
+    completedAt
     system {
         ${SYSTEM}
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Markdown from 'react-markdown';
 import { formatTimeToBeat } from 'helpers/timeToBeat';
 import { isLoggedIn } from 'helpers/auth';
@@ -160,6 +161,11 @@ const Game = (props) => {
             actions={isLoggedIn() ? renderActions() : null}
             head={renderHead()}
             status={props.game.status}
+            statusTooltip={props.game.completedAt ? (
+                `Completed in ${moment(props.game.completedAt).locale('en').format('MMMM YYYY')}`
+            ) : (
+                null
+            )}
             toggleExpanded={expandGame}
             expanded={props.expanded}
             dataProps={{

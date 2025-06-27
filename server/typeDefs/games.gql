@@ -29,6 +29,7 @@ type Game {
     timeToBeat: Float
     criticRating: Int
     country: String
+    completedAt: DateTime
 }
 
 enum GameStatus {
@@ -53,6 +54,7 @@ input CreateGameInput {
     timeToBeat: Float
     criticRating: Int
     country: String
+    completedAt: DateTime
 }
 
 input UpdateGameInput {
@@ -71,6 +73,7 @@ input UpdateGameInput {
     timeToBeat: Float
     criticRating: Int
     country: String
+    completedAt: DateTime
 }
 
 input FetchGameDataInput {
