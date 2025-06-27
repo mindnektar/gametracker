@@ -12,11 +12,7 @@ const mutation = `
 export default () => {
     const [mutate] = useMutation(mutation);
 
-    return (id) => (
-        mutate({
-            input: {
-                id,
-            },
-        })
+    return (input) => (
+        mutate({ input })
     );
 };
