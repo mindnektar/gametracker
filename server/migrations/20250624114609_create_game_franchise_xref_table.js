@@ -7,11 +7,14 @@ module.exports = {
         });
 
         const games = await knex('game').whereNotNull('franchise_id');
-
-        await knex('game_franchise_xref').insert(games.map((game) => ({
+        const inserts = games.map((game) => ({
             game_id: game.id,
             franchise_id: game.franchise_id,
-        })));
+        }));
+
+        if (inserts.length > 0) {
+            await knex('game_franchise_xref').insert(inserts);
+        }
 
         await knex.schema.alterTable('game', (table) => {
             table.dropColumn('franchise_id');
