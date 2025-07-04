@@ -39,7 +39,7 @@ const GameEditor = (props) => {
             compilation: formatSelectValue(values.compilation, props.compilations, 'title'),
             genres: values.genres.map((genre) => formatSelectValue(genre, props.genres)),
             franchises: values.franchises.map((franchise) => formatSelectValue(franchise, props.franchises)),
-            completedAt: values.completedAt,
+            completedAt: values.status === 'completed' ? values.completedAt : null,
         });
 
         props.onClose();
@@ -86,7 +86,7 @@ const GameEditor = (props) => {
                 },
                 country: null,
                 completedAt: {
-                    _default: null,
+                    _default: moment(props.game?.completedAt || undefined).startOf('month').format('YYYY-MM-DD'),
                     _modify: (value) => (value ? moment(value).format('YYYY-MM-DD') : null),
                 },
             }}

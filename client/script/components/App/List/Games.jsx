@@ -100,7 +100,15 @@ const Games = (props) => {
                     averageCriticRating,
                 };
             })
-            .sort(sortMap[sortBy].sort);
+            .sort((a, b) => {
+                const result = sortMap[sortBy].sort(a, b);
+
+                if (result === 0) {
+                    return sortMap.name.sort(a, b);
+                }
+
+                return result;
+            });
 
         if (sortDirection === 'desc') {
             sortedGroups.reverse();
