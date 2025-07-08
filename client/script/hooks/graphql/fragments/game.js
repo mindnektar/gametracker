@@ -19,6 +19,14 @@ export default `
     criticRating
     country
     completedAt
+    atmosphere
+    mood
+    pacing
+    complexity
+    playerAgency
+    narrativeStructure
+    challengeFocus
+    challengeIntensity
     system {
         ${SYSTEM}
     }

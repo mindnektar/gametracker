@@ -68,12 +68,15 @@ const Group = (props) => {
                     expanded={props.expandedGame === game.id}
                     openGameEditor={props.openGameEditor}
                     openDlcEditor={props.openDlcEditor}
+                    openDescriptorEditor={props.openDescriptorEditor}
                     genreFilter={props.genreFilter}
                     groupBy={props.groupBy}
                     key={game.id}
                     skipGame={props.skipGame}
                     statusFilter={props.statusFilter}
                     toggleGenreFilter={props.toggleGenreFilter}
+                    toggleDescriptorFilter={props.toggleDescriptorFilter}
+                    descriptorFilter={props.descriptorFilter}
                     game={game}
                 />
             ))}
@@ -92,11 +95,14 @@ Group.propTypes = {
     expandedGame: PropTypes.string,
     openGameEditor: PropTypes.func.isRequired,
     openDlcEditor: PropTypes.func.isRequired,
+    openDescriptorEditor: PropTypes.func.isRequired,
     genreFilter: PropTypes.array.isRequired,
     groupBy: PropTypes.string.isRequired,
     skipGame: PropTypes.func.isRequired,
     statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
+    toggleDescriptorFilter: PropTypes.func.isRequired,
+    descriptorFilter: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
 };
 

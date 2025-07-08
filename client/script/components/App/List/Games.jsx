@@ -18,6 +18,7 @@ import Collapsible from 'molecules/Collapsible';
 import Group from './Games/Group';
 import GameEditor from './Games/GameEditor';
 import DlcEditor from './Games/DlcEditor';
+import DescriptorEditor from './Games/DescriptorEditor';
 
 const Games = (props) => {
     const skipGame = useSkipGame();
@@ -29,13 +30,20 @@ const Games = (props) => {
     const [statusFilter, setStatusFilter] = useLocalStorage('statusFilter', 'completed');
     const [expandedGame, setExpandedGame] = useState(null);
     const [genreFilter, setGenreFilter] = useLocalStorage('genreFilter', []);
+    const [descriptorFilter, setDescriptorFilter] = useLocalStorage('descriptorFilter', {});
     const [gameEditorState, setGameEditorState] = useState({ id: null, isOpen: false });
     const [dlcEditorState, setDlcEditorState] = useState({ id: null, isOpen: false });
+    const [descriptorEditorState, setDescriptorEditorState] = useState({ id: null, isOpen: false });
     const [isGraphVisible, showGraph, hideGraph] = useToggle(false);
 
     const getGroups = () => {
         const groups = props.games.reduce((result, current) => {
-            const name = groupMap[groupBy].resolver(current);
+            const name = groupMap[groupBy]?.resolver(current);
+
+            if (name === undefined) {
+                return result;
+            }
+
             const names = Array.isArray(name) ? name : [name];
 
             if (current.status !== statusFilter && statusFilter !== 'all') {
@@ -43,6 +51,10 @@ const Games = (props) => {
             }
 
             if (genreFilter.length > 0 && !genreFilter.every((genreId) => current.genres.some(({ id }) => id === genreId))) {
+                return result;
+            }
+
+            if (Object.entries(descriptorFilter).some(([key, value]) => current[key] !== value)) {
                 return result;
             }
 
@@ -130,6 +142,18 @@ const Games = (props) => {
         setGenreFilter(value);
     };
 
+    const toggleDescriptorFilter = (type, value) => {
+        const filter = { ...descriptorFilter };
+
+        if (filter[type]) {
+            delete filter[type];
+        } else {
+            filter[type] = value;
+        }
+
+        setDescriptorFilter(filter);
+    };
+
     const onSkipGame = (id) => {
         skipGame(id);
         pickRandom();
@@ -167,6 +191,14 @@ const Games = (props) => {
         setDlcEditorState((previous) => ({ ...previous, isOpen: false }));
     };
 
+    const openDescriptorEditor = (id) => {
+        setDescriptorEditorState({ id, isOpen: true });
+    };
+
+    const closeDescriptorEditor = () => {
+        setDescriptorEditorState((previous) => ({ ...previous, isOpen: false }));
+    };
+
     return (
         <>
             <OptionBar>
@@ -180,6 +212,7 @@ const Games = (props) => {
                             }
                             onChange={setGroupBy}
                             value={groupBy}
+                            defaultValue="system"
                         />
                     </OptionBar.Item>
 
@@ -206,6 +239,7 @@ const Games = (props) => {
                             ]}
                             onChange={setSortDirection}
                             value={sortDirection}
+                            defaultValue="asc"
                         />
                     </OptionBar.Item>
                 </OptionBar.Group>
@@ -222,6 +256,7 @@ const Games = (props) => {
                             ]}
                             onChange={setStatusFilter}
                             value={statusFilter}
+                            defaultValue="completed"
                         />
                     </OptionBar.Item>
 
@@ -297,9 +332,12 @@ const Games = (props) => {
                         expandedGame={expandedGame}
                         openGameEditor={openGameEditor}
                         openDlcEditor={openDlcEditor}
+                        openDescriptorEditor={openDescriptorEditor}
                         genreFilter={genreFilter}
+                        descriptorFilter={descriptorFilter}
                         groupBy={groupBy}
                         toggleGenreFilter={toggleGenreFilter}
+                        toggleDescriptorFilter={toggleDescriptorFilter}
                         skipGame={onSkipGame}
                         statusFilter={statusFilter}
                         group={group}
@@ -328,6 +366,12 @@ const Games = (props) => {
                 }
                 gameId={dlcEditorState.gameId}
                 onClose={closeDlcEditor}
+            />
+
+            <DescriptorEditor
+                open={descriptorEditorState.isOpen}
+                game={props.games.find(({ id }) => id === descriptorEditorState.id)}
+                onClose={closeDescriptorEditor}
             />
         </>
     );

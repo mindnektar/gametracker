@@ -89,6 +89,30 @@
         height: 225px
         width: 300px
 
+    &__descriptors
+        display: flex
+        flex-wrap: wrap
+        gap: 8px
+        justify-content: space-between
+        margin-bottom: 12px
+
+    &__descriptor
+        cursor: pointer
+        flex-grow: 1
+        transition: opacity 200ms
+
+        &--subdued
+            opacity: .3
+
+    &__descriptor-type
+        border-bottom: 1px solid #444444
+        display: inline
+        font-size: .8em
+        text-transform: uppercase
+
+    &__descriptor-value
+        font-weight: 700
+
     &__description
         flex-grow: 1
         line-height: 1.3em

@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import { formatTimeToBeat } from 'helpers/timeToBeat';
 import { isLoggedIn } from 'helpers/auth';
+import descriptors from 'helpers/descriptors';
 import IconButton from 'atoms/IconButton';
 import Flag from 'atoms/Flag';
 import Genre from 'atoms/Genre';
 import Rating from 'atoms/Rating';
+import Tooltip from 'atoms/Tooltip';
 import PopupDialog from 'molecules/PopupDialog';
 import ListItem from 'molecules/ListItem';
 
@@ -18,6 +21,10 @@ const Game = (props) => {
 
     const editGame = () => {
         props.openGameEditor(props.game.id);
+    };
+
+    const editDescriptors = () => {
+        props.openDescriptorEditor(props.game.id);
     };
 
     const skipGame = () => {
@@ -43,6 +50,10 @@ const Game = (props) => {
     const toggleGenreFilterHandler = (genreId) => (event) => {
         event.stopPropagation();
         props.toggleGenreFilter(genreId);
+    };
+
+    const toggleDescriptorFilterHandler = (type, value) => () => {
+        props.toggleDescriptorFilter(type, value);
     };
 
     const renderHead = () => (
@@ -132,6 +143,10 @@ const Game = (props) => {
                 label: 'Edit game',
                 onClick: editGame,
             }, {
+                icon: 'label',
+                label: 'Edit descriptors',
+                onClick: editDescriptors,
+            }, {
                 icon: 'double_arrow',
                 label: 'Skip game',
                 onClick: skipGame,
@@ -186,6 +201,40 @@ const Game = (props) => {
                     )}
 
                     <div className="game__description">
+                        {props.game.atmosphere && (
+                            <>
+                                <h2>Descriptors</h2>
+
+                                <div className="game__descriptors">
+                                    {Object.entries(descriptors).map(([key, descriptor]) => (
+                                        <div
+                                            key={key}
+                                            className={classnames(
+                                                'game__descriptor',
+                                                {
+                                                    'game__descriptor--subdued': (
+                                                        Object.keys(props.descriptorFilter).length > 0
+                                                        && props.descriptorFilter[key] === undefined
+                                                    ),
+                                                },
+                                            )}
+                                            onClick={toggleDescriptorFilterHandler(key, props.game[key])}
+                                        >
+                                            <Tooltip content={descriptor.values[props.game[key]].description}>
+                                                <div className="game__descriptor-type">
+                                                    {descriptor.label}
+                                                </div>
+
+                                                <div className="game__descriptor-value">
+                                                    {descriptor.values[props.game[key]].label}
+                                                </div>
+                                            </Tooltip>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+
                         <Markdown>{props.game.description}</Markdown>
 
                         {props.game.dlcs.length > 0 && (
@@ -259,11 +308,14 @@ Game.propTypes = {
     expandGame: PropTypes.func.isRequired,
     openGameEditor: PropTypes.func.isRequired,
     openDlcEditor: PropTypes.func.isRequired,
+    openDescriptorEditor: PropTypes.func.isRequired,
     skipGame: PropTypes.func.isRequired,
     genreFilter: PropTypes.array.isRequired,
+    descriptorFilter: PropTypes.object.isRequired,
     groupBy: PropTypes.string.isRequired,
     statusFilter: PropTypes.string.isRequired,
     toggleGenreFilter: PropTypes.func.isRequired,
+    toggleDescriptorFilter: PropTypes.func.isRequired,
 };
 
 export default Game;

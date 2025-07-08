@@ -2,8 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import countries from 'helpers/countries';
 import { formatTimeToBeat } from 'helpers/timeToBeat';
+import descriptors from 'helpers/descriptors';
 import Flag from 'atoms/Flag';
 import Rating from 'atoms/Rating';
+import Tooltip from 'atoms/Tooltip';
 
 export default {
     none: {
@@ -74,10 +76,24 @@ export default {
         icon: 'crossword',
         resolver: (game) => game.genres.map(({ name }) => name),
     },
-    completedAt: {
-        label: 'Date of completion',
+    monthOfCompletion: {
+        label: 'Month of completion',
         icon: 'calendar_today',
-        resolver: (game) => game.completedAt,
-        decorator: (game) => (game.completedAt ? moment(game.completedAt).locale('en').format('MMMM YYYY') : 'N/A'),
+        resolver: (game) => (game.completedAt ? moment(game.completedAt).locale('en').format('MMMM YYYY') : 'N/A'),
     },
+    yearOfCompletion: {
+        label: 'Year of completion',
+        icon: 'calendar_today',
+        resolver: (game) => (game.completedAt ? moment(game.completedAt).locale('en').year() : 'N/A'),
+    },
+    ...Object.fromEntries(Object.entries(descriptors).map(([key, descriptor]) => [key, {
+        label: descriptor.label,
+        icon: descriptor.icon,
+        resolver: (game) => game[key] ?? null,
+        decorator: (game) => (game[key] !== null ? (
+            <Tooltip content={descriptor.values[game[key]].description}>
+                {descriptor.values[game[key]].label}
+            </Tooltip>
+        ) : 'N/A'),
+    }])),
 };

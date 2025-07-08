@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import bigDecimal from 'js-big-decimal';
 import Draggable from 'Draggable';
+import Tooltip from 'atoms/Tooltip';
 
 const Slider = (props) => {
     const sliderRef = useRef();
@@ -52,7 +53,13 @@ const Slider = (props) => {
                     <div className="ui-slider__point" />
 
                     <div className="ui-slider__value">
-                        {props.value}
+                        {props.valueMap ? (
+                            <Tooltip content={props.valueMap[props.value].description}>
+                                {props.valueMap[props.value].label}
+                            </Tooltip>
+                        ) : (
+                            props.value
+                        )}
                     </div>
                 </div>
             </Draggable>
@@ -60,10 +67,16 @@ const Slider = (props) => {
     );
 };
 
+Slider.defaultProps = {
+    stepSize: 1,
+    valueMap: null,
+};
+
 Slider.propTypes = {
+    valueMap: PropTypes.object,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
-    stepSize: PropTypes.number.isRequired,
+    stepSize: PropTypes.number,
     value: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
 };

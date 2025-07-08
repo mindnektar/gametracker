@@ -6,6 +6,7 @@ type Mutation {
     createGame(input: CreateGameInput!): Game!
     updateGame(input: UpdateGameInput!): Game!
     fetchGameData(input: FetchGameDataInput!): FetchGameDataResult!
+    fetchDescriptorData(input: FetchDescriptorDataInput!): FetchDescriptorDataResult!
     skipGame(id: ID!): Game!
     deleteGame(id: ID!): Game!
 }
@@ -30,6 +31,14 @@ type Game {
     criticRating: Int
     country: String
     completedAt: DateTime
+    atmosphere: Int
+    mood: Int
+    pacing: Int
+    complexity: Int
+    playerAgency: Int
+    narrativeStructure: Int
+    challengeFocus: Int
+    challengeIntensity: Int
 }
 
 enum GameStatus {
@@ -55,6 +64,14 @@ input CreateGameInput {
     criticRating: Int
     country: String
     completedAt: DateTime
+    atmosphere: Int
+    mood: Int
+    pacing: Int
+    complexity: Int
+    playerAgency: Int
+    narrativeStructure: Int
+    challengeFocus: Int
+    challengeIntensity: Int
 }
 
 input UpdateGameInput {
@@ -74,6 +91,14 @@ input UpdateGameInput {
     criticRating: Int
     country: String
     completedAt: DateTime
+    atmosphere: Int
+    mood: Int
+    pacing: Int
+    complexity: Int
+    playerAgency: Int
+    narrativeStructure: Int
+    challengeFocus: Int
+    challengeIntensity: Int
 }
 
 input FetchGameDataInput {
@@ -94,4 +119,19 @@ type FetchGameDataResult {
     franchise: String
     timeToBeat: Float
     criticRating: Int
+}
+
+input FetchDescriptorDataInput {
+    gameId: ID!
+}
+
+type FetchDescriptorDataResult {
+    atmosphere: Int
+    mood: Int
+    pacing: Int
+    complexity: Int
+    playerAgency: Int
+    narrativeStructure: Int
+    challengeFocus: Int
+    challengeIntensity: Int
 }

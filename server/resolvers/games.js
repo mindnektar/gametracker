@@ -2,7 +2,7 @@ import transaction from './helpers/transaction';
 import fetchYouTubeData from '../services/youTube';
 import fetchHowLongToBeatData from '../services/howlongtobeat';
 import fetchMetacriticData from '../services/metacritic';
-import fetchAiData from '../services/ai';
+import { fetchGameInfo, fetchDescriptorData } from '../services/ai';
 import Game from '../models/Game';
 
 export default {
@@ -38,7 +38,7 @@ export default {
         ),
         fetchGameData: async (parent, { input }) => {
             const result = await Promise.all([
-                fetchAiData(input),
+                fetchGameInfo(input),
                 fetchYouTubeData(input),
                 fetchHowLongToBeatData(input),
                 fetchMetacriticData(input),
@@ -51,6 +51,11 @@ export default {
                 ...hltbData,
                 ...metacriticData,
             };
+        },
+        fetchDescriptorData: async (parent, { input }) => {
+            const game = await Game.query().findById(input.gameId).withGraphFetched('system');
+
+            return fetchDescriptorData({ ...input, game });
         },
         skipGame: (parent, { id }, context, info) => (
             transaction((trx) => (
