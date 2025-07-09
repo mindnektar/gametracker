@@ -201,7 +201,7 @@ const Game = (props) => {
                     )}
 
                     <div className="game__description">
-                        {props.game.atmosphere && (
+                        {props.game.atmosphere !== null && (
                             <>
                                 <h2>Descriptors</h2>
 
