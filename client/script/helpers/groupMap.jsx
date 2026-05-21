@@ -80,11 +80,13 @@ export default {
         label: 'Month of completion',
         icon: 'calendar_today',
         resolver: (game) => (game.completedAt ? moment(game.completedAt).locale('en').format('MMMM YYYY') : 'N/A'),
+        order: (game) => (game.completedAt ? moment(game.completedAt).startOf('month').valueOf() : 0),
     },
     yearOfCompletion: {
         label: 'Year of completion',
         icon: 'calendar_today',
         resolver: (game) => (game.completedAt ? moment(game.completedAt).locale('en').year() : 'N/A'),
+        order: (game) => (game.completedAt ? moment(game.completedAt).startOf('year').valueOf() : 0),
     },
     ...Object.fromEntries(Object.entries(descriptors).map(([key, descriptor]) => [key, {
         label: descriptor.label,

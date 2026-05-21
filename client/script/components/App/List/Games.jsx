@@ -36,6 +36,22 @@ const Games = (props) => {
     const [descriptorEditorState, setDescriptorEditorState] = useState({ id: null, isOpen: false });
     const [isGraphVisible, showGraph, hideGraph] = useToggle(false);
 
+    const getGroupOrder = (current, existingGroup) => {
+        if (existingGroup) {
+            return existingGroup.order;
+        }
+
+        if (groupBy === 'system') {
+            return props.systems.find(({ id }) => id === current.system.id).order;
+        }
+
+        if (groupMap[groupBy].order) {
+            return groupMap[groupBy].order(current);
+        }
+
+        return undefined;
+    };
+
     const getGroups = () => {
         const groups = props.games.reduce((result, current) => {
             const name = groupMap[groupBy]?.resolver(current);
@@ -63,9 +79,7 @@ const Games = (props) => {
                 [value]: {
                     ...(innerResult[value] || {}),
                     name: value,
-                    order: groupBy === 'system' && !innerResult[value]
-                        ? props.systems.find(({ id }) => id === current.system.id).order
-                        : innerResult[value]?.order,
+                    order: getGroupOrder(current, innerResult[value]),
                     displayValue: groupMap[groupBy].decorator?.(current, value) || value,
                     subLabel: groupMap[groupBy].subLabel?.(current),
                     games: [

@@ -4,7 +4,7 @@ export default {
     priority: {
         label: 'Priority',
         icon: 'leaderboard',
-        usedBy: ['system'],
+        usedBy: ['system', 'monthOfCompletion', 'yearOfCompletion'],
         sort: (a, b) => a.order - b.order,
     },
     name: {
