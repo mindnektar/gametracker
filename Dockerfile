@@ -1,4 +1,4 @@
-FROM node:20.18.1-alpine as webpack
+FROM node:22.13.1-alpine as webpack
 
 LABEL maintainer="Martin Denk <ausdenk@gmail.com>"
 
@@ -20,13 +20,15 @@ RUN chown -R node:node /app
 WORKDIR /app/client
 RUN chown -R node:node /app/client
 COPY --chown=node:node client/package.json /app/client/package.json
-RUN yarn install
+COPY --chown=node:node client/yarn.lock /app/client/yarn.lock
+RUN yarn install --frozen-lockfile
 COPY --chown=node:node client .
 RUN node_modules/.bin/webpack --config webpack.config.prod.js
 WORKDIR /app/server
 RUN chown -R node:node /app/server
 COPY --chown=node:node server/package.json /app/server/package.json
-RUN yarn install
+COPY --chown=node:node server/yarn.lock /app/server/yarn.lock
+RUN yarn install --frozen-lockfile
 COPY --chown=node:node server .
 
 EXPOSE 4000
