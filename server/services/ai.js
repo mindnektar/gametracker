@@ -5,11 +5,28 @@ import genres from './genres.json';
 
 const ai = new GoogleGenAI({ apiKey: config.ai.apiKey });
 
+// Ground factual lookups in Google Search results so the model doesn't hallucinate
+// details for games that are too new or too obscure for its training data.
+const searchGrounding = { tools: [{ googleSearch: {} }] };
+
+// The model is instructed to return null for anything it cannot verify, so both the
+// whole document and individual sections may be missing.
+const buildDescription = (result) => {
+    const sections = [
+        ['Story & Theme', result.story],
+        ['Gameplay', result.gameplay],
+        ['History', result.history],
+    ].filter(([, text]) => text);
+
+    return sections.length > 0 ? sections.map(([heading, text]) => `## ${heading}\n\n${text}`).join('\n\n') : null;
+};
+
 const generateGameInfo = async (input, model) => {
     try {
         if (input.type === 'dlc') {
             const response = await ai.models.generateContent({
                 model,
+                config: searchGrounding,
                 contents: `
                     Please provide a JSON document describing the DLC "${input.title}" for the ${input.game.system.name} game
                     "${input.game.title}" with the following structure:
@@ -19,30 +36,27 @@ const generateGameInfo = async (input, model) => {
                         to the main game.
                     "history": interesting background information about how the DLC was created, about 100 words.
                     "release": the year the DLC was first released in any region.
+
+                    Use Google Search to verify factual details instead of relying on memory, especially for recent or lesser-known
+                    DLCs. If you are unable to find accurate information, please just return null and do not invent any details.
                 `,
             });
 
             const result = JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
-            const description = `## Story & Theme
 
-${result.story}
-
-## Gameplay
-
-${result.gameplay}
-
-## History
-
-${result.history}`;
+            if (!result) {
+                return {};
+            }
 
             return {
-                description,
+                description: buildDescription(result),
                 release: result.release,
             };
         }
 
         const response = await ai.models.generateContent({
             model,
+            config: searchGrounding,
             contents: `
                 Please provide a JSON document describing the ${input.system} game "${input.title}"
                 ${input.compilation ? ` from the compilation "${input.compilation}"` : ''} with the following structure:
@@ -68,27 +82,25 @@ ${result.history}`;
                 Additional instructions or information:
                 - If the specified system is not the one the game was originally developed for, base your information on the system that was
                     specified (such as "Okami" on the Wii, which was developed by Ready at Dawn rather than Clover Studios).
-                - Please only provide factual details that you can confirm. If you are unable to find accurate information, please
-                    just return null and do not invent or extrapolate any details.
+                - Use Google Search to verify every factual detail (developer, country, release year, franchise, genres) instead of
+                    relying on memory, especially for recent or lesser-known games. Prefer official sources such as the game's Steam
+                    page, the developer's or publisher's website and platform store pages, as well as reputable databases such as
+                    Wikipedia and MobyGames.
+                - Please only provide factual details that you can confirm. If you are unable to find accurate information for a
+                    field, return null for that field and do not invent or extrapolate any details. If you cannot find the game at
+                    all, return null instead of the JSON document.
                 ${input.aiInstructions ? `- ${input.aiInstructions}` : ''}
             `,
         });
 
         const result = JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
-        const description = `## Story & Theme
 
-${result.story}
-
-## Gameplay
-
-${result.gameplay}
-
-## History
-
-${result.history}`;
+        if (!result) {
+            return {};
+        }
 
         const data = {
-            description,
+            description: buildDescription(result),
             release: result.release,
             developer: developerMap[result.developer] || result.developer,
             franchise: result.franchise,
@@ -100,6 +112,36 @@ ${result.history}`;
             ...acc,
             [type]: data[type],
         }), {});
+    } catch (error) {
+        if (error.message.includes('The model is overloaded')) {
+            return null;
+        }
+
+        throw error;
+    }
+};
+
+const generateCriticRating = async (input, model) => {
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            config: searchGrounding,
+            contents: `
+                Please use Google Search to find a critic rating for the ${input.system} game "${input.title}" and provide a JSON
+                document with the following structure:
+                "rating": the rating as an integer between 0 and 100.
+                "source": the name of the source the rating was taken from.
+
+                Metacritic has neither a critic nor a user score for this game on this system, so consult other reputable sources
+                such as OpenCritic, aggregated press reviews or the reception section of the game's Wikipedia article. Prefer
+                aggregate scores over individual reviews, but a score from a single reputable publication is acceptable as a last
+                resort. If a score is only available for a different system, you may use it. Convert ratings on other scales (such
+                as 4.5/5 or 8/10) to a 0-100 scale. If you cannot find any rating at all, return null instead of the JSON document.
+                Do not invent or estimate a rating yourself.
+            `,
+        });
+
+        return JSON.parse(response.text.replace(/.*```(json)?(.*)```.*$/s, '$2').trim());
     } catch (error) {
         if (error.message.includes('The model is overloaded')) {
             return null;
@@ -358,7 +400,7 @@ const request = async (method, input) => {
     }
 
     let response;
-    const models = ['gemini-2.0-flash', 'gemini-2.0-flash-lite'];
+    const models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
 
     while (!response && models.length > 0) {
         response = await method(input, models.shift());
@@ -377,4 +419,8 @@ export const fetchGameInfo = async (input) => {
 
 export const fetchDescriptorData = async (input) => (
     request(generateDescriptorData, input)
+);
+
+export const fetchCriticRating = async (input) => (
+    request(generateCriticRating, input)
 );

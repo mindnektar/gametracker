@@ -1,6 +1,13 @@
 import axios from 'axios';
 
+const baseUrl = 'https://howlongtobeat.com';
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
+const headers = {
+    'User-Agent': userAgent,
+    Referer: `${baseUrl}/`,
+    Origin: baseUrl,
+};
 
 const systemMap = {
     GameCube: 'Nintendo GameCube',
@@ -14,7 +21,39 @@ const systemMap = {
     Android: 'Mobile',
 };
 
-const request = async (title, type, system = '') => {
+// HLTB renames its search endpoint every so often (/api/search -> /api/seek/<hash> -> /api/bleed).
+// If the cached name stops working, discover the current one from the site's JS bundles.
+let apiName = 'bleed';
+
+const discoverApiName = async () => {
+    const { data: html } = await axios.get(baseUrl, { headers });
+    const scripts = [...html.matchAll(/src="(\/_next\/static\/[^"]+\.js)"/g)].map(([, src]) => src);
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const src of scripts) {
+        const { data: script } = await axios.get(`${baseUrl}${src}`, { headers });
+        const match = script.match(/fetch\(\s*[`"']\/api\/([a-zA-Z0-9_-]+)\/init/);
+
+        if (match) {
+            return match[1];
+        }
+    }
+
+    throw new Error('Could not discover HowLongToBeat API endpoint');
+};
+
+// The search API requires a short-lived token bound to IP and user agent,
+// issued by /api/<name>/init and sent back via headers and body.
+const fetchAuth = async () => {
+    const { data } = await axios.get(`${baseUrl}/api/${apiName}/init`, {
+        params: { t: Date.now() },
+        headers,
+    });
+
+    return data;
+};
+
+const search = async (title, type, system = '') => {
     const searchData = {
         searchType: 'games',
         searchTerms: title.split(' ').map((term) => term.replace(/[^a-zA-Z0-9-']/g, '')).filter(Boolean),
@@ -44,18 +83,40 @@ const request = async (title, type, system = '') => {
         },
         useCache: true,
     };
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': userAgent,
-            Referer: 'https://howlongtobeat.com/',
-            Origin: 'https://howlongtobeat.com',
-        },
-    };
 
-    const { data } = await axios.post('https://howlongtobeat.com/api/seek/d4b2e330db04dbf3', searchData, config);
+    const { token, hpKey, hpVal } = await fetchAuth();
+
+    const body = { ...searchData };
+
+    if (hpKey) {
+        body[hpKey] = hpVal;
+    }
+
+    const { data } = await axios.post(`${baseUrl}/api/${apiName}`, body, {
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json',
+            'x-auth-token': token,
+            'x-hp-key': hpKey,
+            'x-hp-val': hpVal,
+        },
+    });
 
     return data.data[0];
+};
+
+const request = async (title, type, system = '') => {
+    try {
+        return await search(title, type, system);
+    } catch (error) {
+        if (error.response && [401, 403, 404].includes(error.response.status)) {
+            apiName = await discoverApiName();
+
+            return search(title, type, system);
+        }
+
+        throw error;
+    }
 };
 
 export default async (input) => {
