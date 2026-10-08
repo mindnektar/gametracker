@@ -1,111 +1,20 @@
-import { createYoga } from 'graphql-yoga';
-import { parse } from 'graphql';
-import schema from './schema';
-import { backup } from './backup';
-import { bumpDataVersion, cacheKey } from './cache';
+export { Api } from './api';
 
-const timingSafeEqual = (a, b) => {
-    const encoder = new TextEncoder();
-    const left = encoder.encode(a);
-    const right = encoder.encode(b);
-
-    return left.byteLength === right.byteLength && crypto.subtle.timingSafeEqual(left, right);
-};
-
-const isAdmin = (request, env) => {
-    const key = request.headers.get('X-Auth-Key');
-
-    return !!env.ADMIN_KEY && !!key && timingSafeEqual(key, env.ADMIN_KEY);
-};
-
-const yoga = createYoga({
-    schema,
-    graphqlEndpoint: '/api',
-    // Error messages were passed through before as well, the client shows some of them
-    maskedErrors: false,
-    graphiql: false,
-    landingPage: false,
-    context: ({ request, env }) => ({ db: env.DB, env, isAdmin: isAdmin(request, env) }),
-});
-
-// Which kind of GraphQL request is this? Anything that isn't recognizably a JSON request with
-// only queries counts as a change (Yoga also accepts other formats), so nothing can change the
-// data without invalidating the cached responses.
-const classify = (body) => {
-    try {
-        const payload = JSON.parse(body);
-        const operations = parse(payload.query).definitions.filter(({ kind }) => kind === 'OperationDefinition');
-        const hasVariables = payload.variables && Object.keys(payload.variables).length > 0;
-
-        if (operations.length === 0 || operations.some(({ operation }) => operation !== 'query')) {
-            return { kind: 'change' };
-        }
-
-        return { kind: operations.length === 1 && !hasVariables ? 'cacheable' : 'query', query: payload.query };
-    } catch (error) {
-        return { kind: 'change' };
-    }
-};
-
-const handleApi = async (request, env, ctx) => {
-    // Yoga only runs queries for GET requests, never mutations
-    if (request.method !== 'POST') {
-        return yoga.fetch(request, { env, ctx });
-    }
-
-    const body = await request.text();
-    const forward = () => yoga.fetch(new Request(request, { body }), { env, ctx });
-    const { kind, query } = classify(body);
-
-    if (kind === 'change') {
-        const response = await forward();
-
-        // Only the admin can change anything. Done before responding, so the next page load can't
-        // get a response from before the change.
-        if (isAdmin(request, env)) {
-            await bumpDataVersion(env);
-        }
-
-        return response;
-    }
-
-    if (kind !== 'cacheable') {
-        return forward();
-    }
-
-    const key = await cacheKey(env, query);
-    const cached = await env.STORAGE.get(key);
-
-    if (cached) {
-        return new Response(cached.body, {
-            headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Cache': 'hit' },
-        });
-    }
-
-    const response = await forward();
-    const text = await response.text();
-
-    // GraphQL results put errors first, so this checks for a clean result without parsing it
-    if (response.ok && text.startsWith('{"data"')) {
-        ctx.waitUntil(env.STORAGE.put(key, text, { httpMetadata: { contentType: 'application/json' } }));
-    }
-
-    return new Response(text, { status: response.status, headers: response.headers });
-};
+const api = (env) => env.API.get(env.API.idFromName('api'));
 
 // Everything except /api is served from client/public by the assets binding (see wrangler.jsonc)
 export default {
-    async fetch(request, env, ctx) {
+    async fetch(request, env) {
         const url = new URL(request.url);
 
         if (url.pathname === '/api' || url.pathname === '/api/') {
-            return handleApi(url.pathname === '/api/' ? new Request(new URL('/api', url), request) : request, env, ctx);
+            return api(env).fetch(url.pathname === '/api/' ? new Request(new URL('/api', url), request) : request);
         }
 
         return new Response('Not found', { status: 404 });
     },
 
     async scheduled(controller, env, ctx) {
-        ctx.waitUntil(backup(env));
+        ctx.waitUntil(api(env).backup());
     },
 };

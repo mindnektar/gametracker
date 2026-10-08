@@ -1,4 +1,4 @@
-// Answering the list query takes far more CPU than the free plan's 10 ms per request (there are
+// Answering the list query takes about 200 ms of CPU time and reads thousands of rows (there are
 // over a thousand games with long descriptions). So the response is kept in R2 and served from
 // there as long as the data hasn't changed: every mutation bumps data_version, and responses are
 // stored under the version they were computed from. And under the deployed version of this code,
