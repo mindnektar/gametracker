@@ -1,0 +1,5 @@
+input RelateInput {
+    id: ID!
+}
+
+scalar DateTime

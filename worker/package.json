@@ -1,0 +1,22 @@
+{
+  "name": "gametracker-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "yarn --cwd ../client install --frozen-lockfile && yarn install --frozen-lockfile",
+    "build": "yarn --cwd ../client build",
+    "dev": "wrangler dev",
+    "test": "node --test test/*.test.js",
+    "deploy": "yarn build && wrangler deploy",
+    "backup": "node scripts/backup.js"
+  },
+  "dependencies": {
+    "fastest-levenshtein": "^1.0.16",
+    "graphql": "^16.14.2",
+    "graphql-yoga": "^5.24.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.148.0"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}

@@ -13,6 +13,10 @@ module.exports = merge(require('./webpack.config.common.js'), {
         historyApiFallback: {
             index: 'index.html',
         },
+        // The API is served by `wrangler dev` in ../worker
+        proxy: {
+            '/api': 'http://localhost:8787',
+        },
     },
     output: {
         publicPath: '/',
@@ -26,7 +30,7 @@ module.exports = merge(require('./webpack.config.common.js'), {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development'),
-            'process.env.API_HTTP_URL': JSON.stringify('http://localhost:5930/api'),
+            'process.env.API_HTTP_URL': JSON.stringify('/api'),
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],

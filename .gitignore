@@ -7,3 +7,6 @@ package-lock.json
 client/public/index.html
 client/public/app.*
 client/public/script
+.wrangler
+.dev.vars
+/backups/

@@ -1,0 +1,55 @@
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "gametracker",
+    "main": "src/index.js",
+    "compatibility_date": "2026-09-30",
+    "upload_source_maps": true,
+    "observability": {
+        "enabled": true
+    },
+    "routes": [
+        {
+            "pattern": "gametracker.cardboardfrenzy.com",
+            "custom_domain": true
+        }
+    ],
+    "workers_dev": false,
+    "preview_urls": false,
+    // The client is built into client/public (`yarn build` in client/). Requests for files that
+    // exist there never reach the worker; other paths get index.html.
+    "assets": {
+        "directory": "../client/public",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api", "/api/*"]
+    },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "gametracker",
+            "database_id": "0e5aaf75-25e2-4f83-8fc4-78e5a9ed225b",
+            "migrations_dir": "migrations"
+        }
+    ],
+    // Daily backups (backups/<date>.json) and cached API responses (cache/...)
+    "r2_buckets": [
+        {
+            "binding": "STORAGE",
+            "bucket_name": "gametracker"
+        }
+    ],
+    // The id of the deployed version, part of the cache keys (see src/cache.js)
+    "version_metadata": {
+        "binding": "CF_VERSION_METADATA"
+    },
+    "triggers": {
+        // Daily backup at 03:00 UTC
+        "crons": ["0 3 * * *"]
+    },
+    "rules": [
+        {
+            "type": "Text",
+            "globs": ["**/*.graphql"],
+            "fallthrough": true
+        }
+    ]
+}

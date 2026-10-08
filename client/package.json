@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "node_modules/.bin/webpack serve -c webpack.config.dev.js",
+    "prebuild": "rm -rf public/script public/index.html",
     "build": "node_modules/.bin/webpack -c webpack.config.prod.js"
   },
   "babel": {
