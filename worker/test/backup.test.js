@@ -72,6 +72,16 @@ it('backs up every table to R2 every day, and the backup can be restored', async
 
     assert.ok(key, `No backup written:\n${worker.output()}`);
 
+    // Another run on the same day leaves it alone
+    await fetch(`${worker.baseUrl}/cdn-cgi/local/scheduled?cron=${encodeURIComponent('0 3 * * *')}`);
+
+    for (let attempt = 0; attempt < 100 && !worker.output().includes(`Backup ${key} exists already`); attempt += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(100);
+    }
+
+    assert.match(worker.output(), new RegExp(`Backup ${key} exists already`));
+
     const file = join(dir, 'backup.json');
 
     wrangler(['r2', 'object', 'get', `gametracker/${key}`, '--local', '--persist-to', worker.state, '--file', file]);

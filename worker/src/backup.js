@@ -7,8 +7,18 @@ const KEEP_DAYS = 30;
 
 // Writes every row of every table to R2 as backups/<date>.json, in the same format the migration
 // from Postgres used ({ tables: { game: [{ id, title, ... }], ... } }), so scripts/import.js can
-// restore it. Runs daily (see triggers in wrangler.jsonc) and keeps the last 30 days.
+// restore it. Runs daily (see triggers in wrangler.jsonc) and keeps the last 30 days. If the
+// backup of the day exists already, e.g. because the cron trigger fired twice, it does nothing.
 export const backup = async (env) => {
+    const createdAt = new Date().toISOString();
+    const key = `backups/${createdAt.slice(0, 10)}.json`;
+
+    if (await env.STORAGE.head(key)) {
+        console.log(`Backup ${key} exists already`);
+
+        return;
+    }
+
     const tables = {};
 
     // eslint-disable-next-line no-restricted-syntax
@@ -17,9 +27,6 @@ export const backup = async (env) => {
         // eslint-disable-next-line no-await-in-loop
         tables[table] = (await env.DB.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all()).results;
     }
-
-    const createdAt = new Date().toISOString();
-    const key = `backups/${createdAt.slice(0, 10)}.json`;
 
     await env.STORAGE.put(key, JSON.stringify({ createdAt, tables }), {
         httpMetadata: { contentType: 'application/json' },
