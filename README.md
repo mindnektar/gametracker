@@ -151,14 +151,20 @@ The daily limits reset at midnight UTC.
 
 Usage shows up under Workers & Pages → gametracker → Metrics, and Storage & Databases → D1.
 
-## Moving from Heroku (one-time)
+## Moving from Heroku (done on 2026-10-08)
 
-The data came over from Heroku Postgres like this, so that nothing could get lost:
+The app used to be an Express server with Postgres on Heroku (the `completed-games` app). The data
+came over like this, so that nothing could get lost:
 
 1. `worker/scripts/export-heroku.sh` dumps the Heroku database into `backups/` (with `pg_dump`,
    using Docker and the Heroku CLI), restores the dump into a throwaway local Postgres, which also
    proves that the dump is complete, and exports every table as JSON in the order of the dump.
 2. `node scripts/import.js <export> --remote` writes the export into D1, and
    `node scripts/verify.js <export> --remote` compares every row and column, and their order.
-3. For the switch, the Heroku app went into maintenance mode, so nothing could change anymore, then
-   steps 1 and 2 ran again with `--replace`. Only after that did the app move to the new address.
+3. The list of games the new API returns was compared with the one from the Heroku app, byte for
+   byte.
+4. For the switch, the Heroku app went into maintenance mode, so nothing could change anymore. Then
+   step 1 ran once more, and `verify.js` confirmed that D1 matched that final export exactly.
+
+The dumps and exports are in `backups/`. The old server is in the git history, up to commit
+`84aef56`.
