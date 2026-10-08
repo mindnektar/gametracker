@@ -36,11 +36,12 @@ const request = async (url, options = {}) => {
     return response;
 };
 
-// HLTB renames its search endpoint every so often (/api/search -> /api/seek/<hash> -> /api/bleed).
-// If the cached name stops working, discover the current one from the site's JS bundles.
-let apiName = 'bleed';
+// HLTB moves its search endpoint every so often (/api/search -> /api/seek/<hash> -> /api/bleed ->
+// /api/search/site). If the current one stops working, discover the new one from the site's JS
+// bundles, where the search fetches a token from `<endpoint>/init`.
+let endpoint = '/api/search/site';
 
-const discoverApiName = async () => {
+const discoverEndpoint = async () => {
     const html = await (await request(baseUrl)).text();
     const scripts = [...html.matchAll(/src="(\/_next\/static\/[^"]+\.js)"/g)].map(([, src]) => src);
 
@@ -48,7 +49,7 @@ const discoverApiName = async () => {
     for (const src of scripts) {
         // eslint-disable-next-line no-await-in-loop
         const script = await (await request(`${baseUrl}${src}`)).text();
-        const match = script.match(/fetch\(\s*[`"']\/api\/([a-zA-Z0-9_-]+)\/init/);
+        const match = script.match(/fetch\(\s*[`"'](\/api\/[a-zA-Z0-9_/-]+?)\/init/);
 
         if (match) {
             return match[1];
@@ -58,14 +59,17 @@ const discoverApiName = async () => {
     throw new Error('Could not discover HowLongToBeat API endpoint');
 };
 
-// The search API requires a short-lived token bound to IP and user agent,
-// issued by /api/<name>/init and sent back via headers and body.
-const fetchAuth = async () => (
-    (await request(`${baseUrl}/api/${apiName}/init?t=${Date.now()}`)).json()
+// The search needs a short-lived token, which `<endpoint>/init` issues
+const fetchToken = async () => (
+    (await (await request(`${baseUrl}${endpoint}/init?t=${Date.now()}`)).json()).token
 );
 
+// The filters of the search are lists of values to include
+const include = (values) => ({ mode: 'include', values });
+
 const search = async (title, type, system = '') => {
-    const searchData = {
+    const platform = systemMap[system] || system;
+    const body = {
         searchType: 'games',
         searchTerms: title.split(' ').map((term) => term.replace(/[^a-zA-Z0-9-']/g, '')).filter(Boolean),
         searchPage: 1,
@@ -73,17 +77,12 @@ const search = async (title, type, system = '') => {
         searchOptions: {
             games: {
                 userId: 0,
-                platform: systemMap[system] || system,
+                platform: include(platform ? [platform] : []),
                 sortCategory: 'popular',
                 rangeCategory: 'main',
                 rangeTime: { min: null, max: null },
-                gameplay: {
-                    perspective: '',
-                    flow: '',
-                    genre: '',
-                    difficulty: '',
-                },
-                rangeYear: { min: '', max: '' },
+                gameplay: { perspective: include([]), flow: include([]), genre: include([]) },
+                year: include([]),
                 modifier: type === 'dlc' ? 'only_dlc' : 'hide_dlc',
             },
             users: { sortCategory: 'postcount' },
@@ -95,39 +94,38 @@ const search = async (title, type, system = '') => {
         useCache: true,
     };
 
-    const { token, hpKey, hpVal } = await fetchAuth();
-
-    const body = { ...searchData };
-
-    if (hpKey) {
-        body[hpKey] = hpVal;
-    }
-
-    const response = await request(`${baseUrl}/api/${apiName}`, {
+    const response = await request(`${baseUrl}${endpoint}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-auth-token': token,
-            ...(hpKey ? { 'x-hp-key': hpKey, 'x-hp-val': hpVal } : {}),
-        },
+        headers: { 'Content-Type': 'application/json', 'x-auth-token': await fetchToken() },
         body: JSON.stringify(body),
     });
 
     return (await response.json()).data[0];
 };
 
-const searchWithDiscovery = async (title, type, system = '') => {
-    try {
-        return await search(title, type, system);
-    } catch (error) {
-        if ([401, 403, 404].includes(error.status)) {
-            apiName = await discoverApiName();
+// The token includes the IP address it was issued to, and a Worker's requests don't always leave
+// Cloudflare from the same address. So a rejected token is replaced a few times.
+const MAX_ATTEMPTS = 5;
 
-            return search(title, type, system);
+const searchWithRetries = async (title, type, system = '') => {
+    let discovered = false;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            return await search(title, type, system);
+        } catch (error) {
+            if (error.status === 404 && !discovered) {
+                // eslint-disable-next-line no-await-in-loop
+                endpoint = await discoverEndpoint();
+                discovered = true;
+            } else if (![401, 403].includes(error.status) || attempt === MAX_ATTEMPTS) {
+                throw error;
+            }
         }
-
-        throw error;
     }
+
+    throw new Error('HowLongToBeat kept rejecting the search');
 };
 
 export default async (input) => {
@@ -136,10 +134,10 @@ export default async (input) => {
     }
 
     try {
-        let data = await searchWithDiscovery(input.title, input.type, input.system);
+        let data = await searchWithRetries(input.title, input.type, input.system);
 
         if (!data) {
-            data = await searchWithDiscovery(input.title, input.type);
+            data = await searchWithRetries(input.title, input.type);
         }
 
         return {
